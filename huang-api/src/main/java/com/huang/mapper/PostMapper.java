@@ -1,4 +1,4 @@
-package com.huang.dao;
+package com.huang.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.huang.entity.PostEntity;
 import org.springframework.stereotype.Repository;
@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
  * @date 2022-04-12 18:28:21
  */
 @Repository
-public interface PostDao extends BaseMapper<PostEntity> {
+public interface PostMapper extends BaseMapper<PostEntity> {
 	
 }

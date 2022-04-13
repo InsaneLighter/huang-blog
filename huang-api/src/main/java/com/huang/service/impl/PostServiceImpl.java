@@ -3,7 +3,7 @@ package com.huang.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.huang.dao.PostDao;
+import com.huang.mapper.PostMapper;
 import com.huang.entity.PostEntity;
 import com.huang.service.PostService;
 import com.huang.utils.PageUtils;
@@ -15,9 +15,9 @@ import java.util.Map;
 
 
 @Service
-public class PostServiceImpl extends ServiceImpl<PostDao, PostEntity> implements PostService {
+public class PostServiceImpl extends ServiceImpl<PostMapper, PostEntity> implements PostService {
     @Autowired
-    private PostDao postDao;
+    private PostMapper postMapper;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
