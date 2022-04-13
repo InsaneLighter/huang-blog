@@ -13,7 +13,7 @@ spring:
       username: root
       password: Huanghong1314...
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://150.158.169.154:3306/blog?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&failOverReadOnly=false&serverTimezone=GMT%2B8
+      url: jdbc:mysql://xxxxxxxxx:3306/blog?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&failOverReadOnly=false&serverTimezone=GMT%2B8
       db-type: mysql
       initialSize: 10
       minIdle: 10
