@@ -6,6 +6,8 @@
     <modules>
         <module>huang-api</module>
         <module>huang-utils</module>
+        <module>huang-swagger2-starter</module>
+        <module>huang-common</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -35,18 +37,21 @@
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
         <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
         <spring-boot-maven-plugin.version>2.5.10</spring-boot-maven-plugin.version>
-        <lombok.version>1.18.22</lombok.version>
-        <slf4j-api.version>1.7.36</slf4j-api.version>
-        <mybatisplus.version>3.3.1</mybatisplus.version>
+        <mybatisplus.version>3.5.1</mybatisplus.version>
+        <pagehelper.spring.boot.version>1.4.2</pagehelper.spring.boot.version>
+        <mysql.version>8.0.17</mysql.version>
         <druid.version>1.1.24</druid.version>
+        <knife4j-spring-boot-starter.version>2.0.9</knife4j-spring-boot-starter.version>
+        <guava.version>30.1.1-jre</guava.version>
+        <hutool.version>5.7.2</hutool.version>
+        <antisamy.version>1.6.4</antisamy.version>
         <commons.lang.version>2.6</commons.lang.version>
         <commons.io.version>2.5</commons.io.version>
         <commons.configuration.version>1.10</commons.configuration.version>
+        <lombok.version>1.18.22</lombok.version>
         <fastjson.version>1.2.60</fastjson.version>
-        <pagehelper.spring.boot.version>1.4.2</pagehelper.spring.boot.version>
-        <mysql.version>8.0.17</mysql.version>
-        <hutool.version>5.7.2</hutool.version>
-        <antisamy.version>1.6.4</antisamy.version>
+        <spring-boot-configuration-processor.version>2.5.7</spring-boot-configuration-processor.version>
+        <javax-validation.version>2.0.1.Final</javax-validation.version>
     </properties>
 
     <dependencyManagement>
@@ -54,25 +59,7 @@
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>3.5.1</version>
-            </dependency>
-
-            <dependency>
-                <groupId>commons-lang</groupId>
-                <artifactId>commons-lang</artifactId>
-                <version>${commons.lang.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>${commons.io.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>commons-configuration</groupId>
-                <artifactId>commons-configuration</artifactId>
-                <version>${commons.configuration.version}</version>
+                <version>${mybatisplus.version}</version>
             </dependency>
 
             <dependency>
@@ -104,6 +91,18 @@
             </dependency>
 
             <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>${knife4j-spring-boot-starter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
                 <version>${hutool.version}</version>
@@ -119,6 +118,37 @@
                         <artifactId>slf4j-simple</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>${commons.lang.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons.io.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-configuration</groupId>
+                <artifactId>commons-configuration</artifactId>
+                <version>${commons.configuration.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-configuration-processor</artifactId>
+                <version>${spring-boot-configuration-processor.version}</version>
+                <optional>true</optional>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${javax-validation.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -146,13 +176,6 @@
             <scope>provided</scope>
             <version>${lombok.version}</version>
         </dependency>
-
-        <!--<dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <scope>compile</scope>
-            <version>${slf4j-api.version}</version>
-        </dependency>-->
 
         <dependency>
             <groupId>com.alibaba</groupId>
