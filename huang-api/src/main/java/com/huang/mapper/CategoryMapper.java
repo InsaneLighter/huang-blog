@@ -2,8 +2,6 @@ package com.huang.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.huang.entity.CategoryEntity;
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
 
 /**
  * 
@@ -12,8 +10,6 @@ import org.springframework.stereotype.Repository;
  * @email mail@huanghong.top
  * @date 2022-04-13 21:46:05
  */
-@Mapper
-@Repository
 public interface CategoryMapper extends BaseMapper<CategoryEntity> {
 	
 }

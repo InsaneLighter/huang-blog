@@ -43,7 +43,7 @@
         <commons.io.version>2.5</commons.io.version>
         <commons.configuration.version>1.10</commons.configuration.version>
         <fastjson.version>1.2.60</fastjson.version>
-        <pagehelper.spring.boot.version>1.2.5</pagehelper.spring.boot.version>
+        <pagehelper.spring.boot.version>1.4.2</pagehelper.spring.boot.version>
         <mysql.version>8.0.17</mysql.version>
         <hutool.version>5.7.2</hutool.version>
         <antisamy.version>1.6.4</antisamy.version>
@@ -56,7 +56,6 @@
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>3.5.1</version>
             </dependency>
-
 
             <dependency>
                 <groupId>commons-lang</groupId>
