@@ -54,8 +54,9 @@
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>${mybatisplus.version}</version>
+                <version>3.5.1</version>
             </dependency>
+
 
             <dependency>
                 <groupId>commons-lang</groupId>

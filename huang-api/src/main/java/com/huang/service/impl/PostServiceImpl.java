@@ -14,7 +14,7 @@ import org.springframework.util.StringUtils;
 import java.util.Map;
 
 
-@Service
+@Service("postService")
 public class PostServiceImpl extends ServiceImpl<PostMapper, PostEntity> implements PostService {
     @Autowired
     private PostMapper postMapper;
