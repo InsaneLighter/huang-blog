@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+    <include resource="logback/defaults.xml"/>
+    <!-- 异步记录，建议生成环境使用 -->
+    <root level="${log.level.console}">
+        <appender-ref ref="ASYNC_ROOT_APPENDER"/>
+        <appender-ref ref="ASYNC_CONSOLE_APPENDER"/>
+    </root>
+    <logger name="com.huang" additivity="true" level="${log.level.console}">
+        <appender-ref ref="ASYNC_PROJECT_APPENDER"/>
+    </logger>
+    <logger name="com.huang.exceptionHandler" additivity="true" level="${log.level.console}">
+        <appender-ref ref="ASYNC_EXCEPTION_APPENDER"/>
+    </logger>
+</included>
