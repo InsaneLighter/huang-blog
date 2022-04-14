@@ -6,19 +6,19 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.huang.utils.PageUtils;
 import com.huang.utils.Query;
-import com.huang.mapper.CategoryMapper;
-import com.huang.entity.CategoryEntity;
-import com.huang.service.CategoryService;
+import com.huang.mapper.MessageMapper;
+import com.huang.entity.MessageEntity;
+import com.huang.service.MessageService;
 
 
-@Service("categoryService")
-public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEntity> implements CategoryService {
+@Service("messageService")
+public class MessageServiceImpl extends ServiceImpl<MessageMapper, MessageEntity> implements MessageService {
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        IPage<CategoryEntity> page = this.page(
+        IPage<MessageEntity> page = this.page(
                 new Query().getPage(params),
-                new QueryWrapper<CategoryEntity>()
+                new QueryWrapper<MessageEntity>()
         );
         return new PageUtils(page);
     }

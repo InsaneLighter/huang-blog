@@ -1,21 +1,19 @@
-package com.huang.controller.admin;
-
-import com.huang.utils.R;
+package com.huang.controller;
+import java.util.Arrays;
+import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import com.huang.entity.PostEntity;
 import com.huang.service.PostService;
 import com.huang.utils.PageUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Arrays;
-import java.util.Map;
+import com.huang.utils.R;
 
 /**
  * 
  *
  * @author Huang
  * @email mail@huanghong.top
- * @date 2022-04-12 18:28:21
+ * @date 2022-04-14 18:25:41
  */
 @RestController
 @RequestMapping("/post")

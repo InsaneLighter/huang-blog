@@ -1,20 +1,19 @@
-package com.huang.controller.admin;
+package com.huang.controller;
+import java.util.Arrays;
+import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import com.huang.entity.CategoryEntity;
 import com.huang.service.CategoryService;
 import com.huang.utils.PageUtils;
 import com.huang.utils.R;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Arrays;
-import java.util.Map;
 
 /**
  * 
  *
  * @author Huang
  * @email mail@huanghong.top
- * @date 2022-04-13 21:46:05
+ * @date 2022-04-14 18:25:41
  */
 @RestController
 @RequestMapping("/category")

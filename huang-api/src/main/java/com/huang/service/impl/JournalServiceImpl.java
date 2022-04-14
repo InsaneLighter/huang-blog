@@ -6,19 +6,19 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.huang.utils.PageUtils;
 import com.huang.utils.Query;
-import com.huang.mapper.CategoryMapper;
-import com.huang.entity.CategoryEntity;
-import com.huang.service.CategoryService;
+import com.huang.mapper.JournalMapper;
+import com.huang.entity.JournalEntity;
+import com.huang.service.JournalService;
 
 
-@Service("categoryService")
-public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEntity> implements CategoryService {
+@Service("journalService")
+public class JournalServiceImpl extends ServiceImpl<JournalMapper, JournalEntity> implements JournalService {
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        IPage<CategoryEntity> page = this.page(
+        IPage<JournalEntity> page = this.page(
                 new Query().getPage(params),
-                new QueryWrapper<CategoryEntity>()
+                new QueryWrapper<JournalEntity>()
         );
         return new PageUtils(page);
     }

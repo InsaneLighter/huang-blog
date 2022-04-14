@@ -1,7 +1,7 @@
 package com.huang.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.huang.utils.PageUtils;
-import com.huang.entity.CategoryEntity;
+import com.huang.entity.MessageEntity;
 import java.util.Map;
 
 /**
@@ -11,7 +11,7 @@ import java.util.Map;
  * @email mail@huanghong.top
  * @date 2022-04-14 18:25:41
  */
-public interface CategoryService extends IService<CategoryEntity> {
+public interface MessageService extends IService<MessageEntity> {
     PageUtils queryPage(Map<String, Object> params);
 }
 
