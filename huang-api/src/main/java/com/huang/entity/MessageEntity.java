@@ -21,7 +21,7 @@ public class MessageEntity implements Serializable {
 	/**
 	 * 主键id
 	 */
-	@TableId
+	@TableId(type = IdType.INPUT)
 	private String id;
 	/**
 	 * 天气
@@ -43,6 +43,7 @@ public class MessageEntity implements Serializable {
 	 * 删除状态(0-正常,1-已删除)
 	 */
 	@TableLogic
+	@TableField(fill = FieldFill.INSERT)
 	private Integer deleted;
 	/**
 	 * 请求IP

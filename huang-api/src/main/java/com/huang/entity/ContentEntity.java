@@ -21,7 +21,7 @@ public class ContentEntity implements Serializable {
 	/**
 	 * 主键id
 	 */
-	@TableId
+	@TableId(type = IdType.INPUT)
 	private String id;
 	/**
 	 * 文章标题

@@ -1,6 +1,6 @@
 package com.huang.entity;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -11,7 +11,7 @@ import java.util.Date;
  * 
  * @author Huang
  * @email mail@huanghong.top
- * @date 2022-04-12 18:28:21
+ * @date 2022-04-14 18:25:41
  */
 @Data
 @TableName("post")
@@ -21,8 +21,8 @@ public class PostEntity implements Serializable {
 	/**
 	 * 主键id
 	 */
-	@TableId
-	private Integer id;
+	@TableId(type = IdType.INPUT)
+	private String id;
 	/**
 	 * 文章标题
 	 */
@@ -50,6 +50,8 @@ public class PostEntity implements Serializable {
 	/**
 	 * 删除状态(0-正常,1-已删除)
 	 */
+	@TableLogic
+	@TableField(fill = FieldFill.INSERT)
 	private Integer deleted;
 	/**
 	 * 编辑人
@@ -62,18 +64,22 @@ public class PostEntity implements Serializable {
 	/**
 	 * 创建人
 	 */
+	@TableField(fill = FieldFill.INSERT)
 	private String createBy;
 	/**
 	 * 创建时间
 	 */
+	@TableField(fill = FieldFill.INSERT)
 	private Date createTime;
 	/**
 	 * 修改人
 	 */
+	@TableField(fill = FieldFill.INSERT_UPDATE)
 	private String updateBy;
 	/**
 	 * 修改时间
 	 */
+	@TableField(fill = FieldFill.INSERT_UPDATE)
 	private Date updateTime;
 
 }

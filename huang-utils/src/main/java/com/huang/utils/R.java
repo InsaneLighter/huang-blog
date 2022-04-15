@@ -25,7 +25,7 @@ public class R<T> extends HashMap<String, Object> {
     }
 
     public R() {
-        put("code", 0);
+        put("code", 1);
         put("msg", "success");
     }
 
