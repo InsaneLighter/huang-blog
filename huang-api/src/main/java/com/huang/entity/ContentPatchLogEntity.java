@@ -21,7 +21,7 @@ public class ContentPatchLogEntity implements Serializable {
 	/**
 	 * 主键id
 	 */
-	@TableId(type = IdType.INPUT)
+	@TableId(type = IdType.ASSIGN_UUID)
 	private String id;
 	/**
 	 * 关联content主键id

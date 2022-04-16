@@ -18,4 +18,34 @@
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
     </resultMap>
+    <select id="queryPage" resultMap="postVoMap">
+        SELECT
+            post.id id,
+            post.title title,
+            post.status status,
+            post.visit visit,
+            post.create_time createTime,
+            category.name categoryName,
+            tag.name tagName
+        FROM
+            post
+                LEFT JOIN post_tag ON post.id = post_tag.post_id
+                LEFT JOIN post_category ON post.id = post_category.post_id
+                LEFT JOIN category ON category.id = post_category.category_id
+                LEFT JOIN tag ON tag.id = post_tag.tag_id
+    </select>
+    
+    <resultMap id="postVoMap" type="com.huang.vo.PostVo">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="status" column="status"/>
+        <result property="visit" column="visit"/>
+        <result property="createTime" column="createTime"/>
+        <collection property="categoryName" ofType="string">
+            <result column="categoryName"/>
+        </collection>
+        <collection property="tagName" ofType="string" >
+            <result column="tagName"/>
+        </collection>
+    </resultMap>
 </mapper>

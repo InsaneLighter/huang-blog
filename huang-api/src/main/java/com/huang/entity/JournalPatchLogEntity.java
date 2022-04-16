@@ -21,7 +21,7 @@ public class JournalPatchLogEntity implements Serializable {
 	/**
 	 * 主键id
 	 */
-	@TableId(type = IdType.INPUT)
+	@TableId(type = IdType.ASSIGN_UUID)
 	private String id;
 	/**
 	 * 关联journal主键id

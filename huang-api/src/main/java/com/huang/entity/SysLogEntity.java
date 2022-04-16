@@ -21,7 +21,7 @@ public class SysLogEntity implements Serializable {
 	/**
 	 * 主键id
 	 */
-	@TableId(type = IdType.INPUT)
+	@TableId(type = IdType.ASSIGN_UUID)
 	private String id;
 	/**
 	 * 日志描述

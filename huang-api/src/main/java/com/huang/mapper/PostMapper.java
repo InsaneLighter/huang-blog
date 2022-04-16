@@ -1,7 +1,9 @@
 package com.huang.mapper;
-import com.huang.entity.PostEntity;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Mapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.huang.entity.PostEntity;
+import com.huang.vo.PostVo;
 
 /**
  * 
@@ -11,5 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2022-04-14 18:25:41
  */
 public interface PostMapper extends BaseMapper<PostEntity> {
-	
+
+    IPage<PostVo> queryPage(IPage page, QueryWrapper<PostVo> wrapper);
 }

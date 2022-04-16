@@ -21,7 +21,7 @@ public class SysStatisticsEntity implements Serializable {
 	/**
 	 * 主键id
 	 */
-	@TableId(type = IdType.INPUT)
+	@TableId(type = IdType.ASSIGN_UUID)
 	private String id;
 	/**
 	 * 点赞数量
