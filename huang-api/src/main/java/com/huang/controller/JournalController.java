@@ -24,7 +24,7 @@ public class JournalController {
     @GetMapping("/list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = journalService.queryPage(params);
-        return R.ok().put("page", page);
+        return R.ok().put("data", page);
     }
 
     @GetMapping("/info/{id}")

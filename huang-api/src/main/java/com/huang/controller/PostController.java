@@ -1,12 +1,13 @@
 package com.huang.controller;
-import java.util.Arrays;
-import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import com.huang.entity.PostEntity;
 import com.huang.service.PostService;
 import com.huang.utils.PageUtils;
 import com.huang.utils.R;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Map;
 
 /**
  * 
@@ -24,7 +25,7 @@ public class PostController {
     @GetMapping("/list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = postService.queryPage(params);
-        return R.ok().put("page", page);
+        return R.ok().put("data", page);
     }
 
     @PostMapping("/save")

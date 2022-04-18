@@ -25,7 +25,7 @@ public class SysLogController {
     @GetMapping("/list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = sysLogService.queryPage(params);
-        return R.ok().put("page", page);
+        return R.ok().put("data", page);
     }
 
     @GetMapping("/info/{id}")

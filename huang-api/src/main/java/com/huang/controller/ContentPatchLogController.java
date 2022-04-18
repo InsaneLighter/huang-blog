@@ -25,7 +25,7 @@ public class ContentPatchLogController {
     @GetMapping("/list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = contentPatchLogService.queryPage(params);
-        return R.ok().put("page", page);
+        return R.ok().put("data", page);
     }
 
     @GetMapping("/info/{id}")
