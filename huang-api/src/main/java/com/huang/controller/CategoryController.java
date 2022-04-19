@@ -1,12 +1,13 @@
 package com.huang.controller;
-import java.util.Arrays;
-import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import com.huang.entity.CategoryEntity;
 import com.huang.service.CategoryService;
 import com.huang.utils.PageUtils;
 import com.huang.utils.R;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Map;
 
 /**
  * 
@@ -20,6 +21,12 @@ import com.huang.utils.R;
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
+
+    @GetMapping("/queryAll")
+    public R queryAll(@RequestParam Map<String, Object> params){
+        PageUtils page = categoryService.queryAll(params);
+        return R.ok().put("data", page);
+    }
 
     @GetMapping("/list")
     public R list(@RequestParam Map<String, Object> params){

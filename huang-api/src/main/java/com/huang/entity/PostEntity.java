@@ -1,6 +1,7 @@
 package com.huang.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.huang.entity.enums.PostStatus;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -38,7 +39,7 @@ public class PostEntity implements Serializable {
 	/**
 	 * 文章状态(0-待审核,1-审核通过)
 	 */
-	private Integer status;
+	private PostStatus status;
 	/**
 	 * 点赞数量
 	 */

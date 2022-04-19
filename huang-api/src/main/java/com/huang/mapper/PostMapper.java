@@ -14,5 +14,4 @@ import com.huang.vo.PostVo;
  */
 public interface PostMapper extends BaseMapper<PostEntity> {
 
-    IPage<PostVo> queryPage(IPage page, QueryWrapper<PostVo> wrapper);
 }
