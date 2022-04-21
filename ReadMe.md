@@ -7,4 +7,7 @@ FUNCTION blog.nextval does not exist] with root cause
 2.mybatis数据自动填充异常
 Column 'create_time' cannot be null] with root cause
 mysql中字段为datatime类型  java中对应的类型为Date类型 否则无法正确填充
+
+3.Cannot construct instance of `java.lang.String[]`: no String-argument constructor/factory method to deserialize from String
+前端转换传参格式 Array.of(ids)
 ```
