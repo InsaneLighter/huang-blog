@@ -53,7 +53,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/delete")
-    public R delete(@RequestBody Integer[] ids){
+    public R delete(@RequestBody String ...ids){
 		categoryService.removeByIds(Arrays.asList(ids));
         return R.ok();
     }

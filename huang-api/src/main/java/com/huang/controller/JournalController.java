@@ -46,7 +46,7 @@ public class JournalController {
     }
 
     @DeleteMapping("/delete")
-    public R delete(@RequestBody Integer[] ids){
+    public R delete(@RequestBody String ...ids){
 		journalService.removeByIds(Arrays.asList(ids));
         return R.ok();
     }

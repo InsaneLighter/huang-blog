@@ -11,8 +11,6 @@
         <result property="likes" column="likes"/>
         <result property="visit" column="visit"/>
         <result property="deleted" column="deleted"/>
-        <result property="editBy" column="edit_by"/>
-        <result property="editTime" column="edit_time"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>

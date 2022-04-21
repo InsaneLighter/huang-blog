@@ -26,19 +26,11 @@ public class ContentPatchLogEntity implements Serializable {
 	/**
 	 * 关联content主键id
 	 */
-	private Integer sourceId;
-	/**
-	 * 文章发布时间
-	 */
-	private Date publishTime;
+	private String sourceId;
 	/**
 	 * 文章内容
 	 */
 	private String originalContent;
-	/**
-	 * 当前版本
-	 */
-	private String version;
 	/**
 	 * 创建人
 	 */

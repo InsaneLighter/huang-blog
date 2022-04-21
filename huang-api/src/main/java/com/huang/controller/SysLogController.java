@@ -47,7 +47,7 @@ public class SysLogController {
     }
 
     @DeleteMapping("/delete")
-    public R delete(@RequestBody String[] ids){
+    public R delete(@RequestBody String ...ids){
 		sysLogService.removeByIds(Arrays.asList(ids));
         return R.ok();
     }

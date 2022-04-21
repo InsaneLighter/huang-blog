@@ -47,7 +47,7 @@ public class JournalPatchLogController {
     }
 
     @DeleteMapping("/delete")
-    public R delete(@RequestBody String[] ids){
+    public R delete(@RequestBody String ...ids){
 		journalPatchLogService.removeByIds(Arrays.asList(ids));
         return R.ok();
     }

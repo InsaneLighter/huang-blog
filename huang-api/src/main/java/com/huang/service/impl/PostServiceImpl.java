@@ -6,17 +6,20 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.huang.entity.*;
 import com.huang.entity.enums.PostStatus;
+import com.huang.entity.param.BatchUpdateStatusParam;
+import com.huang.entity.vo.ContentVo;
+import com.huang.entity.vo.PostVo;
 import com.huang.mapper.*;
 import com.huang.service.PostService;
 import com.huang.utils.PageUtils;
 import com.huang.utils.Query;
 import com.huang.utils.ServiceUtils;
-import com.huang.vo.PostVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,6 +38,10 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostEntity> impleme
     private PostCategoryMapper postCategoryMapper;
     @Autowired
     private PostTagMapper postTagMapper;
+    @Autowired
+    private ContentMapper contentMapper;
+    @Autowired
+    protected PostContentMapper postContentMapper;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -124,6 +131,74 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostEntity> impleme
         BeanUtils.copyProperties(postEntityPage, postVoPage);
         postVoPage.setRecords(postVos);
         return new PageUtils(postVoPage);
+    }
+
+    @Override
+    public ContentVo getByPostId(String postId) {
+        ContentVo contentVo = new ContentVo();
+        PostEntity postEntity = this.getById(postId);
+        BeanUtils.copyProperties(postEntity,contentVo);
+        //category
+        QueryWrapper<PostCategoryEntity> postCategoryWrapper = new QueryWrapper<>();
+        postCategoryWrapper.eq("post_id",postId);
+        List<PostCategoryEntity> postCategoryEntities = postCategoryMapper.selectList(postCategoryWrapper);
+        List<String> categoryIds = postCategoryEntities.stream().map(PostCategoryEntity::getCategoryId).collect(Collectors.toList());
+        contentVo.setCategoryIds(categoryIds);
+        //tag
+        QueryWrapper<PostTagEntity> postTagWrapper = new QueryWrapper<>();
+        postTagWrapper.eq("post_id",postId);
+        List<PostTagEntity> postTagEntities = postTagMapper.selectList(postTagWrapper);
+        List<String> tagIds = postTagEntities.stream().map(PostTagEntity::getTagId).collect(Collectors.toList());
+        contentVo.setTagIds(tagIds);
+        //content
+        QueryWrapper<PostContentEntity> postContentWrapper = new QueryWrapper<>();
+        postContentWrapper.eq("post_id",postId);
+        List<PostContentEntity> postContentEntities = postContentMapper.selectList(postContentWrapper);
+        String contentId = postContentEntities.stream().map(PostContentEntity::getContentId).findFirst().orElse("");
+        if(StringUtils.hasText(contentId)){
+            ContentEntity contentEntity = contentMapper.selectById(contentId);
+            String content = contentEntity.getContent();
+            String originContent = contentEntity.getOriginContent();
+            contentVo.setContent(content);
+            contentVo.setOriginContent(originContent);
+        }
+        return contentVo;
+    }
+
+    @Override
+    public void delete(String[] ids) {
+        //post
+        List<PostEntity> postEntities = Arrays.stream(ids).map(id -> {
+            PostEntity postEntity = new PostEntity();
+            postEntity.setId(id);
+            postEntity.setStatus(PostStatus.RECYCLE);
+            return postEntity;
+        }).collect(Collectors.toList());
+        this.updateBatchById(postEntities);
+        this.removeByIds(Arrays.asList(ids));
+
+        //content
+        Arrays.stream(ids).forEach(id -> {
+            QueryWrapper<PostContentEntity> postContentWrapper = new QueryWrapper<>();
+            postContentWrapper.eq("post_id",id);
+            PostContentEntity postContentEntity = postContentMapper.selectOne(postContentWrapper);
+            String contentId = postContentEntity.getContentId();
+            ContentEntity contentEntity = new ContentEntity();
+            contentEntity.setId(contentId);
+            contentEntity.setStatus(PostStatus.RECYCLE);
+            contentMapper.updateById(contentEntity);
+        });
+    }
+
+    @Override
+    public void updateStatusInBatch(BatchUpdateStatusParam batchUpdateStatusParam) {
+        PostStatus status = batchUpdateStatusParam.getStatus();
+        batchUpdateStatusParam.getIds().forEach(id -> {
+            PostEntity postEntity = new PostEntity();
+            postEntity.setId(id);
+            postEntity.setStatus(status);
+            this.updateById(postEntity);
+        });
     }
 
 }

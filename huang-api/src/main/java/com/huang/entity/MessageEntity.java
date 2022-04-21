@@ -38,6 +38,7 @@ public class MessageEntity implements Serializable {
 	/**
 	 * 点赞数量
 	 */
+	@TableField(fill = FieldFill.INSERT)
 	private Integer likes;
 	/**
 	 * 删除状态(0-正常,1-已删除)

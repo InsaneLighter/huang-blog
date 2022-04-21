@@ -5,6 +5,7 @@
     <resultMap type="com.huang.entity.ContentEntity" id="contentMap">
         <result property="id" column="id"/>
         <result property="title" column="title"/>
+        <result property="originContent" column="origin_content"/>
         <result property="content" column="content"/>
         <result property="wordCount" column="word_count"/>
         <result property="version" column="version"/>

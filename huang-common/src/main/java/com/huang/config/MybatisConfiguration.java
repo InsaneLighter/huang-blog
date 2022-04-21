@@ -23,11 +23,16 @@ public class MybatisConfiguration implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         this.strictInsertFill(metaObject, "createTime", Date.class, new Date());
-        this.strictUpdateFill(metaObject, "updateTime", Date.class, new Date());
+        this.strictInsertFill(metaObject, "updateTime", Date.class, new Date());
         //TODO 暂时默认Huang  之后指定创建用户
         this.strictInsertFill(metaObject, "createBy", String.class, "Huang");
         //TODO 暂时默认Huang  之后指定修改用户
-        this.strictUpdateFill(metaObject, "updateBy", String.class, "Huang");
+        this.strictInsertFill(metaObject, "updateBy", String.class, "Huang");
+        this.strictInsertFill(metaObject, "version", Integer.class, 0);
+        this.strictInsertFill(metaObject, "deleted", Integer.class, 0);
+        this.strictInsertFill(metaObject, "likes", Integer.class, 0);
+        this.strictInsertFill(metaObject, "visit", Integer.class, 0);
+        this.strictInsertFill(metaObject, "topPriority", Integer.class, 0);
     }
 
     @Override

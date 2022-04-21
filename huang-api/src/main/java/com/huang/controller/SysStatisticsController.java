@@ -47,7 +47,7 @@ public class SysStatisticsController {
     }
 
     @DeleteMapping("/delete")
-    public R delete(@RequestBody String[] ids){
+    public R delete(@RequestBody String ...ids){
 		sysStatisticsService.removeByIds(Arrays.asList(ids));
         return R.ok();
     }

@@ -26,10 +26,12 @@ public class SysStatisticsEntity implements Serializable {
 	/**
 	 * 点赞数量
 	 */
+	@TableField(fill = FieldFill.INSERT)
 	private Integer likes;
 	/**
 	 * 访客数量
 	 */
+	@TableField(fill = FieldFill.INSERT)
 	private Integer visit;
 	/**
 	 * 创建人

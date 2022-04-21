@@ -47,7 +47,7 @@ public class PostTagController {
     }
 
     @DeleteMapping("/delete")
-    public R delete(@RequestBody String[] ids){
+    public R delete(@RequestBody String ...ids){
 		postTagService.removeByIds(Arrays.asList(ids));
         return R.ok();
     }

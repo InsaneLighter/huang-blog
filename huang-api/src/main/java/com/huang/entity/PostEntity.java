@@ -3,6 +3,7 @@ package com.huang.entity;
 import com.baomidou.mybatisplus.annotation.*;
 import com.huang.entity.enums.PostStatus;
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -15,6 +16,7 @@ import java.util.Date;
  * @date 2022-04-14 18:25:41
  */
 @Data
+@ToString
 @TableName("post")
 public class PostEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -35,18 +37,21 @@ public class PostEntity implements Serializable {
 	/**
 	 * 优先展示
 	 */
+	@TableField(fill = FieldFill.INSERT)
 	private Integer topPriority;
 	/**
-	 * 文章状态(0-待审核,1-审核通过)
+	 * 文章状态
 	 */
 	private PostStatus status;
 	/**
 	 * 点赞数量
 	 */
+	@TableField(fill = FieldFill.INSERT)
 	private Integer likes;
 	/**
 	 * 访客数量
 	 */
+	@TableField(fill = FieldFill.INSERT)
 	private Integer visit;
 	/**
 	 * 删除状态(0-正常,1-已删除)
@@ -54,14 +59,6 @@ public class PostEntity implements Serializable {
 	@TableLogic
 	@TableField(fill = FieldFill.INSERT)
 	private Integer deleted;
-	/**
-	 * 编辑人
-	 */
-	private String editBy;
-	/**
-	 * 编辑时间
-	 */
-	private Date editTime;
 	/**
 	 * 创建人
 	 */

@@ -12,9 +12,7 @@ public enum PostStatus implements ValueEnum<Integer> {
 
     DRAFT(1),
 
-    RECYCLE(2),
-
-    INTIMATE(3);
+    RECYCLE(2);
 
     private final int value;
 

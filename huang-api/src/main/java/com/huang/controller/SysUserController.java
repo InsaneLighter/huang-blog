@@ -47,7 +47,7 @@ public class SysUserController {
     }
 
     @DeleteMapping("/delete")
-    public R delete(@RequestBody String[] ids){
+    public R delete(@RequestBody String ...ids){
 		sysUserService.removeByIds(Arrays.asList(ids));
         return R.ok();
     }

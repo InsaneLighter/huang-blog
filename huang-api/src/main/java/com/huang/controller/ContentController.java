@@ -1,12 +1,15 @@
 package com.huang.controller;
-import java.util.Arrays;
-import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+
 import com.huang.entity.ContentEntity;
+import com.huang.entity.param.ContentParam;
 import com.huang.service.ContentService;
 import com.huang.utils.PageUtils;
 import com.huang.utils.R;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Map;
 
 /**
  * 
@@ -34,19 +37,19 @@ public class ContentController {
     }
 
     @PostMapping("/save")
-    public R save(@RequestBody ContentEntity content){
-		contentService.save(content);
+    public R save(@RequestBody ContentParam contentParam){
+		contentService.saveArticle(contentParam);
         return R.ok();
     }
 
     @PutMapping("/update")
-    public R update(@RequestBody ContentEntity content){
-		contentService.updateById(content);
+    public R update(@RequestBody ContentParam contentParam){
+		contentService.updateArticle(contentParam);
         return R.ok();
     }
 
     @DeleteMapping("/delete")
-    public R delete(@RequestBody Integer[] ids){
+    public R delete(@RequestBody String ...ids){
 		contentService.removeByIds(Arrays.asList(ids));
         return R.ok();
     }

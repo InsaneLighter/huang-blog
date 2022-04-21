@@ -1,9 +1,7 @@
 package com.huang.mapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.huang.entity.PostEntity;
-import com.huang.vo.PostVo;
+import com.huang.entity.vo.PostVo;
 
 /**
  * 

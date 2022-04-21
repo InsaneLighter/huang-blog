@@ -47,7 +47,7 @@ public class PostContentController {
     }
 
     @DeleteMapping("/delete")
-    public R delete(@RequestBody String[] ids){
+    public R delete(@RequestBody String ...ids){
 		postContentService.removeByIds(Arrays.asList(ids));
         return R.ok();
     }

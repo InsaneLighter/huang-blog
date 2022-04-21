@@ -42,16 +42,19 @@ public class JournalEntity implements Serializable {
 	/**
 	 * 点赞数量
 	 */
+	@TableField(fill = FieldFill.INSERT)
 	private Integer likes;
 	/**
 	 * 访客数量
 	 */
+	@TableField(fill = FieldFill.INSERT)
 	private Integer visit;
 	/**
 	 * 当前版本
 	 */
 	@Version
-	private String version;
+	@TableField(fill = FieldFill.INSERT)
+	private Integer version;
 	/**
 	 * 删除状态(0-正常,1-已删除)
 	 */

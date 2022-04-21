@@ -1,12 +1,13 @@
 package com.huang.controller;
-import java.util.Arrays;
-import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import com.huang.entity.TagEntity;
 import com.huang.service.TagService;
 import com.huang.utils.PageUtils;
 import com.huang.utils.R;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Map;
 
 /**
  * 
@@ -20,6 +21,12 @@ import com.huang.utils.R;
 public class TagController {
     @Autowired
     private TagService tagService;
+
+    @GetMapping("/queryAll")
+    public R queryAll(@RequestParam Map<String, Object> params){
+        PageUtils page = tagService.queryAll(params);
+        return R.ok().put("data", page);
+    }
 
     @GetMapping("/list")
     public R list(@RequestParam Map<String, Object> params){
@@ -46,7 +53,7 @@ public class TagController {
     }
 
     @DeleteMapping("/delete")
-    public R delete(@RequestBody Integer[] ids){
+    public R delete(@RequestBody String ...ids){
 		tagService.removeByIds(Arrays.asList(ids));
         return R.ok();
     }

@@ -1,12 +1,14 @@
 package com.huang.controller;
+
 import com.huang.entity.PostEntity;
+import com.huang.entity.param.BatchUpdateStatusParam;
+import com.huang.entity.vo.ContentVo;
 import com.huang.service.PostService;
 import com.huang.utils.PageUtils;
 import com.huang.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -28,6 +30,19 @@ public class PostController {
         return R.ok().put("data", page);
     }
 
+    @GetMapping("/get/{postId}")
+    public R getByPostId(@PathVariable String postId){
+        ContentVo contentVo = postService.getByPostId(postId);
+        return R.ok().put("data", contentVo);
+    }
+
+    @PutMapping("/updateStatusInBatch")
+    public R updateStatusInBatch(@RequestBody BatchUpdateStatusParam batchUpdateStatusParam){
+        postService.updateStatusInBatch(batchUpdateStatusParam);
+        return R.ok();
+    }
+
+
     @PostMapping("/save")
     public R save(@RequestBody PostEntity post){
 		postService.save(post);
@@ -41,8 +56,8 @@ public class PostController {
     }
 
     @DeleteMapping("/delete")
-    public R delete(@RequestBody Integer[] ids){
-		postService.removeByIds(Arrays.asList(ids));
+    public R delete(@RequestBody String ...ids){
+        postService.delete(ids);
         return R.ok();
     }
 

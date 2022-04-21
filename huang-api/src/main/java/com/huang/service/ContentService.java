@@ -1,7 +1,10 @@
 package com.huang.service;
+
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.huang.utils.PageUtils;
 import com.huang.entity.ContentEntity;
+import com.huang.entity.param.ContentParam;
+import com.huang.utils.PageUtils;
+
 import java.util.Map;
 
 /**
@@ -13,5 +16,9 @@ import java.util.Map;
  */
 public interface ContentService extends IService<ContentEntity> {
     PageUtils queryPage(Map<String, Object> params);
+
+    void saveArticle(ContentParam contentParam);
+
+    void updateArticle(ContentParam contentParam);
 }
 

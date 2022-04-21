@@ -1,12 +1,13 @@
 package com.huang.controller;
-import java.util.Arrays;
-import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import com.huang.entity.MessageEntity;
 import com.huang.service.MessageService;
 import com.huang.utils.PageUtils;
 import com.huang.utils.R;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.Map;
 
 /**
  * 
@@ -46,7 +47,7 @@ public class MessageController {
     }
 
     @DeleteMapping("/delete")
-    public R delete(@RequestBody Integer[] ids){
+    public R delete(@RequestBody String ...ids){
 		messageService.removeByIds(Arrays.asList(ids));
         return R.ok();
     }

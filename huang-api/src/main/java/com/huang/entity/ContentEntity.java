@@ -1,6 +1,7 @@
 package com.huang.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.huang.entity.enums.PostStatus;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -28,7 +29,11 @@ public class ContentEntity implements Serializable {
 	 */
 	private String title;
 	/**
-	 * 文章内容
+	 * md文章内容
+	 */
+	private String originContent;
+	/**
+	 * html文章内容
 	 */
 	private String content;
 	/**
@@ -39,11 +44,12 @@ public class ContentEntity implements Serializable {
 	 * 当前版本
 	 */
 	@Version
-	private String version;
+	@TableField(fill = FieldFill.INSERT)
+	private Integer version;
 	/**
-	 * 文章状态(0-待审核,1-审核通过)
+	 * 文章状态
 	 */
-	private Integer status;
+	private PostStatus status;
 	/**
 	 * 创建人
 	 */

@@ -5,9 +5,7 @@
     <resultMap type="com.huang.entity.ContentPatchLogEntity" id="contentPatchLogMap">
         <result property="id" column="id"/>
         <result property="sourceId" column="source_id"/>
-        <result property="publishTime" column="publish_time"/>
         <result property="originalContent" column="original_content"/>
-        <result property="version" column="version"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
     </resultMap>

@@ -26,19 +26,11 @@ public class JournalPatchLogEntity implements Serializable {
 	/**
 	 * 关联journal主键id
 	 */
-	private Integer sourceId;
-	/**
-	 * 日志发布时间
-	 */
-	private Date publishTime;
+	private String sourceId;
 	/**
 	 * 日志内容
 	 */
 	private String originalContent;
-	/**
-	 * 当前版本
-	 */
-	private String version;
 	/**
 	 * 创建人
 	 */
