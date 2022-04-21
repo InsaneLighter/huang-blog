@@ -24,5 +24,9 @@ public class Constant {
      *  升序
      */
     public static final String ASC = "asc";
+    /*
+    *   Sunny
+    * */
+    public static final String SUNNY = "Sunny";
 
 }
