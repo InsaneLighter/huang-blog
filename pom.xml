@@ -8,6 +8,7 @@
         <module>huang-utils</module>
         <module>huang-swagger2-starter</module>
         <module>huang-common</module>
+        <module>huang-third-party</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -54,6 +55,7 @@
         <javax-validation.version>2.0.1.Final</javax-validation.version>
         <httpcore.version>4.4.10</httpcore.version>
         <httpclient.version>4.5.6</httpclient.version>
+        <minio.version>8.2.1</minio.version>
     </properties>
 
     <dependencyManagement>
@@ -163,6 +165,12 @@
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
                 <version>${httpclient.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
