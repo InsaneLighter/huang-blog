@@ -24,9 +24,12 @@ public class Constant {
      *  升序
      */
     public static final String ASC = "asc";
-    /*
-    *   Sunny
-    * */
+    /**
+     *   Sunny
+     */
     public static final String SUNNY = "Sunny";
-
+    /**
+     *  根分类parentId
+     */
+    public static final String ROOT_CATEGORY_PARENT_ID = "";
 }

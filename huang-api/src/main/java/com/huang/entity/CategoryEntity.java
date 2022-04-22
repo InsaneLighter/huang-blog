@@ -1,10 +1,12 @@
 package com.huang.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 
@@ -56,4 +58,12 @@ public class CategoryEntity implements Serializable {
 	@TableField(fill = FieldFill.INSERT_UPDATE)
 	private Date updateTime;
 
+
+	/**
+	 * TableField(exist = false) 数据库中不存在的字段
+	 * JsonInclude(JsonInclude.Include.NON_EMPTY) 字段读取为空的时候不显示
+	 */
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	@TableField(exist = false)
+	private List<CategoryEntity> children;
 }
