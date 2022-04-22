@@ -66,6 +66,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostEntity> impleme
         if (StringUtils.hasText(status)) {
             postWrapper.eq("status", PostStatus.valueOf(status));
         }
+        postWrapper.orderByDesc("top_priority");
         IPage<PostEntity> postEntityPage = this.page(
                 new Query().getPage(params),
                 postWrapper
