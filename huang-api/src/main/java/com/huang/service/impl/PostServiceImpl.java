@@ -172,23 +172,37 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostEntity> impleme
         List<PostEntity> postEntities = Arrays.stream(ids).map(id -> {
             PostEntity postEntity = new PostEntity();
             postEntity.setId(id);
+            //直接删除 需要将状态置为RECYCLE
             postEntity.setStatus(PostStatus.RECYCLE);
             return postEntity;
         }).collect(Collectors.toList());
         this.updateBatchById(postEntities);
         this.removeByIds(Arrays.asList(ids));
 
-        //content
         Arrays.stream(ids).forEach(id -> {
+            //post tag
+            QueryWrapper<PostTagEntity> postTagWrapper = new QueryWrapper<>();
+            postTagWrapper.eq("post_id",id);
+            postTagMapper.delete(postTagWrapper);
+            //post category
+            QueryWrapper<PostCategoryEntity> postCategoryWrapper = new QueryWrapper<>();
+            postCategoryWrapper.eq("post_id",id);
+            postCategoryMapper.delete(postCategoryWrapper);
+            //post content
             QueryWrapper<PostContentEntity> postContentWrapper = new QueryWrapper<>();
             postContentWrapper.eq("post_id",id);
             PostContentEntity postContentEntity = postContentMapper.selectOne(postContentWrapper);
+            postContentMapper.deleteById(postContentEntity);
+            //content
             String contentId = postContentEntity.getContentId();
             ContentEntity contentEntity = new ContentEntity();
             contentEntity.setId(contentId);
+            //将状态置为RECYCLE
             contentEntity.setStatus(PostStatus.RECYCLE);
             contentMapper.updateById(contentEntity);
         });
+
+
     }
 
     @Override
