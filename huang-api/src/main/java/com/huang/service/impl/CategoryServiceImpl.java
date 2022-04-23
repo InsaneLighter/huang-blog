@@ -8,9 +8,7 @@ import com.huang.entity.PostCategoryEntity;
 import com.huang.mapper.CategoryMapper;
 import com.huang.mapper.PostCategoryMapper;
 import com.huang.service.CategoryService;
-import com.huang.utils.Constant;
-import com.huang.utils.PageUtils;
-import com.huang.utils.Query;
+import com.huang.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -58,18 +56,25 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
     }
 
     @Override
-    public PageUtils queryByIds(Map<String, Object> params) {
+    public R queryByIds(Map<String, Object> params) {
         String ids = (String) params.getOrDefault("ids", "");
         Page<PostCategoryEntity> page = new Page<>();
+        boolean compare = false;
         if (StringUtils.hasText(ids)) {
             List<String> categoryIds = Arrays.stream(ids.split(",")).collect(Collectors.toList());
+            //分类关联文章
             QueryWrapper<PostCategoryEntity> postCategoryWrapper = new QueryWrapper<>();
             postCategoryWrapper.in("category_id",categoryIds);
             List<PostCategoryEntity> postCategoryEntities = postCategoryMapper.selectList(postCategoryWrapper);
             page.setRecords(postCategoryEntities);
-        }
-        return new PageUtils(page);
-    }
 
+            QueryWrapper<CategoryEntity> categoryWrapper = new QueryWrapper<>();
+            categoryWrapper.in("id",categoryIds).or().in("parent_id",categoryIds);
+            List<CategoryEntity> categoryEntities = this.list(categoryWrapper);
+            List<String> resultCategoryIds = categoryEntities.stream().map(CategoryEntity::getId).distinct().collect(Collectors.toList());
+            compare = CommonUtils.compare(categoryIds, resultCategoryIds);
+        }
+        return R.ok().put("data",new PageUtils(page)).put("hasChildren",compare);
+    }
 
 }

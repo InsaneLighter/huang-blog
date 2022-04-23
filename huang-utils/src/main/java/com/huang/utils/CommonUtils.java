@@ -3,6 +3,9 @@ package com.huang.utils;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang.StringUtils;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * @Time 2022-04-21 9:05
  * Created by Huang
@@ -28,5 +31,17 @@ public class CommonUtils {
         String highTemp = weatherInfo.getString("temp2");
         String weather = weatherInfo.getString("weather");
         return city + " " + weather + " " + lowTemp + "~" + highTemp;
+    }
+
+    public static <T extends Comparable<T>> boolean compare(List<T> a, List<T> b) {
+        if(a.size() != b.size())
+            return false;
+        Collections.sort(a);
+        Collections.sort(b);
+        for(int i=0;i<a.size();i++){
+            if(!a.get(i).equals(b.get(i)))
+                return false;
+        }
+        return true;
     }
 }

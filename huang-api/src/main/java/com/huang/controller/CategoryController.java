@@ -33,11 +33,10 @@ public class CategoryController {
         PageUtils page = categoryService.queryPage(params);
         return R.ok().put("data", page);
     }
-`
+
     @GetMapping("/queryByIds")
     public R queryByIds(@RequestParam Map<String, Object> params){
-        PageUtils page = categoryService.queryByIds(params);
-        return R.ok().put("data", page);
+        return categoryService.queryByIds(params);
     }
 
     @GetMapping("/info/{id}")
