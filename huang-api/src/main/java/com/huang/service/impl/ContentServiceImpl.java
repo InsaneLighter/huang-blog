@@ -58,6 +58,9 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
 
     @Override
     public void saveArticle(ContentParam contentParam) {
+        if (contentParam.getStatus() == null) {
+            contentParam.setStatus(PostStatus.DRAFT);
+        }
         //content
         ContentEntity contentEntity = new ContentEntity();
         BeanUtils.copyProperties(contentParam,contentEntity);
