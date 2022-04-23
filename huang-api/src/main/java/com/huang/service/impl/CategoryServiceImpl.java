@@ -4,14 +4,19 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.huang.entity.CategoryEntity;
+import com.huang.entity.PostCategoryEntity;
 import com.huang.mapper.CategoryMapper;
+import com.huang.mapper.PostCategoryMapper;
 import com.huang.service.CategoryService;
 import com.huang.utils.Constant;
 import com.huang.utils.PageUtils;
 import com.huang.utils.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,6 +24,8 @@ import java.util.stream.Collectors;
 
 @Service("categoryService")
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEntity> implements CategoryService {
+    @Autowired
+    private PostCategoryMapper postCategoryMapper;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -46,6 +53,20 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
                     .peek(categoryEntity -> categoryEntity.setChildren(getChildren(categoryEntity, list)))
                     .collect(Collectors.toList());
             page.setRecords(entities);
+        }
+        return new PageUtils(page);
+    }
+
+    @Override
+    public PageUtils queryByIds(Map<String, Object> params) {
+        String ids = (String) params.getOrDefault("ids", "");
+        Page<PostCategoryEntity> page = new Page<>();
+        if (StringUtils.hasText(ids)) {
+            List<String> categoryIds = Arrays.stream(ids.split(",")).collect(Collectors.toList());
+            QueryWrapper<PostCategoryEntity> postCategoryWrapper = new QueryWrapper<>();
+            postCategoryWrapper.in("category_id",categoryIds);
+            List<PostCategoryEntity> postCategoryEntities = postCategoryMapper.selectList(postCategoryWrapper);
+            page.setRecords(postCategoryEntities);
         }
         return new PageUtils(page);
     }
