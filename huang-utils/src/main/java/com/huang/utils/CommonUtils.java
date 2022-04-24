@@ -44,4 +44,24 @@ public class CommonUtils {
         }
         return true;
     }
+
+    public static String getString(Object object){
+        if (isEmpty(object)) {
+            return "";
+        }
+        return (object.toString().trim());
+    }
+
+    public static boolean isEmpty(Object object) {
+        if (object == null) {
+            return (true);
+        }
+        if ("".equals(object)) {
+            return (true);
+        }
+        if ("null".equals(object)) {
+            return (true);
+        }
+        return (false);
+    }
 }
