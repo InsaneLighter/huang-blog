@@ -10,4 +10,10 @@ mysql中字段为datatime类型  java中对应的类型为Date类型 否则无�
 
 3.Cannot construct instance of `java.lang.String[]`: no String-argument constructor/factory method to deserialize from String
 前端转换传参格式 Array.of(ids)
+
+4.
+lettuce包异常(系统长时间不控制则抛下述异常)
+io.lettuce.core.RedisCommandTimeoutException: Command timed out
+jedis包异常
+java.util.NoSuchElementException: Timeout waiting for idle object
 ```

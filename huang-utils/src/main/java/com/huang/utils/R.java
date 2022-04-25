@@ -1,7 +1,6 @@
 package com.huang.utils;
 
 import org.apache.http.HttpStatus;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +26,11 @@ public class R<T> extends HashMap<String, Object> {
     public R() {
         put("code", 1);
         put("msg", "success");
+    }
+
+    public R(Integer code,String msg){
+        put("code", code);
+        put("msg", msg);
     }
 
     public static R error() {
@@ -56,12 +60,12 @@ public class R<T> extends HashMap<String, Object> {
         return r;
     }
 
-    public static R ok() {
+    public static R<?> ok() {
         return new R();
     }
 
     @Override
-    public R put(String key, Object value) {
+    public R<?> put(String key, Object value) {
         super.put(key, value);
         return this;
     }
