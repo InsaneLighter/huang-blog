@@ -32,4 +32,7 @@ public class Constant {
      *  根分类parentId
      */
     public static final String ROOT_CATEGORY_PARENT_ID = "";
+
+    public final static String X_SIGN = "X-Sign";
+    public final static String X_TIMESTAMP = "X-TIMESTAMP";
 }
