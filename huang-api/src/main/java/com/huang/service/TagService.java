@@ -2,6 +2,8 @@ package com.huang.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.huang.utils.PageUtils;
 import com.huang.entity.TagEntity;
+import com.huang.utils.R;
+
 import java.util.Map;
 
 /**
@@ -15,5 +17,9 @@ public interface TagService extends IService<TagEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     PageUtils queryAll(Map<String, Object> params);
+
+    void saveTag(TagEntity tag);
+
+    R queryByIds(Map<String, Object> params);
 }
 

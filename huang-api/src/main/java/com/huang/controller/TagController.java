@@ -34,6 +34,12 @@ public class TagController {
         return R.ok().put("data", page);
     }
 
+
+    @GetMapping("/queryByIds")
+    public R queryByIds(@RequestParam Map<String, Object> params){
+        return tagService.queryByIds(params);
+    }
+
     @GetMapping("/info/{id}")
     public R info(@PathVariable("id") Integer id){
 		TagEntity tag = tagService.getById(id);
@@ -42,7 +48,7 @@ public class TagController {
 
     @PostMapping("/save")
     public R save(@RequestBody TagEntity tag){
-		tagService.save(tag);
+		tagService.saveTag(tag);
         return R.ok();
     }
 
