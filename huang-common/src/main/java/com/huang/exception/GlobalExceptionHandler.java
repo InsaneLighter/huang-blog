@@ -6,10 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.redis.connection.PoolException;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -37,11 +35,11 @@ public class GlobalExceptionHandler {
 	/**
 	 * 处理自定义异常
 	 */
-	@ExceptionHandler(Huang401Exception.class)
-	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	public R<?> handleHuang401Exception(Huang401Exception e){
+	@ExceptionHandler(BlogException.class)
+	//@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	public R<?> handleHuang401Exception(BlogException e){
 		log.error(e.getMessage(), e);
-		return new R(401,e.getMessage());
+		return R.error(e.getMessage());
 	}
 
 	@ExceptionHandler(NoHandlerFoundException.class)
