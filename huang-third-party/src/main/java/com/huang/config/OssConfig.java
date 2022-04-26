@@ -25,7 +25,7 @@ public class OssConfig {
      * 获取OSSClient
      */
     @Bean
-    public OSSClient minioClient() {
+    public OSSClient ossClient() {
         return new OSSClient(ossProperties.getEndpoint(),
                 new DefaultCredentialProvider(ossProperties.getAccessKey(), ossProperties.getSecretKey()),
                 new ClientConfiguration());

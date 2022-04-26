@@ -59,6 +59,7 @@
         <aliyun.oss.version>3.11.2</aliyun.oss.version>
         <spring-boot-starter-data-redis.version>2.5.7</spring-boot-starter-data-redis.version>
         <spring-boot-starter-actuator.version>2.5.7</spring-boot-starter-actuator.version>
+        <image4j.version>0.7zensight1</image4j.version>
     </properties>
 
     <dependencyManagement>
@@ -194,6 +195,11 @@
                 <version>${commons-pool2.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>net.sf.image4j</groupId>
+                <artifactId>image4j</artifactId>
+                <version>${image4j.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -248,6 +254,15 @@
             </properties>
         </profile>
     </profiles>
+
+    <!-- 使用aliyun maven -->
+    <repositories>
+        <repository>
+            <id>aliyun</id>
+            <name>aliyun</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+        </repository>
+    </repositories>
 
     <build>
         <finalName>${project.artifactId}</finalName>

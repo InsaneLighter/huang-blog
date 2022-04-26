@@ -1,5 +1,7 @@
 package com.huang.entity.enums;
 
+import com.huang.enums.ValueEnum;
+
 /**
  * @Time 2022-04-18 16:07
  * Created by Huang

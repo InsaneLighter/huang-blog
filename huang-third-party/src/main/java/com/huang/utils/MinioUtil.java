@@ -4,6 +4,7 @@ import com.huang.properties.MinioProperties;
 import io.minio.*;
 import io.minio.errors.*;
 import io.minio.messages.Bucket;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +26,7 @@ import java.util.Random;
  * Description:
  */
 @Component
+@Slf4j
 public class MinioUtil {
 
     @Autowired
@@ -167,6 +169,7 @@ public class MinioUtil {
      * @throws Exception https://docs.minio.io/cn/java-client-apireference.html#removeObject
      */
     public void removeObject(String bucketName, String objectName) throws Exception {
+        log.info("Minio delete {} {}",bucketName,objectName);
         client.removeObject(RemoveObjectArgs.builder().bucket(bucketName).object(objectName).build());
     }
 }
