@@ -73,13 +73,13 @@ public class AttachmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachm
     @Override
     public List<String> listAllMediaType() {
         List<AttachmentEntity> list = this.list();
-        return list.stream().map(AttachmentEntity::getMediaType).collect(Collectors.toList());
+        return list.stream().map(AttachmentEntity::getMediaType).distinct().collect(Collectors.toList());
     }
 
     @Override
     public List<AttachmentType> listAllType() {
         List<AttachmentEntity> list = this.list();
-        return list.stream().map(AttachmentEntity::getType).collect(Collectors.toList());
+        return list.stream().map(AttachmentEntity::getType).distinct().collect(Collectors.toList());
     }
 
     @Override
