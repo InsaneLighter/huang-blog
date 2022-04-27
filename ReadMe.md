@@ -16,4 +16,8 @@ lettuce包异常(系统长时间不控制则抛下述异常)
 io.lettuce.core.RedisCommandTimeoutException: Command timed out
 jedis包异常
 java.util.NoSuchElementException: Timeout waiting for idle object
+
+5.When allowCredentials is true, allowedOrigins cannot contain the special value "*" since that cannot be set on the "Access-Control-Allow-Origin" response header.
+allowedOrigins("*") 替换成 allowedOriginPatterns("*")
+
 ```
