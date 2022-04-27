@@ -1,5 +1,9 @@
 package com.huang.controller;
+
 import com.huang.entity.SysUserEntity;
+import com.huang.entity.param.PwdParam;
+import com.huang.security.service.dto.JwtUserDto;
+import com.huang.security.utils.SecurityUtil;
 import com.huang.service.SysUserService;
 import com.huang.utils.PageUtils;
 import com.huang.utils.R;
@@ -10,8 +14,6 @@ import java.util.Arrays;
 import java.util.Map;
 
 /**
- * 
- *
  * @author Huang
  * @email mail@huanghong.top
  * @date 2022-04-15 10:19:09
@@ -23,32 +25,46 @@ public class SysUserController {
     private SysUserService sysUserService;
 
     @GetMapping("/list")
-    public R list(@RequestParam Map<String, Object> params){
+    public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = sysUserService.queryPage(params);
         return R.ok().put("data", page);
     }
 
+    @GetMapping("/getCurrentUser")
+    public R getCurrentUser() {
+        JwtUserDto currentUser = (JwtUserDto) SecurityUtil.getCurrentUser();
+        SysUserEntity user = currentUser.getUser();
+        user = sysUserService.getById(user.getId());
+        return R.ok().put("user", user);
+    }
+
     @GetMapping("/info/{id}")
-    public R info(@PathVariable("id") String id){
-		SysUserEntity sysUser = sysUserService.getById(id);
+    public R info(@PathVariable("id") String id) {
+        SysUserEntity sysUser = sysUserService.getById(id);
         return R.ok().put("sysUser", sysUser);
     }
 
     @PostMapping("/save")
-    public R save(@RequestBody SysUserEntity sysUser){
-		sysUserService.save(sysUser);
+    public R save(@RequestBody SysUserEntity sysUser) {
+        sysUserService.save(sysUser);
         return R.ok();
     }
 
     @PutMapping("/update")
-    public R update(@RequestBody SysUserEntity sysUser){
-		sysUserService.updateById(sysUser);
+    public R update(@RequestBody SysUserEntity sysUser) {
+        sysUserService.updateById(sysUser);
+        return R.ok();
+    }
+
+    @PutMapping("/updatePwd")
+    public R updatePwd(@RequestBody PwdParam pwdParam) {
+        sysUserService.updatePwd(pwdParam);
         return R.ok();
     }
 
     @DeleteMapping("/delete")
-    public R delete(@RequestBody String ...ids){
-		sysUserService.removeByIds(Arrays.asList(ids));
+    public R delete(@RequestBody String... ids) {
+        sysUserService.removeByIds(Arrays.asList(ids));
         return R.ok();
     }
 

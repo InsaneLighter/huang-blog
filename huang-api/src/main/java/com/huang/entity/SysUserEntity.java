@@ -1,7 +1,9 @@
 package com.huang.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,6 +16,7 @@ import java.util.Date;
  * @date 2022-04-15 10:19:09
  */
 @Data
+@ToString
 @TableName("sys_user")
 public class SysUserEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -43,6 +46,11 @@ public class SysUserEntity implements Serializable {
 	 * 头像地址
 	 */
 	private String avatar;
+
+	/**
+	 *  个人描述
+	 */
+	private String description;
 	/**
 	 * 邮件
 	 */
@@ -81,5 +89,25 @@ public class SysUserEntity implements Serializable {
 	 * 是否为admin账号(0-非admin,1-admin)
 	 */
 	private Integer isAdmin;
+
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	@TableField(exist = false)
+	private String ip;
+
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	@TableField(exist = false)
+	private String browser;
+
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	@TableField(exist = false)
+	private String address;
+
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	@TableField(exist = false)
+	private String token;
+
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	@TableField(exist = false)
+	private Date loginTime;
 
 }

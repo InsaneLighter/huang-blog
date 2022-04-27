@@ -60,6 +60,10 @@
         <spring-boot-starter-data-redis.version>2.5.7</spring-boot-starter-data-redis.version>
         <spring-boot-starter-actuator.version>2.5.7</spring-boot-starter-actuator.version>
         <image4j.version>0.7zensight1</image4j.version>
+        <captcha.version>1.6.2</captcha.version>
+        <yauaa.version>5.23</yauaa.version>
+        <mica-ip2region.version>2.5.6</mica-ip2region.version>
+        <jjwt.version>0.11.1</jjwt.version>
     </properties>
 
     <dependencyManagement>
@@ -199,6 +203,43 @@
                 <groupId>net.sf.image4j</groupId>
                 <artifactId>image4j</artifactId>
                 <version>${image4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.whvcse</groupId>
+                <artifactId>easy-captcha</artifactId>
+                <version>${captcha.version}</version>
+            </dependency>
+
+            <!-- 解析客户端操作系统、浏览器信息 -->
+            <dependency>
+                <groupId>nl.basjes.parse.useragent</groupId>
+                <artifactId>yauaa</artifactId>
+                <version>${yauaa.version}</version>
+            </dependency>
+
+            <!-- ip2region IP库 -->
+            <dependency>
+                <groupId>net.dreamlu</groupId>
+                <artifactId>mica-ip2region</artifactId>
+                <version>${mica-ip2region.version}</version>
+            </dependency>
+
+            <!-- jwt -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jjwt.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
