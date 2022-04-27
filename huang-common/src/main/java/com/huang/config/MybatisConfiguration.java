@@ -43,7 +43,7 @@ public class MybatisConfiguration implements MetaObjectHandler {
     }
 
     @Bean
-    public IKeyGenerator keyGenerator() {
+    public IKeyGenerator mybatisKeyGenerator() {
         return new H2KeyGenerator();
     }
 

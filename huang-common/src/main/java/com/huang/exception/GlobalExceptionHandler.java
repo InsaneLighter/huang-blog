@@ -36,8 +36,13 @@ public class GlobalExceptionHandler {
 	 * 处理自定义异常
 	 */
 	@ExceptionHandler(BlogException.class)
-	//@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	public R<?> handleHuang401Exception(BlogException e){
+	public R<?> handleBlogException(BlogException e){
+		log.error(e.getMessage(), e);
+		return R.error(e.getMessage());
+	}
+
+	@ExceptionHandler(AuthenticationException.class)
+	public R<?> handleAuthenticationException(AuthenticationException e){
 		log.error(e.getMessage(), e);
 		return R.error(e.getMessage());
 	}
