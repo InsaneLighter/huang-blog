@@ -7,32 +7,31 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.huang.entity.SysUserEntity;
+import com.huang.entity.bean.LoginCodeEnum;
+import com.huang.entity.bean.LoginProperties;
+import com.huang.entity.bean.SecurityProperties;
+import com.huang.entity.dto.JwtUserDto;
 import com.huang.entity.param.PwdParam;
 import com.huang.entity.param.UserParam;
 import com.huang.exception.AuthenticationException;
 import com.huang.exception.BlogException;
 import com.huang.mapper.SysUserMapper;
-import com.huang.security.config.bean.LoginCodeEnum;
-import com.huang.security.config.bean.LoginProperties;
-import com.huang.security.config.bean.SecurityProperties;
-import com.huang.security.security.TokenProvider;
+import com.huang.security.handler.TokenProvider;
 import com.huang.security.service.UserCacheClean;
-import com.huang.security.service.dto.JwtUserDto;
 import com.huang.service.SysUserService;
 import com.huang.utils.*;
 import com.wf.captcha.base.Captcha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -57,23 +56,30 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     private LoginProperties loginProperties;
     @Autowired
     private UserCacheClean userCacheClean;
+    @Autowired
+    private PasswordEncoder encoder;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-        IPage<SysUserEntity> page = this.page(
-                new Query().getPage(params),
-                new QueryWrapper<SysUserEntity>()
-        );
+        String keyword = (String) params.getOrDefault("keyword", "");
+        QueryWrapper<SysUserEntity> sysUserWrapper = new QueryWrapper<>();
+        if (StringUtils.hasText(keyword)) {
+            sysUserWrapper.like("username",keyword)
+                    .or().like("email",keyword)
+                    .or().like("description",keyword);
+        }
+        IPage<SysUserEntity> page = this.page(new Query().getPage(params),sysUserWrapper);
         return new PageUtils(page);
     }
 
     /**
      * 保存在线用户信息
+     *
      * @param sysUserEntity /
-     * @param token /
-     * @param request /
+     * @param token         /
+     * @param request       /
      */
-    public void save(SysUserEntity sysUserEntity, String token, HttpServletRequest request){
+    public void save(SysUserEntity sysUserEntity, String token, HttpServletRequest request) {
         String ip = CommonUtils.getIp(request);
         String browser = CommonUtils.getBrowser(request);
         String address = CommonUtils.getCityInfo(ip);
@@ -81,59 +87,87 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
             sysUserEntity.setIp(ip);
             sysUserEntity.setBrowser(browser);
             sysUserEntity.setAddress(address);
+            sysUserEntity.setLoginTime(new Date());
+            sysUserEntity.setToken(token);
         } catch (Exception e) {
-            log.error(e.getMessage(),e);
+            log.error(e.getMessage(), e);
         }
-        redisUtil.set(properties.getOnlineKey() + token, JSONObject.toJSON(sysUserEntity), properties.getTokenValidityInSeconds()/1000);
+        redisUtil.set(properties.getOnlineKey() + token, JSONObject.toJSON(sysUserEntity), properties.getTokenValidityInSeconds() / 1000);
     }
 
     /**
      * 查询全部数据
-     * @param filter /
-     * @param pageable /
+     *
      * @return /
      */
-    public PageUtils getAll(String filter, Pageable pageable){
-        List<SysUserEntity> sysUserEntities = getAll(filter);
-        Page<SysUserEntity> page = new Page<SysUserEntity>();
-        page.setRecords(sysUserEntities);
+    public PageUtils getAll(Map<String, Object> params) {
+        String keyword = (String) params.getOrDefault("keyword", "");
+        List<SysUserEntity> sysUserEntities = getAll(keyword);
+        Page<SysUserEntity> page = toPage(params, sysUserEntities);
         return new PageUtils(page);
+    }
+
+    private Page<SysUserEntity> toPage(Map<String, Object> params, List<SysUserEntity> sysUserEntities) {
+        int page = Integer.parseInt((String) params.getOrDefault("page", "1"));
+        int size = Integer.parseInt((String) params.getOrDefault("size", "10"));
+        Page<SysUserEntity> result = new Page<>();
+        List<SysUserEntity> resultEntities;
+        int fromIndex = page * size;
+        int toIndex = page * size + size;
+        if (fromIndex > sysUserEntities.size()) {
+            resultEntities = new ArrayList();
+        } else if (toIndex >= sysUserEntities.size()) {
+            resultEntities = sysUserEntities.subList(fromIndex, sysUserEntities.size());
+        } else {
+            resultEntities = sysUserEntities.subList(fromIndex, toIndex);
+        }
+        result.setRecords(resultEntities);
+        result.setCurrent(page);
+        result.setSize(size);
+        result.setTotal(sysUserEntities.size());
+        return result;
     }
 
     /**
      * 查询全部数据，不分页
+     *
      * @param filter /
      * @return /
      */
-    public List<SysUserEntity> getAll(String filter){
+    public List<SysUserEntity> getAll(String filter) {
         List<String> keys = redisUtil.scan(properties.getOnlineKey() + "*");
         Collections.reverse(keys);
         List<SysUserEntity> sysUserEntities = new ArrayList<>();
         for (String key : keys) {
-            SysUserEntity sysUserEntity = (SysUserEntity) redisUtil.get(key);
-            if(StringUtils.hasText(filter)){
-                if(sysUserEntity.toString().contains(filter)){
+            JSONObject jsonObject = (JSONObject) redisUtil.get(key);
+            if (jsonObject != null) {
+                SysUserEntity sysUserEntity = jsonObject.toJavaObject(SysUserEntity.class);
+                sysUserEntity.setPassword("******");
+                if (StringUtils.hasText(filter)) {
+                    if (sysUserEntity.toString().toLowerCase().contains(filter.toLowerCase())) {
+                        sysUserEntities.add(sysUserEntity);
+                    }
+                } else {
                     sysUserEntities.add(sysUserEntity);
                 }
-            } else {
-                sysUserEntities.add(sysUserEntity);
             }
         }
-        sysUserEntities.sort((o1, o2) -> o2.getLoginTime().compareTo(o1.getLoginTime()));
         return sysUserEntities;
     }
 
     /**
      * 踢出用户
+     *
      * @param key /
      */
-    public void kickOut(String key){
+    public void kickOut(String key) {
         key = properties.getOnlineKey() + key;
         redisUtil.del(key);
     }
 
     /**
      * 退出登录
+     *
      * @param token /
      */
     public void logout(String token) {
@@ -143,6 +177,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
 
     /**
      * 查询用户
+     *
      * @param key /
      * @return /
      */
@@ -153,24 +188,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
 
     /**
      * 检测用户是否在之前已经登录，已经登录踢下线
+     *
      * @param userName 用户名
      */
-    public void checkLoginOnUser(String userName, String igoreToken){
+    public void checkLoginOnUser(String userName,String ignoreToken) {
         List<SysUserEntity> sysUserEntities = getAll(userName);
-        if(sysUserEntities ==null || sysUserEntities.isEmpty()){
+        if (sysUserEntities == null || sysUserEntities.isEmpty()) {
             return;
         }
-        for(SysUserEntity sysUserEntity : sysUserEntities){
-            if(sysUserEntity.getUsername().equals(userName)){
+        for (SysUserEntity sysUserEntity : sysUserEntities) {
+            String token = sysUserEntity.getToken();
+            if (sysUserEntity.getUsername().equalsIgnoreCase(userName) && !token.equals(ignoreToken)) {
                 try {
-                    String token = EncryptUtils.desDecrypt(sysUserEntity.getToken());
-                    if(StringUtils.hasText(igoreToken)&&!igoreToken.equals(token)){
-                        this.kickOut(token);
-                    }else if(!StringUtils.hasText(igoreToken)){
-                        this.kickOut(token);
-                    }
+                    this.kickOut(token);
                 } catch (Exception e) {
-                    log.error("checkUser is error",e);
+                    log.error("checkUser is error", e);
                 }
             }
         }
@@ -178,6 +210,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
 
     /**
      * 根据用户名强退用户
+     *
      * @param username /
      */
     @Async
@@ -194,7 +227,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     @Override
     public String login(UserParam authUser, HttpServletRequest request) {
         // 密码解密
-        String password = RSAUtils.decryptByPrivateKey(authUser.getPassword(),privateKey);
+        String password = RSAUtils.decryptByPrivateKey(authUser.getPassword(), privateKey);
         // 查询验证码
         String code = (String) redisUtil.get(authUser.getUuid());
         // 清除验证码
@@ -244,47 +277,31 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     @Override
     public SysUserEntity findByName(String username) {
         QueryWrapper<SysUserEntity> sysUserWrapper = new QueryWrapper<>();
-        sysUserWrapper.eq("username",username);
+        sysUserWrapper.eq("username", username);
         return this.list(sysUserWrapper).stream().findFirst().orElse(null);
     }
 
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void updatePass(SysUserEntity sysUserEntity) {
-        this.updateById(sysUserEntity);
-        flushCache(sysUserEntity.getUsername());
-    }
-
-    @Override
-    public Map<String, String> updateAvatar(MultipartFile file) {
-        return null;
-    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateEmail(SysUserEntity sysUserEntity) {
-        this.updateById(sysUserEntity);
-        flushCache(sysUserEntity.getUsername());
-    }
-
-    @Override
     public void updatePwd(PwdParam pwdParam) {
-        String oldPassword = pwdParam.getOldPassword();
-        String newPassword = pwdParam.getNewPassword();
-        if(!StringUtils.hasText(oldPassword)
+        String oldPassword = RSAUtils.decryptByPrivateKey(pwdParam.getOldPassword(), privateKey);
+        String newPassword = RSAUtils.decryptByPrivateKey(pwdParam.getNewPassword(), privateKey);
+        if (!StringUtils.hasText(oldPassword)
                 || !StringUtils.hasText(newPassword)
-                ){
+        ) {
             throw new BlogException("密码为空！");
         }
-        if(newPassword.equals(oldPassword)){
+        if (newPassword.equals(oldPassword)) {
             throw new BlogException("修改前后密码一致！");
         }
         String id = pwdParam.getId();
         SysUserEntity entity = this.getById(id);
-        if (entity.getPassword().equals(oldPassword)) {
-            entity.setPassword(newPassword);
+
+        if (encoder.matches(oldPassword, entity.getPassword())) {
+            entity.setPassword(encoder.encode(newPassword));
             this.updateById(entity);
-        }else {
+        } else {
             throw new BlogException("密码填写错误！");
         }
     }

@@ -5,8 +5,6 @@ import com.huang.entity.SysUserEntity;
 import com.huang.entity.param.PwdParam;
 import com.huang.entity.param.UserParam;
 import com.huang.utils.PageUtils;
-import org.springframework.data.domain.Pageable;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -22,7 +20,7 @@ public interface SysUserService extends IService<SysUserEntity> {
 
     void save(SysUserEntity sysUserEntity, String token, HttpServletRequest request);
 
-    PageUtils getAll(String filter, Pageable pageable);
+    PageUtils getAll(Map<String, Object> params);
 
     List<SysUserEntity> getAll(String filter);
 
@@ -32,7 +30,7 @@ public interface SysUserService extends IService<SysUserEntity> {
 
     SysUserEntity getOne(String key);
 
-    void checkLoginOnUser(String userName, String igoreToken);
+    void checkLoginOnUser(String userName, String ignoreToken);
 
     void kickOutForUsername(String username);
 
@@ -41,12 +39,6 @@ public interface SysUserService extends IService<SysUserEntity> {
     Map<String, Object> getCode();
 
     SysUserEntity findByName(String userName);
-
-    void updatePass(SysUserEntity sysUserEntity);
-
-    Map<String, String> updateAvatar(MultipartFile file);
-
-    void updateEmail(SysUserEntity sysUserEntity);
 
     void updatePwd(PwdParam pwdParam);
 }

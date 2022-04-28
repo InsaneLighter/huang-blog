@@ -1,6 +1,7 @@
 package com.huang.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.ToString;
@@ -37,6 +38,7 @@ public class SysUserEntity implements Serializable {
 	/**
 	 * 生日
 	 */
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
 	private Date birthday;
 	/**
 	 * 性别(0-默认未知,1-男,2-女)
@@ -108,6 +110,7 @@ public class SysUserEntity implements Serializable {
 
 	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	@TableField(exist = false)
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	private Date loginTime;
 
 }
