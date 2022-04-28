@@ -305,8 +305,4 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
             throw new BlogException("密码填写错误！");
         }
     }
-
-    private void flushCache(String username) {
-        userCacheClean.cleanUserCache(username);
-    }
 }
