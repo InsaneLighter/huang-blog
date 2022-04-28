@@ -5,8 +5,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.huang.entity.AttachmentEntity;
+import com.huang.entity.SysUserEntity;
 import com.huang.entity.enums.AttachmentType;
+import com.huang.exception.BlogException;
 import com.huang.mapper.AttachmentMapper;
+import com.huang.mapper.SysUserMapper;
 import com.huang.service.AttachmentService;
 import com.huang.utils.ImageUtils;
 import com.huang.utils.MinioUtil;
@@ -27,10 +30,7 @@ import javax.imageio.ImageReader;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -42,6 +42,8 @@ public class AttachmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachm
     private MinioUtil minioUtil;
     @Value("${minio.bucketName}")
     private String bucketName;
+    @Autowired
+    private SysUserMapper sysUserMapper;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -85,11 +87,27 @@ public class AttachmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachm
     @Override
     public void delete(List<String> list) {
         List<AttachmentEntity> attachmentEntities = this.listByIds(list);
+        List<String> filePaths = new ArrayList<>();
         List<String> fileNames = attachmentEntities.stream().map(attachmentEntity -> {
             String path = attachmentEntity.getPath();
+            filePaths.add(path);
             int index = path.lastIndexOf("/");
             return path.substring(index + 1);
         }).collect(Collectors.toList());
+
+        //关联已经使用的图像
+        QueryWrapper<SysUserEntity> sysUserWrapper = new QueryWrapper<>();
+        sysUserWrapper.in("avatar",filePaths);
+        List<SysUserEntity> sysUserEntities = sysUserMapper.selectList(sysUserWrapper);
+        if (sysUserEntities.size() > 0) {
+            StringBuilder builder = new StringBuilder();
+            sysUserEntities.stream().forEach(sysUserEntity -> {
+                String avatar = sysUserEntity.getAvatar();
+                int i = avatar.lastIndexOf("/");
+                builder.append(avatar.substring(i+1)).append(" ");
+            });
+            throw new BlogException(String.format("选中图像 %s 被使用到！", builder));
+        }
         boolean remove = this.removeByIds(list);
         if (remove) {
             fileNames.forEach(fileName -> {
