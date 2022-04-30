@@ -18,16 +18,17 @@ import com.huang.exception.BlogException;
 import com.huang.mapper.SysUserMapper;
 import com.huang.security.handler.TokenProvider;
 import com.huang.security.service.UserCacheClean;
+import com.huang.security.utils.SecurityUtil;
 import com.huang.service.SysUserService;
 import com.huang.utils.*;
 import com.wf.captcha.base.Captcha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,11 +65,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         String keyword = (String) params.getOrDefault("keyword", "");
         QueryWrapper<SysUserEntity> sysUserWrapper = new QueryWrapper<>();
         if (StringUtils.hasText(keyword)) {
-            sysUserWrapper.like("username",keyword)
-                    .or().like("email",keyword)
-                    .or().like("description",keyword);
+            sysUserWrapper.like("username", keyword)
+                    .or().like("email", keyword)
+                    .or().like("description", keyword);
         }
-        IPage<SysUserEntity> page = this.page(new Query().getPage(params),sysUserWrapper);
+        IPage<SysUserEntity> page = this.page(new Query().getPage(params), sysUserWrapper);
         return new PageUtils(page);
     }
 
@@ -191,7 +192,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
      *
      * @param userName 用户名
      */
-    public void checkLoginOnUser(String userName,String ignoreToken) {
+    public void checkLoginOnUser(String userName, String ignoreToken) {
         List<SysUserEntity> sysUserEntities = getAll(userName);
         if (sysUserEntities == null || sysUserEntities.isEmpty()) {
             return;
@@ -213,12 +214,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
      *
      * @param username /
      */
-    @Async
+    @Override
     public void kickOutForUsername(String username) {
         List<SysUserEntity> sysUserEntities = getAll(username);
         for (SysUserEntity sysUserEntity : sysUserEntities) {
             if (sysUserEntity.getUsername().equals(username)) {
-                String token = EncryptUtils.desDecrypt(sysUserEntity.getToken());
+                String token = sysUserEntity.getToken();
                 kickOut(token);
             }
         }
@@ -237,6 +238,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         }
         if (!StringUtils.hasText(authUser.getCode()) || !authUser.getCode().equalsIgnoreCase(code)) {
             throw new AuthenticationException("验证码错误");
+        }
+        //账号禁用判断
+        QueryWrapper<SysUserEntity> sysUserWrapper = new QueryWrapper<>();
+        sysUserWrapper.eq("username", authUser.getUsername());
+        SysUserEntity entity = this.getOne(sysUserWrapper);
+        Integer status = entity.getStatus();
+        if (status == null || status == 1) {
+            throw new AuthenticationException("账号已被禁用！");
         }
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(authUser.getUsername(), password);
@@ -303,6 +312,35 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
             this.updateById(entity);
         } else {
             throw new BlogException("密码填写错误！");
+        }
+    }
+
+    @Override
+    public void saveUser(SysUserEntity sysUser) {
+        String username = sysUser.getUsername();
+        QueryWrapper<SysUserEntity> sysUserWrapper = new QueryWrapper<>();
+        sysUserWrapper.eq("username", username);
+        SysUserEntity sysUserEntity = this.list(sysUserWrapper).stream().findFirst().orElse(null);
+        if (sysUserEntity == null) {
+            String password = RSAUtils.decryptByPrivateKey(sysUser.getPassword(), privateKey);
+            sysUser.setPassword(encoder.encode(password));
+            this.save(sysUser);
+        } else {
+            throw new BlogException("已存在相同用户名的用户！");
+        }
+    }
+
+    @Override
+    public void update(SysUserEntity sysUser) {
+        UserDetails currentUser = SecurityUtil.getCurrentUser();
+        String username = currentUser.getUsername();
+        QueryWrapper<SysUserEntity> sysUserWrapper = new QueryWrapper<>();
+        sysUserWrapper.eq("id", "0");
+        SysUserEntity sysUserEntity = this.getOne(sysUserWrapper);
+        if(sysUserEntity.getUsername().equals(username)){
+            this.updateById(sysUser);
+        }else {
+            throw new AuthenticationException("当前用户没有权限更改用户数据！");
         }
     }
 }

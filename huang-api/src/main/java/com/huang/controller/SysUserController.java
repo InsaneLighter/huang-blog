@@ -1,11 +1,11 @@
 package com.huang.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.huang.entity.SysUserEntity;
 import com.huang.entity.dto.JwtUserDto;
 import com.huang.entity.param.PwdParam;
 import com.huang.security.utils.SecurityUtil;
 import com.huang.service.SysUserService;
-import com.huang.utils.EncryptUtils;
 import com.huang.utils.PageUtils;
 import com.huang.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,13 +48,13 @@ public class SysUserController {
 
     @PostMapping("/save")
     public R save(@RequestBody SysUserEntity sysUser) {
-        sysUserService.save(sysUser);
+        sysUserService.saveUser(sysUser);
         return R.ok();
     }
 
     @PutMapping("/update")
     public R update(@RequestBody SysUserEntity sysUser) {
-        sysUserService.updateById(sysUser);
+        sysUserService.update(sysUser);
         return R.ok();
     }
 
@@ -82,6 +82,13 @@ public class SysUserController {
             // 解密Key
             sysUserService.kickOut(key);
         }
+        return R.ok();
+    }
+
+    @DeleteMapping("/kickOutByUserName")
+    public R deleteOnlineUserByUserName(@RequestBody JSONObject params) {
+        String username = params.getString("username");
+        sysUserService.kickOutForUsername(username);
         return R.ok();
     }
 
