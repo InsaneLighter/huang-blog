@@ -17,7 +17,6 @@ import com.huang.exception.AuthenticationException;
 import com.huang.exception.BlogException;
 import com.huang.mapper.SysUserMapper;
 import com.huang.security.handler.TokenProvider;
-import com.huang.security.service.UserCacheClean;
 import com.huang.security.utils.SecurityUtil;
 import com.huang.service.SysUserService;
 import com.huang.utils.*;
@@ -43,6 +42,8 @@ import java.util.concurrent.TimeUnit;
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity> implements SysUserService {
     @Value("${rsa.privateKey}")
     private String privateKey;
+    @Value("${login.default-password}")
+    private String DEFAULT_PWD;
     @Autowired
     private RedisUtil redisUtil;
     @Autowired
@@ -55,8 +56,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     private AuthenticationManagerBuilder authenticationManagerBuilder;
     @Autowired
     private LoginProperties loginProperties;
-    @Autowired
-    private UserCacheClean userCacheClean;
     @Autowired
     private PasswordEncoder encoder;
 
@@ -342,5 +341,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         }else {
             throw new AuthenticationException("当前用户没有权限更改用户数据！");
         }
+    }
+
+    @Override
+    public void resetPwd(String id) {
+        SysUserEntity sysUserEntity = new SysUserEntity();
+        sysUserEntity.setId(id);
+        sysUserEntity.setPassword(encoder.encode(DEFAULT_PWD));
+        this.updateById(sysUserEntity);
     }
 }

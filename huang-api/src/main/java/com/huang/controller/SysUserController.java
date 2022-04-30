@@ -92,4 +92,11 @@ public class SysUserController {
         return R.ok();
     }
 
+    @PutMapping("/resetPwd")
+    public R resetPwd(@RequestBody JSONObject params) {
+        String id = params.getString("id");
+        sysUserService.resetPwd(id);
+        return R.ok();
+    }
+
 }

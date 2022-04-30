@@ -45,5 +45,7 @@ public interface SysUserService extends IService<SysUserEntity> {
     void saveUser(SysUserEntity sysUser);
 
     void update(SysUserEntity sysUser);
+
+    void resetPwd(String id);
 }
 
