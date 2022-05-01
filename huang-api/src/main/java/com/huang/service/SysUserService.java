@@ -34,7 +34,7 @@ public interface SysUserService extends IService<SysUserEntity> {
 
     void kickOutForUsername(String username);
 
-    String login(UserParam authUser, HttpServletRequest request);
+    SysUserEntity login(UserParam authUser, HttpServletRequest request);
 
     Map<String, Object> getCode();
 

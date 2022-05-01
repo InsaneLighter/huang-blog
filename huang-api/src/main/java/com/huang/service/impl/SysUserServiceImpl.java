@@ -21,6 +21,7 @@ import com.huang.security.utils.SecurityUtil;
 import com.huang.service.SysUserService;
 import com.huang.utils.*;
 import com.wf.captcha.base.Captcha;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -225,7 +226,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     }
 
     @Override
-    public String login(UserParam authUser, HttpServletRequest request) {
+    public SysUserEntity login(UserParam authUser, HttpServletRequest request) {
         // 密码解密
         String password = RSAUtils.decryptByPrivateKey(authUser.getPassword(), privateKey);
         // 查询验证码
@@ -242,12 +243,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         QueryWrapper<SysUserEntity> sysUserWrapper = new QueryWrapper<>();
         sysUserWrapper.eq("username", authUser.getUsername());
         SysUserEntity entity = this.getOne(sysUserWrapper);
-        Integer status = entity.getStatus();
-        if (status == null || status == 1) {
-            throw new AuthenticationException("账号已被禁用！");
+        if (entity != null) {
+            Integer status = entity.getStatus();
+            if (status == null || status == 1) {
+                throw new AuthenticationException("账号已被禁用！");
+            }
+        }else {
+            throw new AuthenticationException("用户不存在！");
         }
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(authUser.getUsername(), password);
+                    new UsernamePasswordAuthenticationToken(authUser.getUsername(), password);
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = tokenProvider.createToken(authentication);
@@ -260,7 +265,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
             //踢掉之前已经登录的token
             sysUserService.checkLoginOnUser(authUser.getUsername(), token);
         }
-        return properties.getTokenStartWith() + token;
+        SysUserEntity resultEntity = new SysUserEntity();
+        BeanUtils.copyProperties(sysUserEntity,resultEntity);
+        resultEntity.setToken(properties.getTokenStartWith() + token);
+        resultEntity.setPassword(null);
+        return resultEntity;
     }
 
     @Override

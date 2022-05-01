@@ -1,5 +1,6 @@
 package com.huang.controller;
 
+import com.huang.entity.SysUserEntity;
 import com.huang.entity.param.UserParam;
 import com.huang.security.handler.TokenProvider;
 import com.huang.service.SysUserService;
@@ -26,9 +27,9 @@ public class LoginController {
     private TokenProvider tokenProvider;
 
     @PostMapping(value = "/login")
-    public R login(@Validated @RequestBody UserParam authUser, HttpServletRequest request) throws Exception {
-        String token = sysUserService.login(authUser,request);
-        return R.ok().put("token",token);
+    public R login(@Validated @RequestBody UserParam authUser, HttpServletRequest request) {
+        SysUserEntity sysUserEntity = sysUserService.login(authUser,request);
+        return R.ok().put("user",sysUserEntity);
     }
 
     @GetMapping(value = "/code")
