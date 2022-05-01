@@ -147,7 +147,7 @@ public class RedisUtil {
     /**
      * 删除缓存
      *
-     * @param key 可以传一个值 或多个
+     * @param keys 可以传一个值 或多个
      */
     public void del(String... keys) {
         if (keys != null && keys.length > 0) {
