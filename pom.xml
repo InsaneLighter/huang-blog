@@ -64,6 +64,8 @@
         <yauaa.version>5.23</yauaa.version>
         <mica-ip2region.version>2.5.6</mica-ip2region.version>
         <jjwt.version>0.11.1</jjwt.version>
+        <spring-boot-starter-mail.version>2.5.7</spring-boot-starter-mail.version>
+        <spring-boot-starter-validation.version>2.5.7</spring-boot-starter-validation.version>
     </properties>
 
     <dependencyManagement>
@@ -241,6 +243,18 @@
                 <artifactId>jjwt-jackson</artifactId>
                 <version>${jjwt.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-mail</artifactId>
+                <version>${spring-boot-starter-mail.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-validation</artifactId>
+                <version>${spring-boot-starter-validation.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -295,15 +309,6 @@
             </properties>
         </profile>
     </profiles>
-
-    <!-- 使用aliyun maven -->
-    <repositories>
-        <repository>
-            <id>aliyun</id>
-            <name>aliyun</name>
-            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
-        </repository>
-    </repositories>
 
     <build>
         <finalName>${project.artifactId}</finalName>
