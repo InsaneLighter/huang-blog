@@ -84,7 +84,7 @@ public class MailUtil {
             }
             return String.format("邮件发送成功:%s",Arrays.toString(mailEntity.getTos()));
         } catch (Exception e) {
-            return String.format("邮件发送失败:%s",e);
+            throw new RuntimeException(e);
         }
     }
 

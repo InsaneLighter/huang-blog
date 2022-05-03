@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 public class MailEntity {
-    @NotBlank(message = "邮件接收方不能为空")
+    @NotBlank(message = "邮件收件人不能为空")
     private String[] tos;
     @NotBlank(message = "邮件主题不能为空")
     private String subject;
