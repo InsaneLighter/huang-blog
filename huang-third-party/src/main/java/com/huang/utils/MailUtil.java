@@ -1,6 +1,7 @@
 package com.huang.utils;
 
 import com.huang.entity.MailEntity;
+import io.minio.messages.Bucket;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,10 +16,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 /**
  * @Time 2022-05-01 20:16
@@ -31,10 +29,12 @@ import java.util.TimerTask;
 public class MailUtil {
     @Autowired
     private JavaMailSender mailSender;
-
+    @Autowired
+    private MinioUtil minioUtil;
     @Value("${spring.mail.username}")
     private String from;
-
+    @Value("${minio.mail.bucketName}")
+    private String bucketName;
 
     public String send(MailEntity mailEntity) {
         //创建一个MINE消息
@@ -42,14 +42,14 @@ public class MailUtil {
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setFrom(from,"Huang");
-            helper.setTo(mailEntity.getTos());
+            helper.setTo(mailEntity.getTos().split(","));
             //邮件主题
             helper.setSubject(mailEntity.getSubject());
             //邮件内容拼接
             String content = mailEntity.getContent();
             helper.setText(content, true);
             //添加附件
-            MultipartFile[] multipartFiles = mailEntity.getMultipartFiles();
+            /*MultipartFile[] multipartFiles = mailEntity.getMultipartFiles();
             if (multipartFiles != null) {
                 Arrays.stream(multipartFiles).forEach(multipartFile -> {
                     if (multipartFile != null) {
@@ -62,7 +62,7 @@ public class MailUtil {
                         }
                     }
                 });
-            }
+            }*/
             //验证邮箱地址
             helper.setValidateAddresses(true);
 
@@ -82,7 +82,7 @@ public class MailUtil {
             } else {
                 mailSender.send(message);
             }
-            return String.format("邮件发送成功:%s",Arrays.toString(mailEntity.getTos()));
+            return String.format("邮件发送成功:%s",mailEntity.getTos());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -97,5 +97,21 @@ public class MailUtil {
         File file = File.createTempFile(fileName, prefix);
         multiFile.transferTo(file);
         return file;
+    }
+
+    public String upload(MultipartFile multipartFile) {
+        if(multipartFile == null ){
+            throw new RuntimeException("上传附件为空！");
+        }
+        try {
+            Optional<Bucket> bucket = minioUtil.getBucket(bucketName);
+            if (!bucket.isPresent()) {
+                minioUtil.createBucket(bucketName);
+            }
+            return minioUtil.uploadFile(multipartFile, bucketName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }

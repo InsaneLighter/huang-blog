@@ -5,9 +5,8 @@ import com.huang.utils.MailUtil;
 import com.huang.utils.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @Time 2022-05-02 11:17
@@ -23,8 +22,15 @@ public class MailController {
     private MailUtil mailUtil;
 
     @PostMapping("/send")
-    public R sendMail(MailEntity mailEntity){
+    public R sendMail(@RequestBody MailEntity mailEntity){
         String result = mailUtil.send(mailEntity);
         return R.ok().put("result", result);
+    }
+
+    @PostMapping("/upload/images")
+    public R uploadImages(@RequestPart("file") MultipartFile multipartFile){
+        //wangeditor 图片上传即使选择多个 则会分多次请求上传
+        String url = mailUtil.upload(multipartFile);
+        return R.ok().put("url",url);
     }
 }
