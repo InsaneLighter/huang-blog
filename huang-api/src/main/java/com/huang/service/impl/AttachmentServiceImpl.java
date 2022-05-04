@@ -40,7 +40,7 @@ public class AttachmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachm
     private final MediaType IMAGE_TYPE = MediaType.valueOf("image/*");
     @Autowired
     private MinioUtil minioUtil;
-    @Value("${minio.bucketName}")
+    @Value("${minio.attachment.bucketName}")
     private String bucketName;
     @Autowired
     private SysUserMapper sysUserMapper;
