@@ -6,9 +6,13 @@ import com.huang.service.ContentService;
 import com.huang.utils.PageUtils;
 import com.huang.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,4 +58,13 @@ public class ContentController {
         return R.ok();
     }
 
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public R uploadAttachments(@RequestPart("files") MultipartFile[] files) {
+        List<String> urls = new ArrayList<>();
+        for (MultipartFile file : files) {
+            String url = contentService.upload(file);
+            urls.add(url);
+        }
+        return R.ok().put("urls",urls);
+    }
 }

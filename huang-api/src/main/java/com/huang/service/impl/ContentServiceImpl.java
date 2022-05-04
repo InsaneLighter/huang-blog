@@ -8,20 +8,17 @@ import com.huang.entity.enums.PostStatus;
 import com.huang.entity.param.ContentParam;
 import com.huang.mapper.*;
 import com.huang.service.ContentService;
-import com.huang.utils.CommonUtils;
-import com.huang.utils.Constant;
-import com.huang.utils.PageUtils;
-import com.huang.utils.Query;
+import com.huang.utils.*;
+import io.minio.messages.Bucket;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -46,6 +43,10 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
     private JournalMapper journalMapper;
     @Autowired
     private JournalPatchLogMapper journalPatchLogMapper;
+    @Autowired
+    private MinioUtil minioUtil;
+    @Value("${minio.content.bucketName}")
+    private String bucketName;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -146,6 +147,23 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
         saveArticleTags(contentParam,postId);
         //journal
         saveJournalChanges("绞尽脑汁修改了一篇文章: "+ contentParam.getTitle());
+    }
+
+    @Override
+    public String upload(MultipartFile file) {
+        if(file == null ){
+            throw new RuntimeException("上传附件为空！");
+        }
+        try {
+            Optional<Bucket> bucket = minioUtil.getBucket(bucketName);
+            if (!bucket.isPresent()) {
+                minioUtil.createBucket(bucketName);
+            }
+            return minioUtil.uploadFile(file, bucketName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     /***

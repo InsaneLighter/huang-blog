@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.huang.entity.ContentEntity;
 import com.huang.entity.param.ContentParam;
 import com.huang.utils.PageUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -20,5 +21,7 @@ public interface ContentService extends IService<ContentEntity> {
     void saveArticle(ContentParam contentParam);
 
     void updateArticle(ContentParam contentParam);
+
+    String upload(MultipartFile file);
 }
 
