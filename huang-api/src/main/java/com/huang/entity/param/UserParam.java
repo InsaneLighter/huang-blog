@@ -2,8 +2,6 @@ package com.huang.entity.param;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-
 /**
  * @Time 2022-04-26 15:48
  * Created by Huang
@@ -18,5 +16,5 @@ public class UserParam {
 
     private String code;
 
-    private String uuid = "";
+    private String uuid;
 }

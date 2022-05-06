@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.huang.entity.SysUserEntity;
+import com.huang.entity.*;
 import com.huang.entity.bean.LoginCodeEnum;
 import com.huang.entity.bean.LoginProperties;
 import com.huang.entity.bean.SecurityProperties;
@@ -15,12 +15,14 @@ import com.huang.entity.param.PwdParam;
 import com.huang.entity.param.UserParam;
 import com.huang.exception.AuthenticationException;
 import com.huang.exception.BlogException;
-import com.huang.mapper.SysUserMapper;
+import com.huang.mapper.*;
 import com.huang.security.handler.TokenProvider;
+import com.huang.security.utils.RedisUtil;
 import com.huang.security.utils.SecurityUtil;
 import com.huang.service.SysUserService;
 import com.huang.utils.*;
 import com.wf.captcha.base.Captcha;
+import io.minio.messages.Bucket;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,8 +33,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -59,6 +61,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     private LoginProperties loginProperties;
     @Autowired
     private PasswordEncoder encoder;
+    @Autowired
+    private MinioUtil minioUtil;
+    @Autowired
+    private PostMapper postMapper;
+    @Autowired
+    private JournalMapper journalMapper;
+    @Autowired
+    private CategoryMapper categoryMapper;
+    @Autowired
+    private TagMapper tagMapper;
+    @Value("${minio.user.bucketName}")
+    private String bucketName;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -300,7 +314,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
 
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void updatePwd(PwdParam pwdParam) {
         String oldPassword = RSAUtils.decryptByPrivateKey(pwdParam.getOldPassword(), privateKey);
         String newPassword = RSAUtils.decryptByPrivateKey(pwdParam.getNewPassword(), privateKey);
@@ -358,5 +371,53 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         sysUserEntity.setId(id);
         sysUserEntity.setPassword(encoder.encode(DEFAULT_PWD));
         this.updateById(sysUserEntity);
+    }
+
+    @Override
+    public String upload(MultipartFile multipartFile) {
+        try {
+            Optional<Bucket> bucket = minioUtil.getBucket(bucketName);
+            if (!bucket.isPresent()) {
+                minioUtil.createBucket(bucketName);
+            }
+            return minioUtil.uploadFile(multipartFile, bucketName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> getCurrentUserInfo() {
+        Map<String, Object> result = new HashMap<>(2);
+        JwtUserDto currentUser = (JwtUserDto) SecurityUtil.getCurrentUser();
+        SysUserEntity user = currentUser.getUser();
+        user = this.getById(user.getId());
+        Date createTime = user.getCreateTime();
+        long days = (System.currentTimeMillis() - createTime.getTime()) / (1000 * 24 * 3600);
+        String username = user.getUsername();
+        QueryWrapper<PostEntity> postWrapper = new QueryWrapper<>();
+        postWrapper.eq("create_by",username);
+        Long postCount = postMapper.selectCount(postWrapper);
+        QueryWrapper<JournalEntity> journalWrapper = new QueryWrapper<>();
+        journalWrapper.eq("create_by",username);
+        Long journalCount = journalMapper.selectCount(journalWrapper);
+        QueryWrapper<CategoryEntity> categoryWrapper = new QueryWrapper<>();
+        categoryWrapper.eq("create_by",username);
+        Long categoryCount = categoryMapper.selectCount(categoryWrapper);
+        QueryWrapper<TagEntity> tagWrapper = new QueryWrapper<>();
+        tagWrapper.eq("create_by",username);
+        Long tagCount = tagMapper.selectCount(tagWrapper);
+        SysStatisticsEntity sysStatisticsEntity = new SysStatisticsEntity();
+
+        sysStatisticsEntity.setEstablishDays((int) days);
+        sysStatisticsEntity.setPostCount(Math.toIntExact(postCount));
+        sysStatisticsEntity.setJournalCount(Math.toIntExact(journalCount));
+        sysStatisticsEntity.setCategoryCount(Math.toIntExact(categoryCount));
+        sysStatisticsEntity.setTagCount(Math.toIntExact(tagCount));
+
+        result.put("user",user);
+        result.put("statistics",sysStatisticsEntity);
+        return result;
     }
 }

@@ -5,6 +5,7 @@ import com.huang.entity.SysUserEntity;
 import com.huang.entity.param.PwdParam;
 import com.huang.entity.param.UserParam;
 import com.huang.utils.PageUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -47,5 +48,10 @@ public interface SysUserService extends IService<SysUserEntity> {
     void update(SysUserEntity sysUser);
 
     void resetPwd(String id);
+
+    String upload(MultipartFile multipartFile);
+
+    Map<String, Object> getCurrentUserInfo();
+
 }
 
