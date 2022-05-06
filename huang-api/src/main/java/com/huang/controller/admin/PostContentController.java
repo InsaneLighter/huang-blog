@@ -1,4 +1,4 @@
-package com.huang.controller;
+package com.huang.controller.admin;
 import com.huang.entity.PostContentEntity;
 import com.huang.service.PostContentService;
 import com.huang.utils.PageUtils;

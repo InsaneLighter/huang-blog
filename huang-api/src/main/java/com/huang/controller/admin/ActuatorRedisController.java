@@ -1,4 +1,4 @@
-package com.huang.controller;
+package com.huang.controller.admin;
 
 import com.alibaba.fastjson.JSONArray;
 import com.huang.entity.RedisInfo;

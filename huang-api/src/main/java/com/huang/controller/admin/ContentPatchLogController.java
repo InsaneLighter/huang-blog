@@ -1,4 +1,4 @@
-package com.huang.controller;
+package com.huang.controller.admin;
 import com.huang.entity.ContentPatchLogEntity;
 import com.huang.service.ContentPatchLogService;
 import com.huang.utils.PageUtils;

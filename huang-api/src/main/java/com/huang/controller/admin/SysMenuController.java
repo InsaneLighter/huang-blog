@@ -1,10 +1,10 @@
-package com.huang.controller;
+package com.huang.controller.admin;
 import java.util.Arrays;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.huang.entity.JournalEntity;
-import com.huang.service.JournalService;
+import com.huang.entity.SysMenuEntity;
+import com.huang.service.SysMenuService;
 import com.huang.utils.PageUtils;
 import com.huang.utils.R;
 
@@ -13,41 +13,41 @@ import com.huang.utils.R;
  *
  * @author Huang
  * @email mail@huanghong.top
- * @date 2022-04-14 18:25:41
+ * @date 2022-04-15 10:19:09
  */
 @RestController
-@RequestMapping("/journal")
-public class JournalController {
+@RequestMapping("/menu")
+public class SysMenuController {
     @Autowired
-    private JournalService journalService;
+    private SysMenuService sysMenuService;
 
     @GetMapping("/list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = journalService.queryPage(params);
+        PageUtils page = sysMenuService.queryPage(params);
         return R.ok().put("data", page);
     }
 
     @GetMapping("/info/{id}")
-    public R info(@PathVariable("id") Integer id){
-		JournalEntity journal = journalService.getById(id);
-        return R.ok().put("journal", journal);
+    public R info(@PathVariable("id") String id){
+		SysMenuEntity sysMenu = sysMenuService.getById(id);
+        return R.ok().put("sysMenu", sysMenu);
     }
 
     @PostMapping("/save")
-    public R save(@RequestBody JournalEntity journal){
-		journalService.save(journal);
+    public R save(@RequestBody SysMenuEntity sysMenu){
+		sysMenuService.save(sysMenu);
         return R.ok();
     }
 
     @PutMapping("/update")
-    public R update(@RequestBody JournalEntity journal){
-		journalService.updateById(journal);
+    public R update(@RequestBody SysMenuEntity sysMenu){
+		sysMenuService.updateById(sysMenu);
         return R.ok();
     }
 
     @DeleteMapping("/delete")
     public R delete(@RequestBody String ...ids){
-		journalService.removeByIds(Arrays.asList(ids));
+		sysMenuService.removeByIds(Arrays.asList(ids));
         return R.ok();
     }
 

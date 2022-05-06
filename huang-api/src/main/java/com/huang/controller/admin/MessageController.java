@@ -1,6 +1,6 @@
-package com.huang.controller;
-import com.huang.entity.PostTagEntity;
-import com.huang.service.PostTagService;
+package com.huang.controller.admin;
+import com.huang.entity.MessageEntity;
+import com.huang.service.MessageService;
 import com.huang.utils.PageUtils;
 import com.huang.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,41 +14,41 @@ import java.util.Map;
  *
  * @author Huang
  * @email mail@huanghong.top
- * @date 2022-04-15 10:19:09
+ * @date 2022-04-14 18:25:41
  */
 @RestController
-@RequestMapping("/postTag")
-public class PostTagController {
+@RequestMapping("/message")
+public class MessageController {
     @Autowired
-    private PostTagService postTagService;
+    private MessageService messageService;
 
     @GetMapping("/list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = postTagService.queryPage(params);
+        PageUtils page = messageService.queryPage(params);
         return R.ok().put("data", page);
     }
 
     @GetMapping("/info/{id}")
-    public R info(@PathVariable("id") String id){
-		PostTagEntity postTag = postTagService.getById(id);
-        return R.ok().put("postTag", postTag);
+    public R info(@PathVariable("id") Integer id){
+		MessageEntity message = messageService.getById(id);
+        return R.ok().put("message", message);
     }
 
     @PostMapping("/save")
-    public R save(@RequestBody PostTagEntity postTag){
-		postTagService.save(postTag);
+    public R save(@RequestBody MessageEntity message){
+		messageService.save(message);
         return R.ok();
     }
 
     @PutMapping("/update")
-    public R update(@RequestBody PostTagEntity postTag){
-		postTagService.updateById(postTag);
+    public R update(@RequestBody MessageEntity message){
+		messageService.updateById(message);
         return R.ok();
     }
 
     @DeleteMapping("/delete")
     public R delete(@RequestBody String ...ids){
-		postTagService.removeByIds(Arrays.asList(ids));
+		messageService.removeByIds(Arrays.asList(ids));
         return R.ok();
     }
 

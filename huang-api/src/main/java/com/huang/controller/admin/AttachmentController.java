@@ -1,4 +1,4 @@
-package com.huang.controller;
+package com.huang.controller.admin;
 
 import com.huang.entity.AttachmentEntity;
 import com.huang.entity.enums.AttachmentType;

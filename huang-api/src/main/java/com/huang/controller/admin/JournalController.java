@@ -1,6 +1,6 @@
-package com.huang.controller;
-import com.huang.entity.SysLogEntity;
-import com.huang.service.SysLogService;
+package com.huang.controller.admin;
+import com.huang.entity.JournalEntity;
+import com.huang.service.JournalService;
 import com.huang.utils.PageUtils;
 import com.huang.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,41 +14,41 @@ import java.util.Map;
  *
  * @author Huang
  * @email mail@huanghong.top
- * @date 2022-04-15 10:19:09
+ * @date 2022-04-14 18:25:41
  */
 @RestController
-@RequestMapping("/log")
-public class SysLogController {
+@RequestMapping("/journal")
+public class JournalController {
     @Autowired
-    private SysLogService sysLogService;
+    private JournalService journalService;
 
     @GetMapping("/list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = sysLogService.queryPage(params);
+        PageUtils page = journalService.queryPage(params);
         return R.ok().put("data", page);
     }
 
     @GetMapping("/info/{id}")
-    public R info(@PathVariable("id") String id){
-		SysLogEntity sysLog = sysLogService.getById(id);
-        return R.ok().put("sysLog", sysLog);
+    public R info(@PathVariable("id") Integer id){
+		JournalEntity journal = journalService.getById(id);
+        return R.ok().put("journal", journal);
     }
 
     @PostMapping("/save")
-    public R save(@RequestBody SysLogEntity sysLog){
-		sysLogService.save(sysLog);
+    public R save(@RequestBody JournalEntity journal){
+		journalService.save(journal);
         return R.ok();
     }
 
     @PutMapping("/update")
-    public R update(@RequestBody SysLogEntity sysLog){
-		sysLogService.updateById(sysLog);
+    public R update(@RequestBody JournalEntity journal){
+		journalService.updateById(journal);
         return R.ok();
     }
 
     @DeleteMapping("/delete")
     public R delete(@RequestBody String ...ids){
-		sysLogService.removeByIds(Arrays.asList(ids));
+		journalService.removeByIds(Arrays.asList(ids));
         return R.ok();
     }
 

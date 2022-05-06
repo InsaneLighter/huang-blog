@@ -1,10 +1,10 @@
-package com.huang.controller;
+package com.huang.controller.admin;
 import java.util.Arrays;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.huang.entity.SysMenuEntity;
-import com.huang.service.SysMenuService;
+import com.huang.entity.PostCategoryEntity;
+import com.huang.service.PostCategoryService;
 import com.huang.utils.PageUtils;
 import com.huang.utils.R;
 
@@ -16,38 +16,38 @@ import com.huang.utils.R;
  * @date 2022-04-15 10:19:09
  */
 @RestController
-@RequestMapping("/menu")
-public class SysMenuController {
+@RequestMapping("/postCategory")
+public class PostCategoryController {
     @Autowired
-    private SysMenuService sysMenuService;
+    private PostCategoryService postCategoryService;
 
     @GetMapping("/list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = sysMenuService.queryPage(params);
+        PageUtils page = postCategoryService.queryPage(params);
         return R.ok().put("data", page);
     }
 
     @GetMapping("/info/{id}")
     public R info(@PathVariable("id") String id){
-		SysMenuEntity sysMenu = sysMenuService.getById(id);
-        return R.ok().put("sysMenu", sysMenu);
+		PostCategoryEntity postCategory = postCategoryService.getById(id);
+        return R.ok().put("postCategory", postCategory);
     }
 
     @PostMapping("/save")
-    public R save(@RequestBody SysMenuEntity sysMenu){
-		sysMenuService.save(sysMenu);
+    public R save(@RequestBody PostCategoryEntity postCategory){
+		postCategoryService.save(postCategory);
         return R.ok();
     }
 
     @PutMapping("/update")
-    public R update(@RequestBody SysMenuEntity sysMenu){
-		sysMenuService.updateById(sysMenu);
+    public R update(@RequestBody PostCategoryEntity postCategory){
+		postCategoryService.updateById(postCategory);
         return R.ok();
     }
 
     @DeleteMapping("/delete")
     public R delete(@RequestBody String ...ids){
-		sysMenuService.removeByIds(Arrays.asList(ids));
+		postCategoryService.removeByIds(Arrays.asList(ids));
         return R.ok();
     }
 

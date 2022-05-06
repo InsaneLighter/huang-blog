@@ -1,15 +1,14 @@
-package com.huang.controller;
+package com.huang.controller.admin;
 
 import com.alibaba.fastjson.JSONObject;
 import com.huang.entity.SysUserEntity;
-import com.huang.entity.dto.JwtUserDto;
 import com.huang.entity.param.PwdParam;
-import com.huang.security.utils.SecurityUtil;
 import com.huang.service.SysUserService;
 import com.huang.utils.PageUtils;
 import com.huang.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -33,11 +32,9 @@ public class SysUserController {
     }
 
     @GetMapping("/getCurrentUser")
-    public R getCurrentUser() {
-        JwtUserDto currentUser = (JwtUserDto) SecurityUtil.getCurrentUser();
-        SysUserEntity user = currentUser.getUser();
-        user = sysUserService.getById(user.getId());
-        return R.ok().put("user", user);
+    public R getCurrentUserInfo() {
+        Map<String,Object> result = sysUserService.getCurrentUserInfo();
+        return R.ok().put("data", result);
     }
 
     @GetMapping("/info/{id}")
@@ -97,6 +94,12 @@ public class SysUserController {
         String id = params.getString("id");
         sysUserService.resetPwd(id);
         return R.ok();
+    }
+
+    @PostMapping("/upload")
+    public R uploadImages(@RequestPart("file") MultipartFile multipartFile){
+        String url = sysUserService.upload(multipartFile);
+        return R.ok().put("url",url);
     }
 
 }
