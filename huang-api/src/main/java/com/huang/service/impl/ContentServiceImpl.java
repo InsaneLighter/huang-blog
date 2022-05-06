@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.huang.entity.*;
 import com.huang.entity.enums.PostStatus;
 import com.huang.entity.param.ContentParam;
+import com.huang.event.BlogEvent;
 import com.huang.mapper.*;
 import com.huang.service.ContentService;
 import com.huang.utils.*;
@@ -13,7 +14,9 @@ import io.minio.messages.Bucket;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,6 +50,8 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
     private MinioUtil minioUtil;
     @Value("${minio.content.bucketName}")
     private String bucketName;
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -58,6 +63,7 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void saveArticle(ContentParam contentParam) {
         if (contentParam.getStatus() == null) {
             contentParam.setStatus(PostStatus.DRAFT);
@@ -82,6 +88,7 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
             postEntity.setSummary(generateSummary(contentEntity.getContent()));
         }
         postMapper.insert(postEntity);
+        applicationContext.publishEvent(new BlogEvent(this,postEntity));
         final String postEntityId = postEntity.getId();
         //post content
         PostContentEntity postContentEntity = new PostContentEntity();
@@ -100,6 +107,7 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
 
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateArticle(ContentParam contentParam) {
         String postId = contentParam.getId();
         //post
@@ -199,6 +207,7 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
         return text.substring(0, Math.min(text.length(), 150));
     }
 
+
     private void saveArticleCategories(ContentParam contentParam, String postEntityId) {
         Set<String> categoryIds = contentParam.getCategoryIds();
         if(CollectionUtils.isEmpty(categoryIds)){
@@ -232,6 +241,7 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
         journalEntity.setMood(Constant.SUNNY);
         journalEntity.setWeather(CommonUtils.getCurrentWeather());
         journalMapper.insert(journalEntity);
+        applicationContext.publishEvent(new BlogEvent(this,journalEntity));
         //journalPatch
         JournalPatchLogEntity journalPatchLogEntity = new JournalPatchLogEntity();
         journalPatchLogEntity.setSourceId(journalEntity.getId());

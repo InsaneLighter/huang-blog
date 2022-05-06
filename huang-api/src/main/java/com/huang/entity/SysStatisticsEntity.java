@@ -1,6 +1,8 @@
 package com.huang.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -26,18 +28,47 @@ public class SysStatisticsEntity implements Serializable {
 	/**
 	 * 点赞数量
 	 */
-	@TableField(fill = FieldFill.INSERT)
 	private Integer likes;
 	/**
 	 * 访客数量
 	 */
-	@TableField(fill = FieldFill.INSERT)
 	private Integer visit;
+	/**
+	 * 访客IP数量
+	 */
+	private Integer ipVisit;
+	/**
+	 * 文章数量
+	 */
+	private Integer postCount;
+	/**
+	 * 日志数量
+	 */
+	private Integer journalCount;
+	/**
+	 * 分类数量
+	 */
+	private Integer categoryCount;
+	/**
+	 * 标签数量
+	 */
+	private Integer tagCount;
+	/**
+	 * 建站时间
+	 */
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	private Date birthday;
+	/**
+	 * TableField(exist = false) 数据库中不存在的字段
+	 * JsonInclude(JsonInclude.Include.NON_EMPTY) 字段读取为空的时候不显示
+	 */
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	@TableField(exist = false)
+	private Integer establishDays;
 	/**
 	 * 创建人
 	 */
-	@TableField(fill = FieldFill.INSERT)
-	private String createBy;
+	private String createBy = "Huang";
 	/**
 	 * 创建时间
 	 */
@@ -46,8 +77,7 @@ public class SysStatisticsEntity implements Serializable {
 	/**
 	 * 修改人
 	 */
-	@TableField(fill = FieldFill.INSERT_UPDATE)
-	private String updateBy;
+	private String updateBy = "Huang";
 	/**
 	 * 修改时间
 	 */

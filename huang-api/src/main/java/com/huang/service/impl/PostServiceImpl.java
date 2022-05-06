@@ -17,6 +17,7 @@ import com.huang.utils.ServiceUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
@@ -167,6 +168,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostEntity> impleme
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void delete(String[] ids) {
         //post
         List<PostEntity> postEntities = Arrays.stream(ids).map(id -> {
@@ -206,6 +208,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostEntity> impleme
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateStatusInBatch(BatchUpdateStatusParam batchUpdateStatusParam) {
         PostStatus status = batchUpdateStatusParam.getStatus();
         batchUpdateStatusParam.getIds().forEach(id -> {
