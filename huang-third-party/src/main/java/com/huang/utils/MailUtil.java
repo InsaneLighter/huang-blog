@@ -1,5 +1,6 @@
 package com.huang.utils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.huang.entity.MailEntity;
 import io.minio.messages.Bucket;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,10 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Date;
+import java.util.Optional;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @Time 2022-05-01 20:16
@@ -37,6 +41,7 @@ public class MailUtil {
     private String bucketName;
 
     public String send(MailEntity mailEntity) {
+        log.info("mail start building mailEntity {}", JSONObject.toJSON(mailEntity).toString());
         //创建一个MINE消息
         MimeMessage message = mailSender.createMimeMessage();
         try {
@@ -79,6 +84,7 @@ public class MailUtil {
                         log.info("mail send end: {}", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
                     }
                 },date);
+                return String.format("邮件定时发送:%s",mailEntity.getTos());
             } else {
                 mailSender.send(message);
             }
