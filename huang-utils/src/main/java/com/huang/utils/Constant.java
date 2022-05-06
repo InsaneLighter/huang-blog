@@ -33,6 +33,12 @@ public class Constant {
      */
     public static final String ROOT_CATEGORY_PARENT_ID = "";
 
-    public final static String X_SIGN = "X-Sign";
-    public final static String X_TIMESTAMP = "X-TIMESTAMP";
+    public static final String VISIT_COUNT_PREFIX = "huang_blog_visit_count";
+
+    public static final String VISIT_IP = "huang_blog_visit_ip";
+
+    public static final String POST_LIKE_PREFIX = "huang_blog_post_like";
+
+    public static final String JOURNAL_LIKE_PREFIX = "huang_blog_journal_like";
+
 }
