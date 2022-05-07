@@ -1,6 +1,7 @@
 package com.huang.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -24,13 +25,13 @@ public class SysLogEntity implements Serializable {
 	@TableId(type = IdType.ASSIGN_UUID)
 	private String id;
 	/**
-	 * 日志描述
+	 * uri
 	 */
-	private String description;
+	private String uri;
 	/**
-	 * 日志类型
+	 * 请求类型
 	 */
-	private String logType;
+	private String requestType;
 	/**
 	 * 方法名称
 	 */
@@ -48,10 +49,6 @@ public class SysLogEntity implements Serializable {
 	 */
 	private Integer time;
 	/**
-	 * 操作用户
-	 */
-	private String username;
-	/**
 	 * IP来源
 	 */
 	private String address;
@@ -63,6 +60,16 @@ public class SysLogEntity implements Serializable {
 	 * 异常详情
 	 */
 	private String exceptionDetail;
+	/**
+	 * 请求开始执行时间
+	 */
+	/**
+	 * TableField(exist = false) 数据库中不存在的字段
+	 * JsonInclude(JsonInclude.Include.NON_EMPTY) 字段读取为空的时候不显示
+	 */
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	@TableField(exist = false)
+	private long startTime;
 	/**
 	 * 创建人
 	 */

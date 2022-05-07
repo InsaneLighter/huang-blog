@@ -1,8 +1,6 @@
 package com.huang.controller.admin;
 
 import com.huang.entity.SysStatisticsEntity;
-import com.huang.entity.vo.LogInfoVo;
-import com.huang.entity.vo.VisitInfoVo;
 import com.huang.service.SysStatisticsService;
 import com.huang.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,8 +23,8 @@ public class SysStatisticsController {
     @Autowired
     private SysStatisticsService sysStatisticsService;
 
-    @GetMapping(value = {"","/"})
-    public R list(){
+    @GetMapping
+    public R getStatistics(){
         SysStatisticsEntity sysStatisticsEntity = sysStatisticsService.getStatistics();
         return R.ok().put("data", sysStatisticsEntity);
     }
