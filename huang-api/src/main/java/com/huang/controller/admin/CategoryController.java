@@ -41,8 +41,16 @@ public class CategoryController {
 
     @GetMapping("/queryByIds")
     public R queryByIds(@RequestParam Map<String, Object> params){
-        return categoryService.queryByIds(params);
+        Map<String,Object> map = categoryService.queryByIds(params);
+        return R.ok(map);
     }
+
+    @GetMapping("/queryByName/{name}")
+    public R queryByName(@PathVariable String name){
+        CategoryEntity categoryEntity = categoryService.queryByName(name);
+        return R.ok().put("category",categoryEntity);
+    }
+
 
     @GetMapping("/info/{id}")
     public R info(@PathVariable("id") Integer id){

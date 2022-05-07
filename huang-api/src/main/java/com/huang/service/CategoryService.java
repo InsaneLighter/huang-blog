@@ -3,7 +3,6 @@ package com.huang.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.huang.entity.CategoryEntity;
 import com.huang.utils.PageUtils;
-import com.huang.utils.R;
 
 import java.util.Map;
 
@@ -19,6 +18,8 @@ public interface CategoryService extends IService<CategoryEntity> {
 
     PageUtils queryAll(Map<String, Object> params);
 
-    R queryByIds(Map<String, Object> params);
+    Map<String,Object> queryByIds(Map<String, Object> params);
+
+    CategoryEntity queryByName(String name);
 }
 

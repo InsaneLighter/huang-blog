@@ -10,7 +10,6 @@ import com.huang.event.BlogEvent;
 import com.huang.mapper.*;
 import com.huang.service.ContentService;
 import com.huang.utils.*;
-import io.minio.messages.Bucket;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +20,10 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -163,10 +165,6 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
             throw new RuntimeException("上传附件为空！");
         }
         try {
-            Optional<Bucket> bucket = minioUtil.getBucket(bucketName);
-            if (!bucket.isPresent()) {
-                minioUtil.createBucket(bucketName);
-            }
             return minioUtil.uploadFile(file, bucketName);
         } catch (Exception e) {
             e.printStackTrace();

@@ -15,6 +15,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -56,7 +57,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
     }
 
     @Override
-    public R queryByIds(Map<String, Object> params) {
+    public Map<String,Object> queryByIds(Map<String, Object> params) {
+        Map<String,Object> result = new HashMap<>();
         String ids = (String) params.getOrDefault("ids", "");
         Page<PostCategoryEntity> page = new Page<>();
         boolean compare = false;
@@ -74,7 +76,16 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
             List<String> resultCategoryIds = categoryEntities.stream().map(CategoryEntity::getId).distinct().collect(Collectors.toList());
             compare = CommonUtils.compare(categoryIds, resultCategoryIds);
         }
-        return R.ok().put("data",new PageUtils(page)).put("hasChildren",compare);
+        result.put("data",new PageUtils(page));
+        result.put("hasChildren",compare);
+        return result;
+    }
+
+    @Override
+    public CategoryEntity queryByName(String name) {
+        QueryWrapper<CategoryEntity> categoryWrapper = new QueryWrapper<>();
+        categoryWrapper.eq("name",name);
+        return this.list(categoryWrapper).stream().findFirst().orElse(null);
     }
 
 }
