@@ -1,11 +1,13 @@
 package com.huang.controller.admin;
+
 import com.huang.entity.JournalEntity;
 import com.huang.service.JournalService;
 import com.huang.utils.PageUtils;
 import com.huang.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.multipart.MultipartFile;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -36,13 +38,13 @@ public class JournalController {
 
     @PostMapping("/save")
     public R save(@RequestBody JournalEntity journal){
-		journalService.save(journal);
+		journalService.saveJournal(journal);
         return R.ok();
     }
 
     @PutMapping("/update")
     public R update(@RequestBody JournalEntity journal){
-		journalService.updateById(journal);
+		journalService.updateJournal(journal);
         return R.ok();
     }
 
@@ -52,4 +54,9 @@ public class JournalController {
         return R.ok();
     }
 
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public R uploadAttachments(@RequestPart("file") MultipartFile file) {
+        String url = journalService.upload(file);
+        return R.ok().put("url",url);
+    }
 }

@@ -1,7 +1,10 @@
 package com.huang.service;
+
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.huang.utils.PageUtils;
 import com.huang.entity.JournalEntity;
+import com.huang.utils.PageUtils;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Map;
 
 /**
@@ -13,5 +16,11 @@ import java.util.Map;
  */
 public interface JournalService extends IService<JournalEntity> {
     PageUtils queryPage(Map<String, Object> params);
+
+    void saveJournal(JournalEntity journal);
+
+    void updateJournal(JournalEntity journal);
+
+    String upload(MultipartFile file);
 }
 
