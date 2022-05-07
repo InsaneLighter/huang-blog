@@ -22,7 +22,6 @@ import com.huang.security.utils.SecurityUtil;
 import com.huang.service.SysUserService;
 import com.huang.utils.*;
 import com.wf.captcha.base.Captcha;
-import io.minio.messages.Bucket;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -376,10 +375,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     @Override
     public String upload(MultipartFile multipartFile) {
         try {
-            Optional<Bucket> bucket = minioUtil.getBucket(bucketName);
-            if (!bucket.isPresent()) {
-                minioUtil.createBucket(bucketName);
-            }
             return minioUtil.uploadFile(multipartFile, bucketName);
         } catch (Exception e) {
             e.printStackTrace();

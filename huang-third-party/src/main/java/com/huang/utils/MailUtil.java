@@ -2,7 +2,6 @@ package com.huang.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.huang.entity.MailEntity;
-import io.minio.messages.Bucket;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +17,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -110,10 +108,6 @@ public class MailUtil {
             throw new RuntimeException("上传附件为空！");
         }
         try {
-            Optional<Bucket> bucket = minioUtil.getBucket(bucketName);
-            if (!bucket.isPresent()) {
-                minioUtil.createBucket(bucketName);
-            }
             return minioUtil.uploadFile(multipartFile, bucketName);
         } catch (Exception e) {
             e.printStackTrace();

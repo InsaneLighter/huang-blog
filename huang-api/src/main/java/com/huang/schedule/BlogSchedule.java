@@ -75,7 +75,7 @@ public class BlogSchedule implements SchedulingConfigurer {
         if(ipVisitEquals){
             sysStatisticsEntity.setIpVisit(visitIpCount);
         }
-        if (visitEquals && ipVisitEquals) {
+        if (visitEquals || ipVisitEquals) {
             //TODO likes
             sysStatisticsEntity.setLikes(0);
             sysStatisticsMapper.updateById(sysStatisticsEntity);
@@ -89,9 +89,10 @@ public class BlogSchedule implements SchedulingConfigurer {
      **/
     @Async("asyncTaskThreadPool")
     @Scheduled(cron = "0 0 0 * * ?")
+    //@Scheduled(cron = "0 0/1 * * * ?")
     public void addNewStatisticsRecord() {
         log.info("start addNewStatisticsRecord: {}", LocalDateTime.now());
-        redisUtil.del(Constant.VISIT_COUNT_PREFIX,Constant.VISIT_COUNT_PREFIX);
+        redisUtil.del(Constant.VISIT_COUNT_PREFIX,Constant.VISIT_IP);
         QueryWrapper<SysStatisticsEntity> statisticsWrapper = new QueryWrapper<>();
         statisticsWrapper.orderByDesc("create_time");
         SysStatisticsEntity sysStatisticsEntity = sysStatisticsMapper.selectList(statisticsWrapper).stream().findFirst().orElse(null);
@@ -105,7 +106,7 @@ public class BlogSchedule implements SchedulingConfigurer {
         entity.setCategoryCount(sysStatisticsEntity.getCategoryCount());
         entity.setTagCount(sysStatisticsEntity.getTagCount());
         entity.setBirthday(sysStatisticsEntity.getBirthday());
-        sysStatisticsMapper.updateById(sysStatisticsEntity);
+        sysStatisticsMapper.insert(entity);
         log.info("stop addNewStatisticsRecord: {}", LocalDateTime.now());
     }
 }

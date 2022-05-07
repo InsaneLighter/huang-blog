@@ -15,7 +15,6 @@ import com.huang.utils.ImageUtils;
 import com.huang.utils.MinioUtil;
 import com.huang.utils.PageUtils;
 import com.huang.utils.Query;
-import io.minio.messages.Bucket;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,7 +29,10 @@ import javax.imageio.ImageReader;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -130,10 +132,6 @@ public class AttachmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachm
         entity.setSuffix(FileUtil.getSuffix(originalFilename));
         String filePath = null;
         try {
-            Optional<Bucket> bucket = minioUtil.getBucket(bucketName);
-            if (!bucket.isPresent()) {
-                minioUtil.createBucket(bucketName);
-            }
             filePath = minioUtil.uploadFile(file, bucketName);
         } catch (Exception e) {
             e.printStackTrace();
