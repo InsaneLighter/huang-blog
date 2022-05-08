@@ -46,13 +46,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
     public PageUtils queryAll(Map<String, Object> params) {
         List<CategoryEntity> list = this.list();
         Page<CategoryEntity> page = new Page<>();
-        if (!CollectionUtils.isEmpty(list)) {
-            List<CategoryEntity> entities = list.stream()
-                    .filter(categoryEntity -> Constant.ROOT_CATEGORY_PARENT_ID.equals(categoryEntity.getParentId()))
-                    .peek(categoryEntity -> categoryEntity.setChildren(getChildren(categoryEntity, list)))
-                    .collect(Collectors.toList());
-            page.setRecords(entities);
-        }
+        page.setRecords(list);
         return new PageUtils(page);
     }
 
@@ -86,6 +80,20 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
         QueryWrapper<CategoryEntity> categoryWrapper = new QueryWrapper<>();
         categoryWrapper.eq("name",name);
         return this.list(categoryWrapper).stream().findFirst().orElse(null);
+    }
+
+    @Override
+    public PageUtils queryAllTree(Map<String, Object> params) {
+        List<CategoryEntity> list = this.list();
+        Page<CategoryEntity> page = new Page<>();
+        if (!CollectionUtils.isEmpty(list)) {
+            List<CategoryEntity> entities = list.stream()
+                    .filter(categoryEntity -> Constant.ROOT_CATEGORY_PARENT_ID.equals(categoryEntity.getParentId()))
+                    .peek(categoryEntity -> categoryEntity.setChildren(getChildren(categoryEntity, list)))
+                    .collect(Collectors.toList());
+            page.setRecords(entities);
+        }
+        return new PageUtils(page);
     }
 
 }

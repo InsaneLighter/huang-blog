@@ -33,6 +33,12 @@ public class CategoryController {
         return R.ok().put("data", page);
     }
 
+    @GetMapping("/queryAllTree")
+    public R queryAllTree(@RequestParam Map<String, Object> params){
+        PageUtils page = categoryService.queryAllTree(params);
+        return R.ok().put("data", page);
+    }
+
     @GetMapping("/list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = categoryService.queryPage(params);

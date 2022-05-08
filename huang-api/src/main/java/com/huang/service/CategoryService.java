@@ -21,5 +21,7 @@ public interface CategoryService extends IService<CategoryEntity> {
     Map<String,Object> queryByIds(Map<String, Object> params);
 
     CategoryEntity queryByName(String name);
+
+    PageUtils queryAllTree(Map<String, Object> params);
 }
 
