@@ -52,7 +52,7 @@ public class SysStatisticsServiceImpl extends ServiceImpl<SysStatisticsMapper, S
             logInfoVo.setTotalVisitCount(totalCount.get());
 
             List<VisitInfoVo> visitInfoVoList = new ArrayList<>();
-            sysStatisticsEntities.stream().limit(5).sorted((o1, o2) -> (int) (o2.getCreateTime().getTime() - o1.getCreateTime().getTime())).forEach(sysStatisticsEntity -> {
+            sysStatisticsEntities.stream().limit(5).forEach(sysStatisticsEntity -> {
                 VisitInfoVo visitInfoVo = new VisitInfoVo();
                 Date createTime = sysStatisticsEntity.getCreateTime();
                 SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
@@ -61,10 +61,10 @@ public class SysStatisticsServiceImpl extends ServiceImpl<SysStatisticsMapper, S
                 visitInfoVo.setType(date);
                 visitInfoVo.setVisit(currentVisit);
                 visitInfoVoList.add(visitInfoVo);
-
-                map.put("logInfo",logInfoVo);
-                map.put("visitInfo",visitInfoVoList);
             });
+            Collections.reverse(visitInfoVoList);
+            map.put("logInfo",logInfoVo);
+            map.put("visitInfo",visitInfoVoList);
         }
         return map;
     }

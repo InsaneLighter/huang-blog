@@ -56,8 +56,11 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostEntity> impleme
             List<PostCategoryEntity> postCategoryEntities = postCategoryMapper.selectList(preCategoryWrapper);
             prePostIds = ServiceUtils.fetchProperty(postCategoryEntities, PostCategoryEntity::getPostId);
         }
+
         if(prePostIds != null && !prePostIds.isEmpty()){
             postWrapper.in("id", prePostIds);
+        }else if(StringUtils.hasText(paramCategoryId)){
+            postWrapper.eq("id", "-1");
         }
         String title = (String) params.getOrDefault("title", "");
         if (StringUtils.hasText(title)) {

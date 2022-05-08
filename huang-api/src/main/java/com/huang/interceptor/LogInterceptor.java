@@ -1,13 +1,18 @@
 package com.huang.interceptor;
 
+import com.alibaba.fastjson.JSON;
 import com.huang.entity.SysLogEntity;
 import com.huang.mapper.SysLogMapper;
 import com.huang.utils.CommonUtils;
 import com.huang.utils.IPUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
@@ -53,20 +58,19 @@ public class LogInterceptor {
         ServletRequestAttributes sra = (ServletRequestAttributes) ra;
         HttpServletRequest request = sra.getRequest();
         HttpServletResponse response = sra.getResponse();
-
         SysLogEntity sysLogEntity = new SysLogEntity();
         final String ip = IPUtils.getClientIP(request);
         String url = request.getRequestURL().toString();
         String uri = request.getRequestURI();
         String requestType = request.getMethod();
-        String queryString = request.getQueryString();
         Signature signature = pjp.getSignature();
+        String param = getParam(request, requestType, pjp);
         log.info("Starting url: [{}], uri: [{}],requestType: [{}], method: [{}], params: [{}] ip: [{}]",
                 url,
                 uri,
                 requestType,
                 signature.toString(),
-                queryString,
+                param,
                 ip);
         final long startTime = System.currentTimeMillis();
         String browser = CommonUtils.getBrowser(request);
@@ -76,7 +80,7 @@ public class LogInterceptor {
         sysLogEntity.setUri(uri);
         sysLogEntity.setRequestType(requestType);
         sysLogEntity.setMethod(signature.toString());
-        sysLogEntity.setParams(queryString);
+        sysLogEntity.setParams(param);
         sysLogEntity.setRequestIp(ip);
         sysLogEntity.setStartTime(startTime);
         sysLogEntityThreadLocal.set(sysLogEntity);
@@ -86,12 +90,12 @@ public class LogInterceptor {
         log.info("Ending url: [{}], uri: [{}], method: [{}], result: [{}], ip: [{}], status: [{}], usage: [{}] ms",
                 url,
                 uri,
-                "",
+                param,
                 result,
                 ip,
                 response.getStatus(),
                 costTime
-                );
+        );
         sysLogEntity.setTime((int) costTime);
         //TODO 性能压测 and 异常信息处理
         sysLogMapper.insert(sysLogEntity);
@@ -100,9 +104,9 @@ public class LogInterceptor {
     }
 
     @AfterThrowing(pointcut = "executeService()",
-                    throwing = "exception")
-    public void handleControllerException(Exception exception){
-        log.info("handleControllerException: {}",exception.toString());
+            throwing = "exception")
+    public void handleControllerException(Exception exception) {
+        log.info("handleControllerException: {}", exception.toString());
         SysLogEntity sysLogEntity = sysLogEntityThreadLocal.get();
         long startTime = sysLogEntity.getStartTime();
         long costTime = System.currentTimeMillis() - startTime;
@@ -112,4 +116,12 @@ public class LogInterceptor {
         sysLogEntityThreadLocal.remove();
     }
 
+    private String getParam(HttpServletRequest request, String requestType, JoinPoint pjp) {
+        Object[] arguments = pjp.getArgs();
+        if (arguments != null && arguments.length > 0) {
+            Object argument = arguments[0];
+            return JSON.toJSONString(argument);
+        }
+        return "";
+    }
 }
