@@ -89,4 +89,11 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, TagEntity> implements
         return R.ok().put("data",new PageUtils(page)).put("hasChildren",compare);
     }
 
+    @Override
+    public TagEntity queryByName(String name) {
+        QueryWrapper<TagEntity> tagWrapper = new QueryWrapper<>();
+        tagWrapper.eq("name",name);
+        return this.list(tagWrapper).stream().findFirst().orElse(null);
+    }
+
 }

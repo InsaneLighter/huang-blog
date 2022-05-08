@@ -21,5 +21,7 @@ public interface TagService extends IService<TagEntity> {
     void saveTag(TagEntity tag);
 
     R queryByIds(Map<String, Object> params);
+
+    TagEntity queryByName(String name);
 }
 

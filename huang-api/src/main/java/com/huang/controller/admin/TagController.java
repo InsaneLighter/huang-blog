@@ -1,5 +1,6 @@
 package com.huang.controller.admin;
 
+import com.huang.entity.CategoryEntity;
 import com.huang.entity.TagEntity;
 import com.huang.event.BlogEvent;
 import com.huang.service.TagService;
@@ -44,6 +45,13 @@ public class TagController {
     public R queryByIds(@RequestParam Map<String, Object> params){
         return tagService.queryByIds(params);
     }
+
+    @GetMapping("/queryByName/{name}")
+    public R queryByName(@PathVariable String name){
+        TagEntity tagEntity = tagService.queryByName(name);
+        return R.ok().put("tag",tagEntity);
+    }
+
 
     @GetMapping("/info/{id}")
     public R info(@PathVariable("id") Integer id){
