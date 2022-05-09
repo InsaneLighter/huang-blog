@@ -117,10 +117,13 @@ public class LogInterceptor {
     }
 
     private String getParam(HttpServletRequest request, String requestType, JoinPoint pjp) {
-        Object[] arguments = pjp.getArgs();
-        if (arguments != null && arguments.length > 0) {
-            Object argument = arguments[0];
-            return JSON.toJSONString(argument);
+        String contentType = request.getContentType();
+        if(contentType == null || !contentType.contains("multipart/form-data")){
+            Object[] arguments = pjp.getArgs();
+            if (arguments != null && arguments.length > 0) {
+                Object argument = arguments[0];
+                return JSON.toJSONString(argument);
+            }
         }
         return "";
     }

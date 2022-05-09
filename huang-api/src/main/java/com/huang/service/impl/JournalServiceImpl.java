@@ -53,6 +53,7 @@ public class JournalServiceImpl extends ServiceImpl<JournalMapper, JournalEntity
         if(StringUtils.hasText(endDate)){
             journalWrapper.le("create_time",endDate);
         }
+        journalWrapper.orderByDesc("create_time");
         IPage<JournalEntity> page = this.page(new Query().getPage(params), journalWrapper);
         return new PageUtils(page);
     }

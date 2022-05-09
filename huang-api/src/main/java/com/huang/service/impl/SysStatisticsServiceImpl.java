@@ -44,7 +44,7 @@ public class SysStatisticsServiceImpl extends ServiceImpl<SysStatisticsMapper, S
             Integer visit = entity.getVisit();
             AtomicInteger totalCount = new AtomicInteger();
             sysStatisticsEntities.forEach(sysStatisticsEntity -> {
-                totalCount.set(sysStatisticsEntity.getVisit());
+                totalCount.getAndAdd(sysStatisticsEntity.getVisit());
             });
             LogInfoVo logInfoVo = new LogInfoVo();
             logInfoVo.setTodayIp(ipVisit);
