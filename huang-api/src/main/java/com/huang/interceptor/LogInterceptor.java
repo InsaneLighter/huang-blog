@@ -14,6 +14,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -64,7 +65,7 @@ public class LogInterceptor {
         String uri = request.getRequestURI();
         String requestType = request.getMethod();
         Signature signature = pjp.getSignature();
-        String param = getParam(request, requestType, pjp);
+        String param = getParam(request, pjp);
         log.info("Starting url: [{}], uri: [{}],requestType: [{}], method: [{}], params: [{}] ip: [{}]",
                 url,
                 uri,
@@ -116,12 +117,15 @@ public class LogInterceptor {
         sysLogEntityThreadLocal.remove();
     }
 
-    private String getParam(HttpServletRequest request, String requestType, JoinPoint pjp) {
+    private String getParam(HttpServletRequest request, JoinPoint pjp) {
         String contentType = request.getContentType();
         if(contentType == null || !contentType.contains("multipart/form-data")){
             Object[] arguments = pjp.getArgs();
             if (arguments != null && arguments.length > 0) {
                 Object argument = arguments[0];
+                if(argument instanceof SecurityContextHolderAwareRequestWrapper){
+                    return "";
+                }
                 return JSON.toJSONString(argument);
             }
         }
