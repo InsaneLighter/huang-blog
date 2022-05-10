@@ -44,14 +44,25 @@ public class CommonUtils {
     }
 
     public static String getCurrentWeather() {
-        String weatherUrl = "http://www.weather.com.cn/data/cityinfo/101200101.html";
+        return getCurrentWeather("101200101");
+    }
+
+    public static String getCurrentWeather(String cityNum) {
+        String weatherUrl = "https://www.tianqiapi.com/api?version=v6&appid=21375891&appsecret=fTYv7v5E&cityid="+cityNum;
+        //String weatherUrl = "http://www.weather.com.cn/data/cityinfo/"+cityNum+".html";
         JSONObject result = HttpUtils.get(weatherUrl);
-        JSONObject weatherInfo = result.getJSONObject("weatherinfo");
-        String city = weatherInfo.getString("city");
-        String lowTemp = weatherInfo.getString("temp1");
-        String highTemp = weatherInfo.getString("temp2");
-        String weather = weatherInfo.getString("weather");
-        return city + " " + weather + " " + lowTemp + "~" + highTemp;
+        //JSONObject weatherInfo = result.getJSONObject("weatherinfo");
+        //String city = weatherInfo.getString("city");
+        //String lowTemp = weatherInfo.getString("temp1");
+        //String highTemp = weatherInfo.getString("temp2");
+        //String weather = weatherInfo.getString("weather");
+
+        String city = result.getString("city");
+        String weather = result.getString("wea");
+        String highTemp = result.getString("tem1");
+        String lowTemp = result.getString("tem2");
+        //return city + " " + weather + " " + lowTemp + "~" + highTemp;
+        return city + " " + weather + " " + lowTemp + "°C~" + highTemp + "°C";
     }
 
     public static <T extends Comparable<T>> boolean compare(List<T> a, List<T> b) {
