@@ -11,6 +11,8 @@ import com.huang.utils.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 
@@ -23,18 +25,23 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLogEntity> i
         String startDate = (String) params.getOrDefault("startDate", "");
         String endDate = (String) params.getOrDefault("endDate", "");
         QueryWrapper<SysLogEntity> sysLogWrapper = new QueryWrapper<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        if (StringUtils.hasText(startDate)) {
+            Date date = new Date(Long.parseLong(startDate));
+            sysLogWrapper.ge("create_time", sdf.format(date));
+        }
+        if (StringUtils.hasText(endDate)) {
+            Date date = new Date(Long.parseLong(endDate));
+            sysLogWrapper.le("create_time", sdf.format(date) + " 23:59:59");
+        }
         if (StringUtils.hasText(keyword)) {
-            sysLogWrapper.like("uri", keyword)
-                    .or().like("method", keyword)
-                    .or().like("request_ip", keyword)
-                    .or().like("address", keyword)
-                    .or().like("exception_detail", keyword);
-        }
-        if(StringUtils.hasText(startDate)){
-            sysLogWrapper.ge("create_time",startDate);
-        }
-        if(StringUtils.hasText(endDate)){
-            sysLogWrapper.le("create_time",endDate);
+            sysLogWrapper.and(journalEntityQueryWrapper -> {
+                journalEntityQueryWrapper.like("uri", keyword);
+                journalEntityQueryWrapper.like("method", keyword);
+                journalEntityQueryWrapper.like("request_ip", keyword);
+                journalEntityQueryWrapper.like("address", keyword);
+                journalEntityQueryWrapper.like("exception_detail", keyword);
+            });
         }
         sysLogWrapper.orderByDesc("create_time");
         IPage<SysLogEntity> page = this.page(new Query().getPage(params), sysLogWrapper);

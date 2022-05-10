@@ -9,6 +9,7 @@ import com.huang.event.BlogEvent;
 import com.huang.mapper.JournalMapper;
 import com.huang.mapper.JournalPatchLogMapper;
 import com.huang.service.JournalService;
+import com.huang.utils.CommonUtils;
 import com.huang.utils.MinioUtil;
 import com.huang.utils.PageUtils;
 import com.huang.utils.Query;
@@ -18,8 +19,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 
@@ -42,16 +49,21 @@ public class JournalServiceImpl extends ServiceImpl<JournalMapper, JournalEntity
         String startDate = (String) params.getOrDefault("startDate", "");
         String endDate = (String) params.getOrDefault("endDate", "");
         QueryWrapper<JournalEntity> journalWrapper = new QueryWrapper<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        if (StringUtils.hasText(startDate)) {
+            Date date = new Date(Long.parseLong(startDate));
+            journalWrapper.ge("create_time", sdf.format(date));
+        }
+        if (StringUtils.hasText(endDate)) {
+            Date date = new Date(Long.parseLong(endDate));
+            journalWrapper.le("create_time", sdf.format(date) + " 23:59:59");
+        }
         if (StringUtils.hasText(keyword)) {
-            journalWrapper.like("weather", keyword)
-                    .or().like("mood", keyword)
-                    .or().like("content", keyword);
-        }
-        if(StringUtils.hasText(startDate)){
-            journalWrapper.ge("create_time",startDate);
-        }
-        if(StringUtils.hasText(endDate)){
-            journalWrapper.le("create_time",endDate);
+            journalWrapper.and(journalEntityQueryWrapper -> {
+                journalEntityQueryWrapper.like("weather", keyword);
+                journalEntityQueryWrapper.like("mood", keyword);
+                journalEntityQueryWrapper.like("content", keyword);
+            });
         }
         journalWrapper.orderByDesc("create_time");
         IPage<JournalEntity> page = this.page(new Query().getPage(params), journalWrapper);
@@ -61,9 +73,13 @@ public class JournalServiceImpl extends ServiceImpl<JournalMapper, JournalEntity
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveJournal(JournalEntity journal) {
+        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+        //TODO 当前用户IP所在城市天气
+        journal.setWeather(CommonUtils.getCurrentWeather());
         //journal
         journalMapper.insert(journal);
-        applicationContext.publishEvent(new BlogEvent(this,journal));
+        applicationContext.publishEvent(new BlogEvent(this, journal));
         //journalPatch
         JournalPatchLogEntity journalPatchLogEntity = new JournalPatchLogEntity();
         journalPatchLogEntity.setSourceId(journal.getId());
