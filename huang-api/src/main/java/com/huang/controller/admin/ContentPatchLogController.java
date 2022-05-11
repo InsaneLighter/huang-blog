@@ -17,36 +17,30 @@ import java.util.Map;
  * @date 2022-04-15 10:19:09
  */
 @RestController
-@RequestMapping("/contentPatchLog")
+@RequestMapping("/admin/contentPatchLog")
 public class ContentPatchLogController {
     @Autowired
     private ContentPatchLogService contentPatchLogService;
 
-    @GetMapping("/list")
+    @GetMapping
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = contentPatchLogService.queryPage(params);
         return R.ok().put("data", page);
     }
 
-    @GetMapping("/info/{id}")
-    public R info(@PathVariable("id") String id){
-		ContentPatchLogEntity contentPatchLog = contentPatchLogService.getById(id);
-        return R.ok().put("contentPatchLog", contentPatchLog);
-    }
-
-    @PostMapping("/save")
+    @PostMapping
     public R save(@RequestBody ContentPatchLogEntity contentPatchLog){
 		contentPatchLogService.save(contentPatchLog);
         return R.ok();
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public R update(@RequestBody ContentPatchLogEntity contentPatchLog){
 		contentPatchLogService.updateById(contentPatchLog);
         return R.ok();
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public R delete(@RequestBody String ...ids){
 		contentPatchLogService.removeByIds(Arrays.asList(ids));
         return R.ok();

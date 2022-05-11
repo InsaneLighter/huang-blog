@@ -18,7 +18,7 @@ import java.util.Map;
  * @date 04-15 10:19:09
  */
 @RestController
-@RequestMapping("/statistics")
+@RequestMapping("/admin/statistics")
 public class SysStatisticsController {
     @Autowired
     private SysStatisticsService sysStatisticsService;

@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
  * Description:
  */
 @RestController
-@RequestMapping("/mail")
+@RequestMapping("/admin/mail")
 @Slf4j
 public class MailController {
     @Autowired

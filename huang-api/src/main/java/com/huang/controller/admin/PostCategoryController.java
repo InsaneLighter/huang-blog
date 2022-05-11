@@ -16,36 +16,30 @@ import com.huang.utils.R;
  * @date 2022-04-15 10:19:09
  */
 @RestController
-@RequestMapping("/postCategory")
+@RequestMapping("/admin/postCategory")
 public class PostCategoryController {
     @Autowired
     private PostCategoryService postCategoryService;
 
-    @GetMapping("/list")
+    @GetMapping
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = postCategoryService.queryPage(params);
         return R.ok().put("data", page);
     }
 
-    @GetMapping("/info/{id}")
-    public R info(@PathVariable("id") String id){
-		PostCategoryEntity postCategory = postCategoryService.getById(id);
-        return R.ok().put("postCategory", postCategory);
-    }
-
-    @PostMapping("/save")
+    @PostMapping
     public R save(@RequestBody PostCategoryEntity postCategory){
 		postCategoryService.save(postCategory);
         return R.ok();
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public R update(@RequestBody PostCategoryEntity postCategory){
 		postCategoryService.updateById(postCategory);
         return R.ok();
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public R delete(@RequestBody String ...ids){
 		postCategoryService.removeByIds(Arrays.asList(ids));
         return R.ok();

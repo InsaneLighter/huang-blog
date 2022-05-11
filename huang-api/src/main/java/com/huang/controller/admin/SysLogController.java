@@ -17,36 +17,30 @@ import java.util.Map;
  * @date 2022-04-15 10:19:09
  */
 @RestController
-@RequestMapping("/log")
+@RequestMapping("/admin/log")
 public class SysLogController {
     @Autowired
     private SysLogService sysLogService;
 
-    @GetMapping("/list")
+    @GetMapping
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = sysLogService.queryPage(params);
         return R.ok().put("data", page);
     }
 
-    @GetMapping("/info/{id}")
-    public R info(@PathVariable("id") String id){
-		SysLogEntity sysLog = sysLogService.getById(id);
-        return R.ok().put("sysLog", sysLog);
-    }
-
-    @PostMapping("/save")
+    @PostMapping
     public R save(@RequestBody SysLogEntity sysLog){
 		sysLogService.save(sysLog);
         return R.ok();
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public R update(@RequestBody SysLogEntity sysLog){
 		sysLogService.updateById(sysLog);
         return R.ok();
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public R delete(@RequestBody String ...ids){
 		sysLogService.removeByIds(Arrays.asList(ids));
         return R.ok();

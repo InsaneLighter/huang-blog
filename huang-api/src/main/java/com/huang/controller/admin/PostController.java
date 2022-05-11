@@ -19,12 +19,12 @@ import java.util.Map;
  * @date 2022-04-14 18:25:41
  */
 @RestController
-@RequestMapping("/post")
+@RequestMapping("/admin/post")
 public class PostController {
     @Autowired
     private PostService postService;
 
-    @GetMapping("/list")
+    @GetMapping
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = postService.queryPage(params);
         return R.ok().put("data", page);
@@ -43,19 +43,19 @@ public class PostController {
     }
 
 
-    @PostMapping("/save")
+    @PostMapping
     public R save(@RequestBody PostEntity post){
 		postService.save(post);
         return R.ok();
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public R update(@RequestBody PostEntity post){
 		postService.updateById(post);
         return R.ok();
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public R delete(@RequestBody String ...ids){
         postService.delete(ids);
         return R.ok();

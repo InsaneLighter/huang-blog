@@ -21,36 +21,30 @@ import java.util.Map;
  * @date 2022-04-14 18:25:41
  */
 @RestController
-@RequestMapping("/content")
+@RequestMapping("/admin/content")
 public class ContentController {
     @Autowired
     private ContentService contentService;
 
-    @GetMapping("/list")
+    @GetMapping
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = contentService.queryPage(params);
         return R.ok().put("data", page);
     }
 
-    @GetMapping("/info/{id}")
-    public R info(@PathVariable("id") Integer id){
-		ContentEntity content = contentService.getById(id);
-        return R.ok().put("content", content);
-    }
-
-    @PostMapping("/save")
+    @PostMapping
     public R save(@RequestBody ContentParam contentParam){
 		contentService.saveArticle(contentParam);
         return R.ok();
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public R update(@RequestBody ContentParam contentParam){
 		contentService.updateArticle(contentParam);
         return R.ok();
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public R delete(@RequestBody String ...ids){
 		contentService.removeByIds(Arrays.asList(ids));
         return R.ok();

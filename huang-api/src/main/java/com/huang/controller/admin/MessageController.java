@@ -17,36 +17,30 @@ import java.util.Map;
  * @date 2022-04-14 18:25:41
  */
 @RestController
-@RequestMapping("/message")
+@RequestMapping("/admin/message")
 public class MessageController {
     @Autowired
     private MessageService messageService;
 
-    @GetMapping("/list")
+    @GetMapping
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = messageService.queryPage(params);
         return R.ok().put("data", page);
     }
 
-    @GetMapping("/info/{id}")
-    public R info(@PathVariable("id") Integer id){
-		MessageEntity message = messageService.getById(id);
-        return R.ok().put("message", message);
-    }
-
-    @PostMapping("/save")
+    @PostMapping
     public R save(@RequestBody MessageEntity message){
 		messageService.save(message);
         return R.ok();
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public R update(@RequestBody MessageEntity message){
 		messageService.updateById(message);
         return R.ok();
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public R delete(@RequestBody String ...ids){
 		messageService.removeByIds(Arrays.asList(ids));
         return R.ok();

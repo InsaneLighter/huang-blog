@@ -20,12 +20,12 @@ import java.util.Set;
  * @date 2022-04-15 10:19:09
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/admin/user")
 public class SysUserController {
     @Autowired
     private SysUserService sysUserService;
 
-    @GetMapping("/list")
+    @GetMapping
     public R list(@RequestParam Map<String, Object> params) {
         PageUtils page = sysUserService.queryPage(params);
         return R.ok().put("data", page);
@@ -37,19 +37,13 @@ public class SysUserController {
         return R.ok().put("data", result);
     }
 
-    @GetMapping("/info/{id}")
-    public R info(@PathVariable("id") String id) {
-        SysUserEntity user = sysUserService.getById(id);
-        return R.ok().put("user", user);
-    }
-
-    @PostMapping("/save")
+    @PostMapping
     public R save(@RequestBody SysUserEntity sysUser) {
         sysUserService.saveUser(sysUser);
         return R.ok();
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public R update(@RequestBody SysUserEntity sysUser) {
         sysUserService.update(sysUser);
         return R.ok();
@@ -61,7 +55,7 @@ public class SysUserController {
         return R.ok();
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public R delete(@RequestBody String... ids) {
         sysUserService.removeByIds(Arrays.asList(ids));
         return R.ok();

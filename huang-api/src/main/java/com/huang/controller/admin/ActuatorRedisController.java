@@ -21,44 +21,44 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("/redis")
+@RequestMapping("/admin/redis")
 public class ActuatorRedisController {
     @Autowired
     private RedisService redisService;
 
     @GetMapping("/info")
-    public R getRedisInfo() throws Exception {
+    public R getRedisInfo() {
         List<RedisInfo> infoList = this.redisService.getRedisInfo();
         return R.ok().put("data",infoList);
     }
 
     @GetMapping("/keysSize")
-    public Map<String, Object> getKeysSize() throws Exception {
+    public Map<String, Object> getKeysSize() {
         return redisService.getKeysSize();
     }
 
     @GetMapping("/keysSizeForReport")
-    public Map<String, JSONArray> getKeysSizeReport() throws Exception {
+    public Map<String, JSONArray> getKeysSizeReport() {
 		return redisService.getMapForReport("1");
     }
 
     @GetMapping("/memoryForReport")
-    public Map<String, JSONArray> memoryForReport() throws Exception {
+    public Map<String, JSONArray> memoryForReport() {
 		return redisService.getMapForReport("2");
     }
 
     @GetMapping("/infoForReport")
-    public Map<String, JSONArray> infoForReport() throws Exception {
+    public Map<String, JSONArray> infoForReport() {
 		return redisService.getMapForReport("3");
     }
 
     @GetMapping("/memoryInfo")
-    public Map<String, Object> getMemoryInfo() throws Exception {
+    public Map<String, Object> getMemoryInfo() {
         return redisService.getMemoryInfo();
     }
     
   	@GetMapping("/queryDiskInfo")
-  	public R queryDiskInfo(HttpServletRequest request, HttpServletResponse response){
+  	public R queryDiskInfo(){
 		List<Map<String,Object>> list = new ArrayList<>();
 		try {
   			// 当前文件系统类

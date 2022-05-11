@@ -23,36 +23,30 @@ import java.util.Map;
  * @date 2022-04-25 16:15:08
  */
 @RestController
-@RequestMapping("/attachment")
+@RequestMapping("/admin/attachment")
 public class AttachmentController {
     @Autowired
     private AttachmentService attachmentService;
 
-    @GetMapping("/list")
+    @GetMapping
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = attachmentService.queryPage(params);
         return R.ok().put("data", page);
     }
 
-    @GetMapping("/info/{id}")
-    public R info(@PathVariable("id") Integer id){
-		AttachmentEntity attachment = attachmentService.getById(id);
-        return R.ok().put("attachment", attachment);
-    }
-
-    @PostMapping("/save")
+    @PostMapping
     public R save(@RequestBody AttachmentEntity attachment){
 		attachmentService.save(attachment);
         return R.ok();
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public R update(@RequestBody AttachmentEntity attachment){
 		attachmentService.updateById(attachment);
         return R.ok();
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public R delete(@RequestBody String ...ids){
 		attachmentService.delete(Arrays.asList(ids));
         return R.ok();

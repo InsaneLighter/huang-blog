@@ -20,7 +20,7 @@ import java.util.Map;
  * @date 2022-04-14 18:25:41
  */
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/admin/category")
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
@@ -39,12 +39,6 @@ public class CategoryController {
         return R.ok().put("data", page);
     }
 
-    @GetMapping("/list")
-    public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = categoryService.queryPage(params);
-        return R.ok().put("data", page);
-    }
-
     @GetMapping("/queryByIds")
     public R queryByIds(@RequestParam Map<String, Object> params){
         Map<String,Object> map = categoryService.queryByIds(params);
@@ -57,27 +51,20 @@ public class CategoryController {
         return R.ok().put("category",categoryEntity);
     }
 
-
-    @GetMapping("/info/{id}")
-    public R info(@PathVariable("id") Integer id){
-		CategoryEntity category = categoryService.getById(id);
-        return R.ok().put("category", category);
-    }
-
-    @PostMapping("/save")
+    @PostMapping
     public R save(@RequestBody CategoryEntity category){
 		categoryService.save(category);
         applicationContext.publishEvent(new BlogEvent(this,category));
         return R.ok();
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public R update(@RequestBody CategoryEntity category){
 		categoryService.updateById(category);
         return R.ok();
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public R delete(@RequestBody String ...ids){
 		categoryService.removeByIds(Arrays.asList(ids));
         return R.ok();

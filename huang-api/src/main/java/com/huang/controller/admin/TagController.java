@@ -1,6 +1,5 @@
 package com.huang.controller.admin;
 
-import com.huang.entity.CategoryEntity;
 import com.huang.entity.TagEntity;
 import com.huang.event.BlogEvent;
 import com.huang.service.TagService;
@@ -21,7 +20,7 @@ import java.util.Map;
  * @date 2022-04-14 18:25:41
  */
 @RestController
-@RequestMapping("/tag")
+@RequestMapping("/admin/tag")
 public class TagController {
     @Autowired
     private TagService tagService;
@@ -34,7 +33,7 @@ public class TagController {
         return R.ok().put("data", page);
     }
 
-    @GetMapping("/list")
+    @GetMapping
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = tagService.queryPage(params);
         return R.ok().put("data", page);
@@ -51,27 +50,20 @@ public class TagController {
         return R.ok().put("tag",tagEntity);
     }
 
-
-    @GetMapping("/info/{id}")
-    public R info(@PathVariable("id") Integer id){
-		TagEntity tag = tagService.getById(id);
-        return R.ok().put("tag", tag);
-    }
-
-    @PostMapping("/save")
+    @PostMapping
     public R save(@RequestBody TagEntity tag){
 		tagService.saveTag(tag);
         applicationContext.publishEvent(new BlogEvent(this,tag));
         return R.ok();
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public R update(@RequestBody TagEntity tag){
 		tagService.updateById(tag);
         return R.ok();
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public R delete(@RequestBody String ...ids){
 		tagService.removeByIds(Arrays.asList(ids));
         return R.ok();

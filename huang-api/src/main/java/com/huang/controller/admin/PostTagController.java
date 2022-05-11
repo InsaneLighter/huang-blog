@@ -17,36 +17,30 @@ import java.util.Map;
  * @date 2022-04-15 10:19:09
  */
 @RestController
-@RequestMapping("/postTag")
+@RequestMapping("/admin/postTag")
 public class PostTagController {
     @Autowired
     private PostTagService postTagService;
 
-    @GetMapping("/list")
+    @GetMapping
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = postTagService.queryPage(params);
         return R.ok().put("data", page);
     }
 
-    @GetMapping("/info/{id}")
-    public R info(@PathVariable("id") String id){
-		PostTagEntity postTag = postTagService.getById(id);
-        return R.ok().put("postTag", postTag);
-    }
-
-    @PostMapping("/save")
+    @PostMapping
     public R save(@RequestBody PostTagEntity postTag){
 		postTagService.save(postTag);
         return R.ok();
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public R update(@RequestBody PostTagEntity postTag){
 		postTagService.updateById(postTag);
         return R.ok();
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public R delete(@RequestBody String ...ids){
 		postTagService.removeByIds(Arrays.asList(ids));
         return R.ok();
