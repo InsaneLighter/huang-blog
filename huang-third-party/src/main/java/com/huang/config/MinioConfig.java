@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableConfigurationProperties(MinioProperties.class)
 public class MinioConfig {
-
     @Autowired
     private MinioProperties minioProperties;
 
