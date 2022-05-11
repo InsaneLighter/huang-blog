@@ -23,15 +23,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/redis")
 public class ActuatorRedisController {
-
     @Autowired
     private RedisService redisService;
 
-    /**
-     * Redis详细信息
-     * @return
-     * @throws Exception
-     */
     @GetMapping("/info")
     public R getRedisInfo() throws Exception {
         List<RedisInfo> infoList = this.redisService.getRedisInfo();
@@ -43,30 +37,16 @@ public class ActuatorRedisController {
         return redisService.getKeysSize();
     }
 
-    /**
-     * 获取redis key数量 for 报表
-     * @return
-     * @throws Exception
-     */
     @GetMapping("/keysSizeForReport")
     public Map<String, JSONArray> getKeysSizeReport() throws Exception {
 		return redisService.getMapForReport("1");
     }
-    /**
-     * 获取redis 内存 for 报表
-     *
-     * @return
-     * @throws Exception
-     */
+
     @GetMapping("/memoryForReport")
     public Map<String, JSONArray> memoryForReport() throws Exception {
 		return redisService.getMapForReport("2");
     }
-    /**
-     * 获取redis 全部信息 for 报表
-     * @return
-     * @throws Exception
-     */
+
     @GetMapping("/infoForReport")
     public Map<String, JSONArray> infoForReport() throws Exception {
 		return redisService.getMapForReport("3");
@@ -77,12 +57,6 @@ public class ActuatorRedisController {
         return redisService.getMemoryInfo();
     }
     
-  	/**
-  	 * @功能：获取磁盘信息
-  	 * @param request
-  	 * @param response
-  	 * @return
-  	 */
   	@GetMapping("/queryDiskInfo")
   	public R queryDiskInfo(HttpServletRequest request, HttpServletResponse response){
 		List<Map<String,Object>> list = new ArrayList<>();

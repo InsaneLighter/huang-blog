@@ -76,7 +76,6 @@ public class SysUserController {
     @DeleteMapping("/kickOut")
     public R deleteOnlineUser(@RequestBody Set<String> keys) {
         for (String key : keys) {
-            // 解密Key
             sysUserService.kickOut(key);
         }
         return R.ok();
