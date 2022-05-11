@@ -3,7 +3,7 @@ package com.huang.security.utils;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.huang.exception.AuthenticationException1;
+import com.huang.exception.AuthenticationException;
 import com.huang.utils.SpringContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -33,13 +33,13 @@ public class SecurityUtil {
     public static String getCurrentUsername() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
-            throw new AuthenticationException1("当前登录状态过期");
+            throw new AuthenticationException("当前登录状态过期");
         }
         if (authentication.getPrincipal() instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             return userDetails.getUsername();
         }
-        throw new AuthenticationException1("找不到当前登录的信息");
+        throw new AuthenticationException("找不到当前登录的信息");
     }
 
     /**

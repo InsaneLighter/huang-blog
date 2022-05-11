@@ -13,7 +13,7 @@ import com.huang.entity.bean.SecurityProperties;
 import com.huang.entity.dto.JwtUserDto;
 import com.huang.entity.param.PwdParam;
 import com.huang.entity.param.UserParam;
-import com.huang.exception.AuthenticationException1;
+import com.huang.exception.AuthenticationException;
 import com.huang.exception.BlogException;
 import com.huang.mapper.*;
 import com.huang.security.handler.TokenProvider;
@@ -247,10 +247,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         // 清除验证码
         redisUtil.del(authUser.getUuid());
         if (!StringUtils.hasText(code)) {
-            throw new AuthenticationException1("验证码不存在或已过期");
+            throw new AuthenticationException("验证码不存在或已过期");
         }
         if (!StringUtils.hasText(authUser.getCode()) || !authUser.getCode().equalsIgnoreCase(code)) {
-            throw new AuthenticationException1("验证码错误");
+            throw new AuthenticationException("验证码错误");
         }
         //账号禁用判断
         QueryWrapper<SysUserEntity> sysUserWrapper = new QueryWrapper<>();
@@ -259,10 +259,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         if (entity != null) {
             Integer status = entity.getStatus();
             if (status == null || status == 1) {
-                throw new AuthenticationException1("账号已被禁用！");
+                throw new AuthenticationException("账号已被禁用！");
             }
         }else {
-            throw new AuthenticationException1("用户不存在！");
+            throw new AuthenticationException("用户不存在！");
         }
         UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(authUser.getUsername(), password);
@@ -360,7 +360,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         if(sysUserEntity.getUsername().equals(username)){
             this.updateById(sysUser);
         }else {
-            throw new AuthenticationException1("当前用户没有权限更改用户数据！");
+            throw new AuthenticationException("当前用户没有权限更改用户数据！");
         }
     }
 
