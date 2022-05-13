@@ -64,6 +64,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
             List<PostCategoryEntity> postCategoryEntities = postCategoryMapper.selectList(postCategoryWrapper);
             page.setRecords(postCategoryEntities);
 
+            //是否存在子节点
             QueryWrapper<CategoryEntity> categoryWrapper = new QueryWrapper<>();
             categoryWrapper.in("id",categoryIds).or().in("parent_id",categoryIds);
             List<CategoryEntity> categoryEntities = this.list(categoryWrapper);
