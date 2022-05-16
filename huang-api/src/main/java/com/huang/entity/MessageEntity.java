@@ -24,14 +24,6 @@ public class MessageEntity implements Serializable {
 	@TableId(type = IdType.ASSIGN_UUID)
 	private String id;
 	/**
-	 * 天气
-	 */
-	private String weather;
-	/**
-	 * 心情
-	 */
-	private String mood;
-	/**
 	 * 日志内容
 	 */
 	private String content;
