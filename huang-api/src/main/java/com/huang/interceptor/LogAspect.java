@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 @Aspect
 @Component
-public class LogInterceptor {
+public class LogAspect {
     private final ThreadLocal<SysLogEntity> sysLogEntityThreadLocal = new ThreadLocal<>();
     @Autowired
     private SysLogMapper sysLogMapper;
@@ -119,6 +119,7 @@ public class LogInterceptor {
 
     private String getParam(HttpServletRequest request, JoinPoint pjp) {
         String contentType = request.getContentType();
+        //请求contentType不为multipart/form-data
         if(contentType == null || !contentType.contains("multipart/form-data")){
             Object[] arguments = pjp.getArgs();
             if (arguments != null && arguments.length > 0) {
