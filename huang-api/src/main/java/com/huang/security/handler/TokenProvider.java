@@ -86,21 +86,21 @@ public class TokenProvider implements InitializingBean {
      */
     public void checkRenewal(String token) {
         // 判断是否续期token,计算token的过期时间
-        long time = redisUtil.getExpire(properties.getOnlineKey() + token) * 1000;
+        long time = redisUtil.getExpire(properties.getOnlineKey() + properties.getTokenStartWith() + token) * 1000;
         Date expireDate = DateUtil.offset(new Date(), DateField.MILLISECOND, (int) time);
         // 判断当前时间与过期时间的时间差
         long differ = expireDate.getTime() - System.currentTimeMillis();
         // 如果在续期检查的范围内，则续期
         if (differ <= properties.getDetect()) {
             long renew = time + properties.getRenew();
-            redisUtil.expire(properties.getOnlineKey() + token, renew, TimeUnit.MILLISECONDS);
+            redisUtil.expire(properties.getOnlineKey() + properties.getTokenStartWith() + token, renew, TimeUnit.MILLISECONDS);
         }
     }
 
     public String getToken(HttpServletRequest request) {
         final String requestHeader = request.getHeader(properties.getHeader());
         if (requestHeader != null && requestHeader.startsWith(properties.getTokenStartWith())) {
-            return requestHeader.substring(7);
+            return requestHeader;
         }
         return null;
     }

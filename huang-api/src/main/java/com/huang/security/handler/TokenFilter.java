@@ -43,7 +43,7 @@ public class TokenFilter extends GenericFilterBean {
             SysUserEntity sysUserEntity = null;
             boolean cleanUserCache = false;
             try {
-                sysUserEntity = sysUserService.getOne(properties.getOnlineKey() + token);
+                sysUserEntity = sysUserService.getOne(properties.getOnlineKey() + properties.getTokenStartWith() + token);
             } catch (Exception e) {
                 log.error("当前登录状态过期 {}",e.getMessage());
                 cleanUserCache = true;

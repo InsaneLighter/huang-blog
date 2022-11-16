@@ -106,7 +106,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-        redisUtil.set(properties.getOnlineKey() + token, JSONObject.toJSON(sysUserEntity), properties.getTokenValidityInSeconds() / 1000);
+        redisUtil.set(properties.getOnlineKey() + properties.getTokenStartWith() + token, JSONObject.toJSON(sysUserEntity), properties.getTokenValidityInSeconds() / 1000);
     }
 
     /**
@@ -175,7 +175,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
      * @param key /
      */
     public void kickOut(String key) {
-        key = properties.getOnlineKey() + key;
+        key = properties.getOnlineKey() + properties.getTokenStartWith() + key;
         redisUtil.del(key);
     }
 
