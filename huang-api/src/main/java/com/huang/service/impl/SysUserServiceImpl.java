@@ -388,6 +388,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         JwtUserDto currentUser = (JwtUserDto) SecurityUtil.getCurrentUser();
         SysUserEntity user = currentUser.getUser();
         user = this.getById(user.getId());
+        user.setPassword(null);
         Date createTime = user.getCreateTime();
         long days = (System.currentTimeMillis() - createTime.getTime()) / (1000 * 24 * 3600);
         String username = user.getUsername();
