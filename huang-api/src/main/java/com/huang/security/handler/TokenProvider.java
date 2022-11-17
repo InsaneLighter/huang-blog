@@ -14,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
@@ -98,9 +99,26 @@ public class TokenProvider implements InitializingBean {
     }
 
     public String getToken(HttpServletRequest request) {
-        final String requestHeader = request.getHeader(properties.getHeader());
-        if (requestHeader != null && requestHeader.startsWith(properties.getTokenStartWith())) {
+        final String requestHeader = resolveToken(request);
+        if (requestHeader != null) {
             return requestHeader;
+        }
+        return null;
+    }
+
+    /**
+     * 初步检测Token
+     *
+     * @param request /
+     * @return /
+     */
+    private String resolveToken(HttpServletRequest request) {
+        String token = request.getHeader(properties.getHeader());
+        if (StringUtils.hasText(token) && token.startsWith(properties.getTokenStartWith())) {
+            // 去掉令牌前缀
+            return token.replace(properties.getTokenStartWith(), "");
+        } else {
+            log.debug("非法Token：{}", token);
         }
         return null;
     }

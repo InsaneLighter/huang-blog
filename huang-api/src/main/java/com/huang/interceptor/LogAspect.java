@@ -104,7 +104,7 @@ public class LogAspect {
         return result;
     }
 
-    @AfterThrowing(pointcut = "executeService()",
+    @AfterThrowing(pointcut = "executeService() && !excludeGetCurrentUserInfo()",
             throwing = "exception")
     public void handleControllerException(Exception exception) {
         log.info("handleControllerException: {}", exception.toString());
