@@ -2,9 +2,11 @@ package com.huang.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.huang.entity.JournalEntity;
+import com.huang.entity.vo.FrontJournalVo;
 import com.huang.utils.PageUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,5 +24,7 @@ public interface JournalService extends IService<JournalEntity> {
     void updateJournal(JournalEntity journal);
 
     String upload(MultipartFile file);
+
+    List<FrontJournalVo> queryByCondition(Map<String, Object> params);
 }
 

@@ -8,6 +8,7 @@ import com.huang.entity.*;
 import com.huang.entity.enums.PostStatus;
 import com.huang.entity.param.BatchUpdateStatusParam;
 import com.huang.entity.vo.ContentVo;
+import com.huang.entity.vo.FrontPostVo;
 import com.huang.entity.vo.PostVo;
 import com.huang.mapper.*;
 import com.huang.service.PostService;
@@ -220,6 +221,48 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostEntity> impleme
             postEntity.setStatus(status);
             this.updateById(postEntity);
         });
+    }
+
+    @Override
+    public List<FrontPostVo> queryByCondition(Map<String, Object> params) {
+        QueryWrapper<PostEntity> postEntityQueryWrapper = new QueryWrapper<>();
+        String keyword = (String) params.getOrDefault("keyword", "");
+        if (StringUtils.hasText(keyword)) {
+            postEntityQueryWrapper.and(condition -> {
+                condition.like("title", keyword)
+                .or().like("summary", keyword);
+            });
+        }
+        String category = (String) params.getOrDefault("category", "");
+        String categoryName = null;
+        if (StringUtils.hasText(category)) {
+            QueryWrapper<PostCategoryEntity> postCategoryEntityQueryWrapper = new QueryWrapper<>();
+            postCategoryEntityQueryWrapper.eq("category_id",category);
+            List<String> postIds = postCategoryMapper.selectList(postCategoryEntityQueryWrapper).stream().map(PostCategoryEntity::getPostId).distinct().collect(Collectors.toList());
+            if (postIds.size() > 0) {
+                postEntityQueryWrapper.and(condition->{
+                    condition.in("id",postIds);
+                });
+            }
+            QueryWrapper<CategoryEntity> categoryEntityQueryWrapper = new QueryWrapper<>();
+            categoryEntityQueryWrapper.eq("id",category);
+            categoryName = categoryMapper.selectOne(categoryEntityQueryWrapper).getName();
+        }else {
+            
+        }
+        String currentCount = (String) params.getOrDefault("currentCount", "10");
+        postEntityQueryWrapper.last("limit" + currentCount);
+        String finalCategoryName = categoryName;
+        List<FrontPostVo> frontPostVoList = postMapper.selectList(postEntityQueryWrapper).stream().map(item -> {
+            FrontPostVo frontPostVo = new FrontPostVo();
+            BeanUtils.copyProperties(item, frontPostVo);
+            if(StringUtils.hasText(finalCategoryName)){
+                frontPostVo.setCategory(finalCategoryName);
+            }
+            return frontPostVo;
+        }).collect(Collectors.toList());
+
+        return frontPostVoList;
     }
 
 }

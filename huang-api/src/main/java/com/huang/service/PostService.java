@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.huang.entity.PostEntity;
 import com.huang.entity.param.BatchUpdateStatusParam;
 import com.huang.entity.vo.ContentVo;
+import com.huang.entity.vo.FrontPostVo;
 import com.huang.utils.PageUtils;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,5 +25,7 @@ public interface PostService extends IService<PostEntity> {
     void delete(String[] ids);
 
     void updateStatusInBatch(BatchUpdateStatusParam batchUpdateStatusParam);
+
+    List<FrontPostVo> queryByCondition(Map<String, Object> params);
 }
 
