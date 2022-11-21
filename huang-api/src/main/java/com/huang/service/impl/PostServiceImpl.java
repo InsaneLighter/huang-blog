@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.huang.entity.*;
 import com.huang.entity.enums.PostStatus;
 import com.huang.entity.param.BatchUpdateStatusParam;
@@ -225,44 +226,29 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostEntity> impleme
 
     @Override
     public List<FrontPostVo> queryByCondition(Map<String, Object> params) {
-        QueryWrapper<PostEntity> postEntityQueryWrapper = new QueryWrapper<>();
+        MPJLambdaWrapper<FrontPostVo> mpjLambdaWrapper = new MPJLambdaWrapper<FrontPostVo>()
+                .selectAll(PostEntity.class)
+                .selectAs(CategoryEntity::getName, FrontPostVo::getCategory)
+                .leftJoin(PostCategoryEntity.class, PostCategoryEntity::getPostId, PostEntity::getId)
+                .leftJoin(CategoryEntity.class, CategoryEntity::getId, PostCategoryEntity::getCategoryId);
         String keyword = (String) params.getOrDefault("keyword", "");
         if (StringUtils.hasText(keyword)) {
-            postEntityQueryWrapper.and(condition -> {
-                condition.like("title", keyword)
-                .or().like("summary", keyword);
+            mpjLambdaWrapper.and(condition -> {
+                condition.like(PostEntity::getTitle,keyword)
+                .or().like(PostEntity::getSummary, keyword);
             });
         }
         String category = (String) params.getOrDefault("category", "");
-        String categoryName = null;
         if (StringUtils.hasText(category)) {
-            QueryWrapper<PostCategoryEntity> postCategoryEntityQueryWrapper = new QueryWrapper<>();
-            postCategoryEntityQueryWrapper.eq("category_id",category);
-            List<String> postIds = postCategoryMapper.selectList(postCategoryEntityQueryWrapper).stream().map(PostCategoryEntity::getPostId).distinct().collect(Collectors.toList());
-            if (postIds.size() > 0) {
-                postEntityQueryWrapper.and(condition->{
-                    condition.in("id",postIds);
-                });
-            }
-            QueryWrapper<CategoryEntity> categoryEntityQueryWrapper = new QueryWrapper<>();
-            categoryEntityQueryWrapper.eq("id",category);
-            categoryName = categoryMapper.selectOne(categoryEntityQueryWrapper).getName();
-        }else {
-            
+            mpjLambdaWrapper.and(condition -> {
+                condition.eq(CategoryEntity::getId,category);
+            });
         }
-        String currentCount = (String) params.getOrDefault("currentCount", "10");
-        postEntityQueryWrapper.last("limit" + currentCount);
-        String finalCategoryName = categoryName;
-        List<FrontPostVo> frontPostVoList = postMapper.selectList(postEntityQueryWrapper).stream().map(item -> {
-            FrontPostVo frontPostVo = new FrontPostVo();
-            BeanUtils.copyProperties(item, frontPostVo);
-            if(StringUtils.hasText(finalCategoryName)){
-                frontPostVo.setCategory(finalCategoryName);
-            }
-            return frontPostVo;
-        }).collect(Collectors.toList());
 
-        return frontPostVoList;
+        String currentCount = (String) params.getOrDefault("currentCount", "10");
+        mpjLambdaWrapper.last("limit" + currentCount);
+
+        return postMapper.selectJoinList(FrontPostVo.class, mpjLambdaWrapper);
     }
 
 }

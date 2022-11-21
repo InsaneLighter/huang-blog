@@ -1,7 +1,7 @@
 package com.huang.mapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+import com.github.yulichang.base.MPJBaseMapper;
 import com.huang.entity.PostEntity;
-import com.huang.entity.vo.PostVo;
 
 /**
  * 
@@ -10,6 +10,6 @@ import com.huang.entity.vo.PostVo;
  * @email mail@huanghong.top
  * @date 2022-04-14 18:25:41
  */
-public interface PostMapper extends BaseMapper<PostEntity> {
+public interface PostMapper extends MPJBaseMapper<PostEntity> {
 
 }

@@ -39,6 +39,7 @@
         <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
         <spring-boot-maven-plugin.version>2.5.10</spring-boot-maven-plugin.version>
         <mybatisplus.version>3.5.1</mybatisplus.version>
+        <mybatis-plus-join.version>1.2.4</mybatis-plus-join.version>
         <pagehelper.spring.boot.version>1.4.2</pagehelper.spring.boot.version>
         <mysql.version>8.0.17</mysql.version>
         <druid.version>1.1.24</druid.version>
@@ -75,6 +76,12 @@
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatisplus.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.yulichang</groupId>
+                <artifactId>mybatis-plus-join</artifactId>
+                <version>${mybatis-plus-join.version}</version>
             </dependency>
 
             <dependency>
