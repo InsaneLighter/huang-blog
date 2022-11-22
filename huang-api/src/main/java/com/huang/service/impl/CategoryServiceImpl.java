@@ -97,4 +97,11 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
         return new PageUtils(page);
     }
 
+    @Override
+    public List<CategoryEntity> getCategories() {
+        QueryWrapper<CategoryEntity> categoryEntityQueryWrapper = new QueryWrapper<>();
+        categoryEntityQueryWrapper.ne("id","0");
+        return this.list(categoryEntityQueryWrapper);
+    }
+
 }

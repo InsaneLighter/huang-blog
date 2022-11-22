@@ -245,8 +245,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostEntity> impleme
             });
         }
 
-        String currentCount = (String) params.getOrDefault("currentCount", "10");
-        mpjLambdaWrapper.last("limit" + currentCount);
+        String currentCount = (String) params.getOrDefault("currentCount", "0");
+        mpjLambdaWrapper.last("limit " + currentCount + ",5");
 
         return postMapper.selectJoinList(FrontPostVo.class, mpjLambdaWrapper);
     }

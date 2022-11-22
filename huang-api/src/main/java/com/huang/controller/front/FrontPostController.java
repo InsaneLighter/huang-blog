@@ -1,7 +1,6 @@
 package com.huang.controller.front;
 
-import com.huang.entity.ContentEntity;
-import com.huang.entity.PostEntity;
+import com.huang.entity.vo.ContentVo;
 import com.huang.entity.vo.FrontPostVo;
 import com.huang.service.CategoryService;
 import com.huang.service.ContentService;
@@ -23,7 +22,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/front/post")
-public class PostController {
+public class FrontPostController {
     @Autowired
     private PostService postService;
     @Autowired
@@ -33,7 +32,7 @@ public class PostController {
 
     @GetMapping("/category")
     public R category(){
-        return R.ok().put("data",categoryService.list());
+        return R.ok().put("data",categoryService.getCategories());
     }
 
     @PostMapping("/list")
@@ -43,7 +42,8 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
-    public R detail(@PathVariable String postId){
-        return R.ok().put("data",contentService.getById(postId));
+    public R getByPostId(@PathVariable String postId){
+        ContentVo contentVo = postService.getByPostId(postId);
+        return R.ok().put("data", contentVo);
     }
 }
