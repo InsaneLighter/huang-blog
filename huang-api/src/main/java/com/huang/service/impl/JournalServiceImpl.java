@@ -115,4 +115,13 @@ public class JournalServiceImpl extends ServiceImpl<JournalMapper, JournalEntity
         IPage<JournalEntity> page = this.page(new Query().getPage(params), journalWrapper);
         return new PageUtils(page);
     }
+
+    @Override
+    public void like(Map<String, Object> params) {
+        String id = (String) params.getOrDefault("id", "");
+        Boolean like = (Boolean) params.getOrDefault("like", "");
+        JournalEntity item = journalMapper.selectById(id);
+        item.setLikes(like?item.getLikes()+1:item.getLikes()-1);
+        journalMapper.updateById(item);
+    }
 }

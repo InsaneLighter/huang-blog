@@ -24,5 +24,7 @@ public interface JournalService extends IService<JournalEntity> {
     String upload(MultipartFile file);
 
     PageUtils queryPageByCondition(Map<String, Object> params);
+
+    void like(Map<String, Object> params);
 }
 

@@ -27,4 +27,10 @@ public class FrontJournalController {
         PageUtils data = journalService.queryPageByCondition(params);
         return R.ok().put("data",data);
     }
+
+    @PostMapping("/like")
+    public R like(@RequestBody Map<String,Object> params){
+        journalService.like(params);
+        return R.ok();
+    }
 }

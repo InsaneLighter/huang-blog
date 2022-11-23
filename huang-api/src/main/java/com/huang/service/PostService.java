@@ -26,6 +26,6 @@ public interface PostService extends IService<PostEntity> {
 
     void updateStatusInBatch(BatchUpdateStatusParam batchUpdateStatusParam);
 
-    List<FrontPostVo> queryByCondition(Map<String, Object> params);
+    PageUtils queryByCondition(Map<String, Object> params);
 }
 

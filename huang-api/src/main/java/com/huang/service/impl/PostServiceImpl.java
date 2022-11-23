@@ -225,7 +225,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostEntity> impleme
     }
 
     @Override
-    public List<FrontPostVo> queryByCondition(Map<String, Object> params) {
+    public PageUtils queryByCondition(Map<String, Object> params) {
         MPJLambdaWrapper<FrontPostVo> mpjLambdaWrapper = new MPJLambdaWrapper<FrontPostVo>()
                 .selectAll(PostEntity.class)
                 .selectAs(CategoryEntity::getName, FrontPostVo::getCategory)
@@ -245,10 +245,16 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostEntity> impleme
             });
         }
 
-        String currentCount = (String) params.getOrDefault("currentCount", "0");
-        mpjLambdaWrapper.last("limit " + currentCount + ",5");
+        String startDate = (String) params.getOrDefault("startDate", "");
+        String endDate = (String) params.getOrDefault("endDate", "");
+        if (StringUtils.hasText(startDate) && StringUtils.hasText(endDate)) {
+            mpjLambdaWrapper.and(condition -> {
+                condition.between(PostEntity::getCreateTime,startDate,endDate);
+            });
+        }
 
-        return postMapper.selectJoinList(FrontPostVo.class, mpjLambdaWrapper);
+        IPage<FrontPostVo> page = postMapper.selectJoinPage(new Query().getPage(params), FrontPostVo.class, mpjLambdaWrapper);
+        return new PageUtils(page);
     }
 
 }
