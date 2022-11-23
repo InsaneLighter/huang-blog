@@ -35,20 +35,20 @@ public class TodoController {
         return R.ok().put("todo", todo);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public R save(@RequestBody TodoEntity todo){
 		todoService.save(todo);
         return R.ok();
     }
 
-    @PutMapping("/")
+    @PutMapping
     public R update(@RequestBody TodoEntity todo){
 		todoService.updateById(todo);
         return R.ok();
     }
 
-    @DeleteMapping("/")
-    public R delete(@RequestBody Integer[] ids){
+    @DeleteMapping
+    public R delete(@RequestBody String[] ids){
 		todoService.removeByIds(Arrays.asList(ids));
         return R.ok();
     }

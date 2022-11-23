@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.huang.entity.JournalEntity;
 import com.huang.entity.JournalPatchLogEntity;
-import com.huang.entity.vo.FrontJournalVo;
 import com.huang.event.BlogEvent;
 import com.huang.mapper.JournalMapper;
 import com.huang.mapper.JournalPatchLogMapper;
@@ -14,7 +13,6 @@ import com.huang.utils.CommonUtils;
 import com.huang.utils.MinioUtil;
 import com.huang.utils.PageUtils;
 import com.huang.utils.Query;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -29,9 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 
 @Service("journalService")
@@ -113,15 +109,10 @@ public class JournalServiceImpl extends ServiceImpl<JournalMapper, JournalEntity
     }
 
     @Override
-    public List<FrontJournalVo> queryByCondition(Map<String, Object> params) {
-        QueryWrapper<JournalEntity> journalEntityQueryWrapper = new QueryWrapper<>();
-        String currentCount = (String) params.getOrDefault("currentCount", "10");
-        journalEntityQueryWrapper.last("limit" + currentCount);
-        List<FrontJournalVo> frontJournalVos = journalMapper.selectList(journalEntityQueryWrapper).stream().map(item -> {
-            FrontJournalVo frontJournalVo = new FrontJournalVo();
-            BeanUtils.copyProperties(item, frontJournalVo);
-            return frontJournalVo;
-        }).collect(Collectors.toList());
-        return frontJournalVos;
+    public PageUtils queryPageByCondition(Map<String, Object> params) {
+        QueryWrapper<JournalEntity> journalWrapper = new QueryWrapper<>();
+        journalWrapper.orderByDesc("create_time");
+        IPage<JournalEntity> page = this.page(new Query().getPage(params), journalWrapper);
+        return new PageUtils(page);
     }
 }

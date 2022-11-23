@@ -22,7 +22,7 @@ public class TodoEntity implements Serializable {
 	 * 主键id
 	 */
 	@TableId(type = IdType.ASSIGN_UUID)
-	private Integer id;
+	private String id;
 	/**
 	 * 待办内容
 	 */
