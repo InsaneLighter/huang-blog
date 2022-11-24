@@ -39,7 +39,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, TagEntity> implements
     }
 
     @Override
-    public PageUtils queryAll(Map<String, Object> params) {
+    public PageUtils queryAll() {
         QueryWrapper<TagEntity> wrapper = new QueryWrapper<>();
         wrapper.orderByAsc("name");
         List<TagEntity> list = this.list(wrapper);

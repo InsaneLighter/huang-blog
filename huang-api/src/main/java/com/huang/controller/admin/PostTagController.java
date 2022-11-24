@@ -22,8 +22,8 @@ public class PostTagController {
     @Autowired
     private PostTagService postTagService;
 
-    @GetMapping
-    public R list(@RequestParam Map<String, Object> params){
+    @PostMapping
+    public R list(@RequestBody Map<String, Object> params){
         PageUtils page = postTagService.queryPage(params);
         return R.ok().put("data", page);
     }

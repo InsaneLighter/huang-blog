@@ -22,8 +22,8 @@ public class PostContentController {
     @Autowired
     private PostContentService postContentService;
 
-    @GetMapping
-    public R list(@RequestParam Map<String, Object> params){
+    @PostMapping
+    public R list(@RequestBody Map<String, Object> params){
         PageUtils page = postContentService.queryPage(params);
         return R.ok().put("data", page);
     }

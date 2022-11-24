@@ -28,19 +28,19 @@ public class TagController {
     private ApplicationContext applicationContext;
 
     @GetMapping("/queryAll")
-    public R queryAll(@RequestParam Map<String, Object> params){
-        PageUtils page = tagService.queryAll(params);
+    public R queryAll(){
+        PageUtils page = tagService.queryAll();
         return R.ok().put("data", page);
     }
 
-    @GetMapping
-    public R list(@RequestParam Map<String, Object> params){
+    @PostMapping
+    public R list(@RequestBody Map<String, Object> params){
         PageUtils page = tagService.queryPage(params);
         return R.ok().put("data", page);
     }
 
-    @GetMapping("/queryByIds")
-    public R queryByIds(@RequestParam Map<String, Object> params){
+    @PostMapping("/queryByIds")
+    public R queryByIds(@RequestBody Map<String, Object> params){
         return tagService.queryByIds(params);
     }
 

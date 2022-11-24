@@ -17,13 +17,13 @@ import java.util.Map;
 public interface CategoryService extends IService<CategoryEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
-    PageUtils queryAll(Map<String, Object> params);
+    PageUtils queryAll();
 
     Map<String,Object> queryByIds(Map<String, Object> params);
 
     CategoryEntity queryByName(String name);
 
-    PageUtils queryAllTree(Map<String, Object> params);
+    PageUtils queryAllTree();
 
     List<CategoryEntity> getCategories();
 }

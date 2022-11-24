@@ -16,7 +16,7 @@ import java.util.Map;
 public interface TagService extends IService<TagEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
-    PageUtils queryAll(Map<String, Object> params);
+    PageUtils queryAll();
 
     void saveTag(TagEntity tag);
 

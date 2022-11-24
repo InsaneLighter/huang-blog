@@ -22,8 +22,8 @@ public class FrontJournalController {
     @Autowired
     private JournalService journalService;
 
-    @GetMapping("/list")
-    public R list(@RequestParam Map<String,Object> params){
+    @PostMapping("/list")
+    public R list(@RequestBody Map<String,Object> params){
         PageUtils data = journalService.queryPageByCondition(params);
         return R.ok().put("data",data);
     }

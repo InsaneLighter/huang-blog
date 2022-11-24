@@ -22,8 +22,8 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
-    @GetMapping
-    public R list(@RequestParam Map<String, Object> params){
+    @PostMapping
+    public R list(@RequestBody Map<String, Object> params){
         PageUtils page = messageService.queryPage(params);
         return R.ok().put("data", page);
     }

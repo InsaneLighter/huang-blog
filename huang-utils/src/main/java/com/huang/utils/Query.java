@@ -26,10 +26,10 @@ public class Query extends LinkedHashMap<String,Object> {
         long limit = 10;
 
         if(params.get(Constant.PAGE) != null){
-            curPage = Long.parseLong((String)params.get(Constant.PAGE)) + 1;
+            curPage = Long.parseLong(String.valueOf(params.get(Constant.PAGE))) + 1;
         }
         if(params.get(Constant.LIMIT) != null){
-            limit = Long.parseLong((String)params.get(Constant.LIMIT));
+            limit = Long.parseLong(String.valueOf(params.get(Constant.LIMIT)));
         }
 
         //分页对象

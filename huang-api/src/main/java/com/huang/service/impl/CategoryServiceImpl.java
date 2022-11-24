@@ -43,7 +43,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
     }
 
     @Override
-    public PageUtils queryAll(Map<String, Object> params) {
+    public PageUtils queryAll() {
         List<CategoryEntity> list = this.list();
         Page<CategoryEntity> page = new Page<>();
         page.setRecords(list);
@@ -84,7 +84,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
     }
 
     @Override
-    public PageUtils queryAllTree(Map<String, Object> params) {
+    public PageUtils queryAllTree() {
         List<CategoryEntity> list = this.list();
         Page<CategoryEntity> page = new Page<>();
         if (!CollectionUtils.isEmpty(list)) {

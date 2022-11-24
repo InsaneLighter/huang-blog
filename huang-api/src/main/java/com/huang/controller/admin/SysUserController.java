@@ -25,8 +25,8 @@ public class SysUserController {
     @Autowired
     private SysUserService sysUserService;
 
-    @GetMapping
-    public R list(@RequestParam Map<String, Object> params) {
+    @PostMapping
+    public R list(@RequestBody Map<String, Object> params) {
         PageUtils page = sysUserService.queryPage(params);
         return R.ok().put("data", page);
     }

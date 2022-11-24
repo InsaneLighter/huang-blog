@@ -22,8 +22,8 @@ public class SysLogController {
     @Autowired
     private SysLogService sysLogService;
 
-    @GetMapping
-    public R list(@RequestParam Map<String, Object> params){
+    @PostMapping
+    public R list(@RequestBody Map<String, Object> params){
         PageUtils page = sysLogService.queryPage(params);
         return R.ok().put("data", page);
     }

@@ -1,6 +1,5 @@
 package com.huang.controller.admin;
 
-import com.huang.entity.ContentEntity;
 import com.huang.entity.param.ContentParam;
 import com.huang.service.ContentService;
 import com.huang.utils.PageUtils;
@@ -26,8 +25,8 @@ public class ContentController {
     @Autowired
     private ContentService contentService;
 
-    @GetMapping
-    public R list(@RequestParam Map<String, Object> params){
+    @PostMapping
+    public R list(@RequestBody Map<String, Object> params){
         PageUtils page = contentService.queryPage(params);
         return R.ok().put("data", page);
     }

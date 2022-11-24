@@ -28,8 +28,8 @@ public class AttachmentController {
     @Autowired
     private AttachmentService attachmentService;
 
-    @GetMapping
-    public R list(@RequestParam Map<String, Object> params){
+    @PostMapping
+    public R list(@RequestBody Map<String, Object> params){
         PageUtils page = attachmentService.queryPage(params);
         return R.ok().put("data", page);
     }

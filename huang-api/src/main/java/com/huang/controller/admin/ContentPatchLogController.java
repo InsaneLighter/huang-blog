@@ -22,8 +22,8 @@ public class ContentPatchLogController {
     @Autowired
     private ContentPatchLogService contentPatchLogService;
 
-    @GetMapping
-    public R list(@RequestParam Map<String, Object> params){
+    @PostMapping
+    public R list(@RequestBody Map<String, Object> params){
         PageUtils page = contentPatchLogService.queryPage(params);
         return R.ok().put("data", page);
     }
