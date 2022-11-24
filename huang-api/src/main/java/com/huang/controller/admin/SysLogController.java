@@ -22,7 +22,7 @@ public class SysLogController {
     @Autowired
     private SysLogService sysLogService;
 
-    @PostMapping
+    @PostMapping("/list")
     public R list(@RequestBody Map<String, Object> params){
         PageUtils page = sysLogService.queryPage(params);
         return R.ok().put("data", page);

@@ -22,7 +22,7 @@ public class JournalPatchLogController {
     @Autowired
     private JournalPatchLogService journalPatchLogService;
 
-    @PostMapping
+    @PostMapping("/list")
     public R list(@RequestBody Map<String, Object> params){
         PageUtils page = journalPatchLogService.queryPage(params);
         return R.ok().put("data", page);

@@ -24,7 +24,7 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    @PostMapping
+    @PostMapping("/list")
     public R list(@RequestBody Map<String, Object> params){
         PageUtils page = postService.queryPage(params);
         return R.ok().put("data", page);

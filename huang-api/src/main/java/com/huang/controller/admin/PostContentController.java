@@ -22,7 +22,7 @@ public class PostContentController {
     @Autowired
     private PostContentService postContentService;
 
-    @PostMapping
+    @PostMapping("/list")
     public R list(@RequestBody Map<String, Object> params){
         PageUtils page = postContentService.queryPage(params);
         return R.ok().put("data", page);

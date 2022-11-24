@@ -33,7 +33,7 @@ public class TagController {
         return R.ok().put("data", page);
     }
 
-    @PostMapping
+    @PostMapping("/list")
     public R list(@RequestBody Map<String, Object> params){
         PageUtils page = tagService.queryPage(params);
         return R.ok().put("data", page);

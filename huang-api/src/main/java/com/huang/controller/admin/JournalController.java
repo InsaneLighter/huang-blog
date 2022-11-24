@@ -24,7 +24,7 @@ public class JournalController {
     @Autowired
     private JournalService journalService;
 
-    @PostMapping
+    @PostMapping("/list")
     public R list(@RequestBody Map<String, Object> params){
         PageUtils page = journalService.queryPage(params);
         return R.ok().put("data", page);

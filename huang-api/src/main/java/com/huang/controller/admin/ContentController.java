@@ -25,7 +25,7 @@ public class ContentController {
     @Autowired
     private ContentService contentService;
 
-    @PostMapping
+    @PostMapping("/list")
     public R list(@RequestBody Map<String, Object> params){
         PageUtils page = contentService.queryPage(params);
         return R.ok().put("data", page);

@@ -22,7 +22,7 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
-    @PostMapping
+    @PostMapping("/list")
     public R list(@RequestBody Map<String, Object> params){
         PageUtils page = messageService.queryPage(params);
         return R.ok().put("data", page);

@@ -22,7 +22,7 @@ public class PostTagController {
     @Autowired
     private PostTagService postTagService;
 
-    @PostMapping
+    @PostMapping("/list")
     public R list(@RequestBody Map<String, Object> params){
         PageUtils page = postTagService.queryPage(params);
         return R.ok().put("data", page);

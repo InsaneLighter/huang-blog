@@ -28,7 +28,7 @@ public class AttachmentController {
     @Autowired
     private AttachmentService attachmentService;
 
-    @PostMapping
+    @PostMapping("/list")
     public R list(@RequestBody Map<String, Object> params){
         PageUtils page = attachmentService.queryPage(params);
         return R.ok().put("data", page);

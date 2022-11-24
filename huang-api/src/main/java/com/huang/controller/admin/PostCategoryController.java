@@ -21,7 +21,7 @@ public class PostCategoryController {
     @Autowired
     private PostCategoryService postCategoryService;
 
-    @PostMapping
+    @PostMapping("/list")
     public R list(@RequestBody Map<String, Object> params){
         PageUtils page = postCategoryService.queryPage(params);
         return R.ok().put("data", page);
