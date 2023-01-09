@@ -11,6 +11,8 @@ import java.util.Map;
  * Description:
  */
 public class R<T> extends HashMap<String, Object> {
+
+
     private static final long serialVersionUID = 1L;
 
     private T data;
