@@ -23,8 +23,8 @@ public class TodoController {
     @Autowired
     private TodoService todoService;
 
-    @GetMapping("/queryAll")
-    public R queryAll(@RequestParam Map<String, Object> params){
+    @PostMapping("/queryAll")
+    public R queryAll(@RequestBody Map<String, Object> params){
         List<TodoEntity> todoEntityList = todoService.queryAll(params);
         return R.ok().put("data", todoEntityList);
     }
