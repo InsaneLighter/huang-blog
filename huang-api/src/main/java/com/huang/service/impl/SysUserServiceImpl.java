@@ -175,7 +175,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
      * @param key /
      */
     public void kickOut(String key) {
-        key = properties.getOnlineKey() + key;
+        key = properties.getOnlineKey() + properties.getTokenStartWith() + key;
         redisUtil.del(key);
     }
 

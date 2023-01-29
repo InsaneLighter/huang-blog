@@ -101,7 +101,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/admin/*").permitAll()
                 // 所有请求都需要认证
-                //.anyRequest().authenticated()
+                .anyRequest().authenticated()
                 .and().apply(securityConfigurerAdapter());
     }
 
