@@ -3,10 +3,10 @@ package com.huang.entity;
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.huang.entity.vo.ReplyVo;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * @Time 2023-01-30 14:11
@@ -83,5 +83,5 @@ public class CommentEntity {
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @TableField(exist = false)
-    private List<CommentEntity> reply;
+    private ReplyVo reply;
 }
