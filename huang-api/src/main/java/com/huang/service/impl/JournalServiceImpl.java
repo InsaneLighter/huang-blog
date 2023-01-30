@@ -25,8 +25,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 
 
@@ -49,14 +47,11 @@ public class JournalServiceImpl extends ServiceImpl<JournalMapper, JournalEntity
         String startDate = (String) params.getOrDefault("startDate", "");
         String endDate = (String) params.getOrDefault("endDate", "");
         QueryWrapper<JournalEntity> journalWrapper = new QueryWrapper<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         if (StringUtils.hasText(startDate)) {
-            Date date = new Date(Long.parseLong(startDate));
-            journalWrapper.ge("create_time", sdf.format(date));
+            journalWrapper.ge("create_time", startDate + " 00:00:00");
         }
         if (StringUtils.hasText(endDate)) {
-            Date date = new Date(Long.parseLong(endDate));
-            journalWrapper.le("create_time", sdf.format(date) + " 23:59:59");
+            journalWrapper.le("create_time", endDate + " 23:59:59");
         }
         if (StringUtils.hasText(keyword)) {
             journalWrapper.and(journalEntityQueryWrapper -> {

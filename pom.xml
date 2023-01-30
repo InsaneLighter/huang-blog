@@ -63,7 +63,7 @@
         <image4j.version>0.7zensight1</image4j.version>
         <captcha.version>1.6.2</captcha.version>
         <yauaa.version>5.23</yauaa.version>
-        <mica-ip2region.version>2.5.6</mica-ip2region.version>
+        <mica-ip2region.version>2.6.6</mica-ip2region.version>
         <jjwt.version>0.11.1</jjwt.version>
         <spring-boot-starter-mail.version>2.5.7</spring-boot-starter-mail.version>
         <spring-boot-starter-validation.version>2.5.7</spring-boot-starter-validation.version>
