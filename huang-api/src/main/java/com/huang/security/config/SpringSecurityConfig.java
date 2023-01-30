@@ -96,11 +96,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/file/**").permitAll()
                 // 阿里巴巴 druid
                 .antMatchers("/druid/**").permitAll()
-                .antMatchers("/api/**").permitAll()
                 // 放行OPTIONS请求
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers("/admin/*").permitAll()
-                // 所有请求都需要认证
+                .antMatchers("/front/**").permitAll()
+                .antMatchers("/admin/login","/admin/logout","/admin/code").permitAll()
+                //.anyRequest().permitAll()
                 .anyRequest().authenticated()
                 .and().apply(securityConfigurerAdapter());
     }

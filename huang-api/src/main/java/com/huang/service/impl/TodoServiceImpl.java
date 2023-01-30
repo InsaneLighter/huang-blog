@@ -15,8 +15,8 @@ public class TodoServiceImpl extends ServiceImpl<TodoMapper, TodoEntity> impleme
     @Override
     public List<TodoEntity> queryAll(Map<String, Object> params) {
         QueryWrapper<TodoEntity> todoEntityQueryWrapper = new QueryWrapper<>();
-        Integer status = (Integer) params.getOrDefault("status", "");
-        if(status != null){
+        Integer status = (Integer) params.get("status");
+        if(status != 9){
             todoEntityQueryWrapper.eq("status", status);
         }
         return this.list(todoEntityQueryWrapper);
