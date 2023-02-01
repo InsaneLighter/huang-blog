@@ -2,6 +2,7 @@ package com.huang.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.huang.entity.CommentEntity;
+import com.huang.entity.VisitorEntity;
 import com.huang.entity.vo.CommentVo;
 import com.huang.utils.PageUtils;
 
@@ -19,5 +20,5 @@ public interface CommentService  extends IService<CommentEntity> {
 
     List<CommentVo> queryTreeByPostId(String postId);
 
-    void like(Map<String, Object> params);
+    VisitorEntity like(Map<String, Object> params);
 }

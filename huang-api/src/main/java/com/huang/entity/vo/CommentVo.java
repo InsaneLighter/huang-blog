@@ -1,5 +1,6 @@
 package com.huang.entity.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -20,6 +21,7 @@ public class CommentVo {
     private String address;
     private Integer like;
     private String postId;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
     private ReplyVo reply;
 }

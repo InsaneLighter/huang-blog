@@ -3,7 +3,6 @@ package com.huang.entity.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.huang.entity.CategoryEntity;
 import com.huang.entity.TagEntity;
-import com.huang.entity.enums.PostStatus;
 import lombok.Data;
 
 import java.util.Date;
@@ -22,9 +21,9 @@ public class PostVo {
     private String title;
     private String summary;
     private Integer topPriority;
-    private PostStatus status;
     private Integer likes;
     private Integer visit;
+    private Long comments;
     private Integer deleted;
     private String createBy;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

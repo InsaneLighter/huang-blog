@@ -1,5 +1,6 @@
 package com.huang.controller.front;
 
+import com.huang.entity.PostEntity;
 import com.huang.entity.vo.ContentVo;
 import com.huang.service.CategoryService;
 import com.huang.service.ContentService;
@@ -30,19 +31,28 @@ public class FrontPostController {
     private CategoryService categoryService;
 
     @GetMapping("/category")
-    public R category(){
-        return R.ok().put("data",categoryService.getCategories());
+    public R category() {
+        return R.ok().put("data", categoryService.getCategories());
     }
 
     @PostMapping("/list")
-    public R postList(@RequestBody Map<String, Object> params){
-        PageUtils data =  postService.queryByCondition(params);
-        return R.ok().put("data",data);
+    public R postList(@RequestBody Map<String, Object> params) {
+        PageUtils data = postService.queryByCondition(params);
+        return R.ok().put("data", data);
     }
 
     @GetMapping("/{postId}")
-    public R getByPostId(@PathVariable String postId){
+    public R getByPostId(@PathVariable String postId) {
         ContentVo contentVo = postService.getByPostId(postId);
         return R.ok().put("data", contentVo);
+    }
+
+    @GetMapping("/visit/{postId}")
+    public R visitPost(@PathVariable String postId) {
+        PostEntity postEntity = postService.getById(postId);
+        Integer visit = postEntity.getVisit();
+        postEntity.setVisit(visit == null ? 1 : (visit + 1));
+        postService.updateById(postEntity);
+        return R.ok();
     }
 }

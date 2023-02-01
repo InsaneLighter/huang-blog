@@ -36,19 +36,19 @@ public class FrontVisitorController {
         return R.ok().put("visitor", visitor);
     }
 
-    @PostMapping("")
+    @PostMapping
     public R save(@RequestBody VisitorEntity visitor){
         visitorService.save(visitor);
         return R.ok();
     }
 
-    @PutMapping("")
+    @PutMapping
     public R update(@RequestBody VisitorEntity visitor){
         visitorService.updateById(visitor);
         return R.ok();
     }
 
-    @DeleteMapping("")
+    @DeleteMapping
     public R delete(@RequestBody String[] ids){
         visitorService.removeByIds(Arrays.asList(ids));
         return R.ok();

@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import com.huang.entity.*;
 import com.huang.entity.enums.PostStatus;
 import com.huang.entity.param.BatchUpdateStatusParam;
@@ -16,6 +15,7 @@ import com.huang.service.PostService;
 import com.huang.utils.PageUtils;
 import com.huang.utils.Query;
 import com.huang.utils.ServiceUtils;
+import org.apache.ibatis.binding.MapperMethod;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,6 +45,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostEntity> impleme
     private ContentMapper contentMapper;
     @Autowired
     protected PostContentMapper postContentMapper;
+    @Autowired
+    protected CommentMapper commentMapper;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -130,6 +132,11 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostEntity> impleme
                                 })
                                 .collect(Collectors.toList());
                         postVo.setTags(tags);
+                        //set comments
+                        QueryWrapper<CommentEntity> commentWrapper = new QueryWrapper<>();
+                        commentWrapper.eq("post_id", postEntityId);
+                        Long count = commentMapper.selectCount(commentWrapper);
+                        postVo.setComments(count);
                         return postVo;
                     })
                     .collect(Collectors.toList());
@@ -226,11 +233,12 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostEntity> impleme
 
     @Override
     public PageUtils queryByCondition(Map<String, Object> params) {
-        MPJLambdaWrapper<FrontPostVo> mpjLambdaWrapper = new MPJLambdaWrapper<FrontPostVo>()
+        /*MPJLambdaWrapper<FrontPostVo> mpjLambdaWrapper = new MPJLambdaWrapper<FrontPostVo>()
                 .selectAll(PostEntity.class)
                 .selectAs(CategoryEntity::getName, FrontPostVo::getCategory)
                 .leftJoin(PostCategoryEntity.class, PostCategoryEntity::getPostId, PostEntity::getId)
                 .leftJoin(CategoryEntity.class, CategoryEntity::getId, PostCategoryEntity::getCategoryId);
+
         String keyword = (String) params.getOrDefault("keyword", "");
         if (StringUtils.hasText(keyword)) {
             mpjLambdaWrapper.and(condition -> {
@@ -252,8 +260,13 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostEntity> impleme
                 condition.between(PostEntity::getCreateTime,startDate,endDate);
             });
         }
-
-        IPage<FrontPostVo> page = postMapper.selectJoinPage(new Query().getPage(params), FrontPostVo.class, mpjLambdaWrapper);
+        IPage<FrontPostVo> page = postMapper.selectJoinPage(new Query().getPage(params), FrontPostVo.class, mpjLambdaWrapper);*/
+        MapperMethod.ParamMap paramMap = new MapperMethod.ParamMap();
+        paramMap.put("startDate", params.get("startDate"));
+        paramMap.put("endDate", params.get("endDate"));
+        paramMap.put("category", params.get("category"));
+        paramMap.put("keyword", params.get("keyword"));
+        IPage<FrontPostVo> page = postMapper.queryByCondition(new Query().getPage(params),paramMap);
         return new PageUtils(page);
     }
 

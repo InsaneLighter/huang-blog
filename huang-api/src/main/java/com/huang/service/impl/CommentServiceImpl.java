@@ -69,6 +69,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, CommentEntity
         List<CommentVo> commentVos = list.stream().map(item -> {
             CommentVo commentVo = new CommentVo();
             BeanUtils.copyProperties(item, commentVo);
+            commentVo.setLike(item.getLikes());
             return commentVo;
         }).collect(Collectors.toList());
         //获取父节点
@@ -86,7 +87,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, CommentEntity
     }
 
     @Override
-    public void like(Map<String, Object> params) {
+    public VisitorEntity like(Map<String, Object> params) {
         String uid = (String) params.getOrDefault("uid", "");
         String commentId = (String) params.getOrDefault("id", "");
         VisitorEntity visitorEntity = visitorMapper.selectById(uid);
@@ -111,6 +112,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, CommentEntity
         CommentEntity item = this.getById(commentId);
         item.setLikes(like?item.getLikes()+1:item.getLikes()-1);
         this.updateById(item);
+        return visitorEntity;
     }
 
     /**

@@ -19,5 +19,6 @@ public class FrontPostVo {
     private Integer topPriority;
     private Integer likes;
     private Integer visit;
+    private Long comments;
     private Date createTime;
 }
