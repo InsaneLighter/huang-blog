@@ -15,6 +15,7 @@ public class FrontPostVo {
     private String id;
     private String title;
     private String summary;
+    private String cover;
     private String category;
     private Integer topPriority;
     private Integer likes;

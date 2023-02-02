@@ -30,9 +30,9 @@ public class FrontPostController {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping("/category")
-    public R category() {
-        return R.ok().put("data", categoryService.getCategories());
+    @PostMapping("/category")
+    public R category(@RequestBody Map<String,Object> params) {
+        return R.ok().put("data", categoryService.getCategories(params));
     }
 
     @PostMapping("/list")
@@ -53,6 +53,12 @@ public class FrontPostController {
         Integer visit = postEntity.getVisit();
         postEntity.setVisit(visit == null ? 1 : (visit + 1));
         postService.updateById(postEntity);
+        return R.ok();
+    }
+
+    @PostMapping("/like")
+    public R like(@RequestBody Map<String,Object> params){
+        postService.like(params);
         return R.ok();
     }
 }

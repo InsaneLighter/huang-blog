@@ -25,6 +25,6 @@ public interface CategoryService extends IService<CategoryEntity> {
 
     PageUtils queryAllTree();
 
-    List<CategoryEntity> getCategories();
+    List<CategoryEntity> getCategories(Map<String,Object> params);
 }
 

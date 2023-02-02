@@ -98,8 +98,12 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
     }
 
     @Override
-    public List<CategoryEntity> getCategories() {
+    public List<CategoryEntity> getCategories(Map<String,Object> params) {
         QueryWrapper<CategoryEntity> categoryEntityQueryWrapper = new QueryWrapper<>();
+        String keyword = (String) params.getOrDefault("keyword", "");
+        if (StringUtils.hasText(keyword)) {
+            categoryEntityQueryWrapper.like("name", keyword);
+        }
         categoryEntityQueryWrapper.ne("id","0");
         return this.list(categoryEntityQueryWrapper);
     }

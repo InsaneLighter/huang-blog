@@ -233,34 +233,6 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostEntity> impleme
 
     @Override
     public PageUtils queryByCondition(Map<String, Object> params) {
-        /*MPJLambdaWrapper<FrontPostVo> mpjLambdaWrapper = new MPJLambdaWrapper<FrontPostVo>()
-                .selectAll(PostEntity.class)
-                .selectAs(CategoryEntity::getName, FrontPostVo::getCategory)
-                .leftJoin(PostCategoryEntity.class, PostCategoryEntity::getPostId, PostEntity::getId)
-                .leftJoin(CategoryEntity.class, CategoryEntity::getId, PostCategoryEntity::getCategoryId);
-
-        String keyword = (String) params.getOrDefault("keyword", "");
-        if (StringUtils.hasText(keyword)) {
-            mpjLambdaWrapper.and(condition -> {
-                condition.like(PostEntity::getTitle,keyword)
-                .or().like(PostEntity::getSummary, keyword);
-            });
-        }
-        String category = (String) params.getOrDefault("category", "");
-        if (StringUtils.hasText(category)) {
-            mpjLambdaWrapper.and(condition -> {
-                condition.eq(CategoryEntity::getId,category);
-            });
-        }
-
-        String startDate = (String) params.getOrDefault("startDate", "");
-        String endDate = (String) params.getOrDefault("endDate", "");
-        if (StringUtils.hasText(startDate) && StringUtils.hasText(endDate)) {
-            mpjLambdaWrapper.and(condition -> {
-                condition.between(PostEntity::getCreateTime,startDate,endDate);
-            });
-        }
-        IPage<FrontPostVo> page = postMapper.selectJoinPage(new Query().getPage(params), FrontPostVo.class, mpjLambdaWrapper);*/
         MapperMethod.ParamMap paramMap = new MapperMethod.ParamMap();
         paramMap.put("startDate", params.get("startDate"));
         paramMap.put("endDate", params.get("endDate"));
@@ -268,6 +240,15 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostEntity> impleme
         paramMap.put("keyword", params.get("keyword"));
         IPage<FrontPostVo> page = postMapper.queryByCondition(new Query().getPage(params),paramMap);
         return new PageUtils(page);
+    }
+
+    @Override
+    public void like(Map<String, Object> params) {
+        String id = (String) params.getOrDefault("id", "");
+        Boolean like = (Boolean) params.getOrDefault("like", "");
+        PostEntity item = postMapper.selectById(id);
+        item.setLikes(like?item.getLikes()+1:item.getLikes()-1);
+        postMapper.updateById(item);
     }
 
 }

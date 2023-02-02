@@ -12,10 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Time 2022-04-21 9:05
@@ -35,6 +32,29 @@ public class CommonUtils {
             .withField(UserAgent.AGENT_NAME_VERSION)
             .build();
 
+    public static final Map<String, String> WEATHER_MAP = new HashMap() {{
+        put("CLEAR_DAY", "晴（白天）");
+        put("CLEAR_NIGHT", "晴（夜间）");
+        put("PARTLY_CLOUDY_DAY", "多云（白天）");
+        put("PARTLY_CLOUDY_NIGHT", "多云（夜间）");
+        put("CLOUDY", "阴天");
+        put("LIGHT_HAZE", "轻度雾霾");
+        put("MODERATE_HAZE", "中度雾霾");
+        put("HEAVY_HAZE", "重度雾霾");
+        put("LIGHT_RAIN", "小雨");
+        put("MODERATE_RAIN", "中雨");
+        put("HEAVY_RAIN", "大雨");
+        put("STORM_RAIN", "暴雨");
+        put("FOG", "雾天");
+        put("LIGHT_SNOW", "小雪");
+        put("MODERATE_SNOW", "中雪");
+        put("HEAVY_SNOW", "大雪");
+        put("STORM_SNOW", "暴雪");
+        put("DUST", "浮尘");
+        put("SAND", "沙尘");
+        put("WIND", "大风");
+    }};
+
 
     public static String cleanHtmlTag(String content) {
         if (StringUtils.isEmpty(content)) {
@@ -43,12 +63,9 @@ public class CommonUtils {
         return content.replaceAll(RE_HTML_MARK, StringUtils.EMPTY);
     }
 
-    public static String getCurrentWeather() {
-        return getCurrentWeather("101200101");
-    }
 
     public static String getCurrentWeather(String cityNum) {
-        String weatherUrl = "http://www.weather.com.cn/data/cityinfo/"+cityNum+".html";
+        String weatherUrl = "http://www.weather.com.cn/data/cityinfo/" + cityNum + ".html";
         JSONObject result = HttpUtils.get(weatherUrl);
         JSONObject weatherInfo = result.getJSONObject("weatherinfo");
         String city = weatherInfo.getString("city");
@@ -57,6 +74,19 @@ public class CommonUtils {
         String weather = weatherInfo.getString("weather");
 
         return city + " " + weather + " " + lowTemp + "~" + highTemp;
+    }
+
+    public static String getCurrentWeather() {
+        String weatherUrl = "https://api.caiyunapp.com/v2.6/TAkhjf8d1nlSlspN/113.83727,30.66301/realtime";
+        JSONObject result = HttpUtils.get(weatherUrl);
+        String status = result.getString("status");
+        if("ok".equals(status)){
+            JSONObject weatherInfo = result.getJSONObject("result").getJSONObject("realtime");
+            String temperature = weatherInfo.getString("temperature");
+            String skycon = weatherInfo.getString("skycon");
+            return "武汉" + "  " + WEATHER_MAP.get(skycon) + "  " + temperature + "℃";
+        }
+        return "武汉 天气未知";
     }
 
     public static <T extends Comparable<T>> boolean compare(List<T> a, List<T> b) {

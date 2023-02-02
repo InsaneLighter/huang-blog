@@ -2,9 +2,11 @@ package com.huang.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.huang.entity.PostEntity;
 import com.huang.entity.SysStatisticsEntity;
 import com.huang.entity.vo.LogInfoVo;
 import com.huang.entity.vo.VisitInfoVo;
+import com.huang.mapper.PostMapper;
 import com.huang.mapper.SysStatisticsMapper;
 import com.huang.service.SysStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SysStatisticsServiceImpl extends ServiceImpl<SysStatisticsMapper, SysStatisticsEntity> implements SysStatisticsService {
     @Autowired
     private SysStatisticsMapper sysStatisticsMapper;
+    @Autowired
+    private PostMapper postMapper;
 
     @Override
     public SysStatisticsEntity getStatistics() {
@@ -29,6 +33,10 @@ public class SysStatisticsServiceImpl extends ServiceImpl<SysStatisticsMapper, S
         long birthday = entity.getBirthday().getTime();
         long days = (System.currentTimeMillis() - birthday) / (1000 * 24 * 3600);
         entity.setEstablishDays((int) days);
+        QueryWrapper<PostEntity> postWrapper = new QueryWrapper<>();
+        postWrapper.select("sum(visit) as visit");
+        PostEntity postEntity = postMapper.selectOne(postWrapper);
+        entity.setViewPostCount(postEntity.getVisit());
         return entity;
     }
 

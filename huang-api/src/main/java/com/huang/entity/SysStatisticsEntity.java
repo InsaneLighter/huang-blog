@@ -84,4 +84,11 @@ public class SysStatisticsEntity implements Serializable {
 	@TableField(fill = FieldFill.INSERT_UPDATE)
 	private Date updateTime;
 
+	/**
+	 * TableField(exist = false) 数据库中不存在的字段
+	 * JsonInclude(JsonInclude.Include.NON_EMPTY) 字段读取为空的时候不显示
+	 */
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	@TableField(exist = false)
+	private Integer viewPostCount;
 }

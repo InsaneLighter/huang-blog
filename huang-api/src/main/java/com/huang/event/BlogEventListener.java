@@ -35,7 +35,9 @@ public class BlogEventListener {
         SysStatisticsEntity sysStatisticsEntity = sysStatisticsMapper.selectList(statisticsWrapper).stream().findFirst().orElse(null);
         Long postCount = postMapper.selectCount(new QueryWrapper<>());
         Long journalCount = journalMapper.selectCount(new QueryWrapper<>());
-        Long categoryCount = categoryMapper.selectCount(new QueryWrapper<>());
+        QueryWrapper<CategoryEntity> categoryWrapper = new QueryWrapper<>();
+        categoryWrapper.ne("id", 0);
+        Long categoryCount = categoryMapper.selectCount(categoryWrapper);
         Long tagCount = tagMapper.selectCount(new QueryWrapper<>());
         assert sysStatisticsEntity != null;
         Object type = event.getObject();

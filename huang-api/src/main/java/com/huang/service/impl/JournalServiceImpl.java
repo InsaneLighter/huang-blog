@@ -19,12 +19,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 
@@ -68,9 +64,6 @@ public class JournalServiceImpl extends ServiceImpl<JournalMapper, JournalEntity
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveJournal(JournalEntity journal) {
-        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
-        HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
-        //TODO 当前用户IP所在城市天气
         journal.setWeather(CommonUtils.getCurrentWeather());
         //journal
         journalMapper.insert(journal);

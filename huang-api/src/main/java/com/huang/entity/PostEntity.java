@@ -35,6 +35,10 @@ public class PostEntity implements Serializable {
 	 */
 	private String summary;
 	/**
+	 * 文章封面
+	 */
+	private String cover;
+	/**
 	 * 优先展示
 	 */
 	@TableField(fill = FieldFill.INSERT)

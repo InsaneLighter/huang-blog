@@ -41,6 +41,10 @@ public class ContentParam {
      */
     private String summary;
     /**
+     * 文章封面
+     */
+    private String cover;
+    /**
      * 优先展示
      */
     private Integer topPriority;

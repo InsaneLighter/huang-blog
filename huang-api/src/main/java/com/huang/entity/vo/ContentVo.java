@@ -30,4 +30,6 @@ public class ContentVo {
     private Date updateTime;
     private List<String> categoryIds;
     private List<String> tagIds;
+    private Integer visit;
+    private String cover;
 }
