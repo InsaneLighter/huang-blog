@@ -122,6 +122,22 @@ public class AttachmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachm
         }
     }
 
+    @Override
+    public AttachmentEntity uploadPicWall(MultipartFile file) {
+        Assert.notNull(file, "Multipart file must not be null");
+        AttachmentType attachmentType = AttachmentType.PICWALL;
+        AttachmentEntity attachment = uploadByAttachmentType(file, attachmentType);
+        this.save(attachment);
+        return attachment;
+    }
+
+    @Override
+    public List<AttachmentEntity> listPicWall() {
+        QueryWrapper<AttachmentEntity> attachmentWrapper = new QueryWrapper<>();
+        attachmentWrapper.eq("type", 3);
+        return this.list(attachmentWrapper);
+    }
+
     private AttachmentEntity uploadByAttachmentType(MultipartFile file, AttachmentType attachmentType) {
         AttachmentEntity entity = new AttachmentEntity();
         String originalFilename = file.getOriginalFilename();

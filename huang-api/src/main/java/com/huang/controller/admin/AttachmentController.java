@@ -58,6 +58,18 @@ public class AttachmentController {
         return R.ok().put("data",entity);
     }
 
+    @PostMapping("/picWall/upload")
+    public R uploadPicWall(@RequestPart("file") MultipartFile file) {
+        AttachmentEntity entity = attachmentService.uploadPicWall(file);
+        return R.ok().put("data",entity);
+    }
+
+    @GetMapping("/picWall/list")
+    public R listPicWall() {
+        List<AttachmentEntity> list = attachmentService.listPicWall();
+        return R.ok().put("data",list);
+    }
+
     @PostMapping(value = "/uploads", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public R uploadAttachments(@RequestPart("files") MultipartFile[] files) {
         List<AttachmentEntity> result = new LinkedList<>();

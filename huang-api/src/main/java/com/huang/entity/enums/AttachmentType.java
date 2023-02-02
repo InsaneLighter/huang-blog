@@ -23,7 +23,12 @@ public enum AttachmentType implements ValueEnum<Integer> {
     /**
      * MINIO
      */
-    MINIO(2);
+    MINIO(2),
+
+    /**
+     * PICWALL
+     */
+    PICWALL(3);
 
     private final Integer value;
 

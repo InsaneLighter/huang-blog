@@ -25,5 +25,9 @@ public interface AttachmentService extends IService<AttachmentEntity> {
     List<AttachmentType> listAllType();
 
     void delete(List<String> list);
+
+    AttachmentEntity uploadPicWall(MultipartFile file);
+
+    List<AttachmentEntity> listPicWall();
 }
 
