@@ -58,6 +58,7 @@ public class AttachmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachm
         if(StringUtils.hasText(mediaType)){
             attachmentWrapper.eq("media_type",mediaType);
         }
+        attachmentWrapper.orderByDesc("create_time");
         IPage<AttachmentEntity> page = this.page(
                 new Query().getPage(params),
                 attachmentWrapper
