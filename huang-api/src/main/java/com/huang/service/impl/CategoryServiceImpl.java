@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -53,11 +50,10 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
     @Override
     public Map<String,Object> queryByIds(Map<String, Object> params) {
         Map<String,Object> result = new HashMap<>();
-        String ids = (String) params.getOrDefault("ids", "");
+        ArrayList<String> categoryIds = (ArrayList<String>) params.get("ids");
         Page<PostCategoryEntity> page = new Page<>();
         boolean compare = false;
-        if (StringUtils.hasText(ids)) {
-            List<String> categoryIds = Arrays.stream(ids.split(",")).collect(Collectors.toList());
+        if (categoryIds != null && categoryIds.size() > 0) {
             //分类关联文章
             QueryWrapper<PostCategoryEntity> postCategoryWrapper = new QueryWrapper<>();
             postCategoryWrapper.in("category_id",categoryIds);

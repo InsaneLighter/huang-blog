@@ -39,7 +39,9 @@ public class BlogEventListener {
         categoryWrapper.ne("id", 0);
         Long categoryCount = categoryMapper.selectCount(categoryWrapper);
         Long tagCount = tagMapper.selectCount(new QueryWrapper<>());
-        assert sysStatisticsEntity != null;
+        if(sysStatisticsEntity == null){
+            sysStatisticsEntity = new SysStatisticsEntity();
+        }
         Object type = event.getObject();
         if(type instanceof PostEntity){
             sysStatisticsEntity.setPostCount(Math.toIntExact(postCount));

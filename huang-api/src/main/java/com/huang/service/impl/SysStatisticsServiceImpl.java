@@ -29,14 +29,20 @@ public class SysStatisticsServiceImpl extends ServiceImpl<SysStatisticsMapper, S
         QueryWrapper<SysStatisticsEntity> statisticsWrapper = new QueryWrapper<>();
         statisticsWrapper.orderByDesc("create_time");
         SysStatisticsEntity entity = sysStatisticsMapper.selectList(statisticsWrapper).stream().findFirst().orElse(null);
-        assert entity != null;
+        if(entity == null){
+            entity = new SysStatisticsEntity();
+        }
         long birthday = entity.getBirthday().getTime();
         long days = (System.currentTimeMillis() - birthday) / (1000 * 24 * 3600);
         entity.setEstablishDays((int) days);
         QueryWrapper<PostEntity> postWrapper = new QueryWrapper<>();
         postWrapper.select("sum(visit) as visit");
         PostEntity postEntity = postMapper.selectOne(postWrapper);
-        entity.setViewPostCount(postEntity.getVisit());
+        if(postEntity == null){
+            entity.setViewPostCount(0);
+        }else {
+            entity.setViewPostCount(postEntity.getVisit());
+        }
         return entity;
     }
 

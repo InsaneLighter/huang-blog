@@ -156,7 +156,7 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
         }
         saveArticleTags(contentParam,postId);
         //journal
-        saveJournalChanges("绞尽脑汁修改了一篇文章: "+ contentParam.getTitle());
+        //saveJournalChanges("绞尽脑汁修改了一篇文章: "+ contentParam.getTitle());
     }
 
     @Override

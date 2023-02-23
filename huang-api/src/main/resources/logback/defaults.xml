@@ -22,7 +22,7 @@
            %l
            输出日志事件的发生位置，包括类目名、发生的线程，以及在代码中的行数。举例：TestLog.main(TestLog.java:10)
         -->
-    <springProperty scope="context" name="log.path" source="logging.file.path" defaultValue="/data/projects/logs"/>
+    <springProperty scope="context" name="log.path" source="logging.file.path" defaultValue="/opt/huang-blog/web"/>
     <springProperty scope="context" name="spring.application.name" source="spring.application.name"/>
     <springProperty scope="context" name="spring.profiles.active" source="spring.profiles.active"/>
     <springProperty scope="context" name="log.level.console" source="logging.level.console" defaultValue="INFO"/>
@@ -71,10 +71,10 @@
 
     <!-- 整个项目的所有日志， 包括第三方包 -->
     <appender name="ROOT_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.path}/${spring.application.name}/root.log</file>
+        <file>${log.path}/root.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- 每天一归档 -->
-            <fileNamePattern>${log.path}/${spring.application.name}/%d{yyyy-MM}/root-%d{yyyy-MM-dd}-%i.log.gz
+            <fileNamePattern>${log.path}/%d{yyyy-MM}/root-%d{yyyy-MM-dd}-%i.log.gz
             </fileNamePattern>
             <!-- 单个日志文件最多 100MB, 60天的日志周期，最大不能超过20GB -->
             <maxFileSize>128MB</maxFileSize>
@@ -93,10 +93,10 @@
 
     <!-- 整个项目com.huang包下的的所有日志， 不包括第三方包 -->
     <appender name="PROJECT_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.path}/${spring.application.name}/project.log</file>
+        <file>${log.path}/project.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- 每天一归档 -->
-            <fileNamePattern>${log.path}/${spring.application.name}/%d{yyyy-MM}/project-%d{yyyy-MM-dd}-%i.log.gz
+            <fileNamePattern>${log.path}/%d{yyyy-MM}/project-%d{yyyy-MM-dd}-%i.log.gz
             </fileNamePattern>
             <!-- 单个日志文件最多 100MB, 60天的日志周期，最大不能超过20GB -->
             <maxFileSize>128MB</maxFileSize>
@@ -115,9 +115,9 @@
 
     <!-- service包的日志 -->
     <appender name="SERVICE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.path}/${spring.application.name}/service.log</file>
+        <file>${log.path}/service.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/${spring.application.name}/%d{yyyy-MM}/service-%d{yyyy-MM-dd}-%i.log.gz
+            <fileNamePattern>${log.path}/%d{yyyy-MM}/service-%d{yyyy-MM-dd}-%i.log.gz
             </fileNamePattern>
             <maxFileSize>128MB</maxFileSize>
             <maxHistory>60</maxHistory>
@@ -135,9 +135,9 @@
 
     <!-- controller 包的日志 -->
     <appender name="CONTROLLER_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.path}/${spring.application.name}/controller.log</file>
+        <file>${log.path}/controller.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/${spring.application.name}/%d{yyyy-MM}/controller-%d{yyyy-MM-dd}-%i.log.gz
+            <fileNamePattern>${log.path}/%d{yyyy-MM}/controller-%d{yyyy-MM-dd}-%i.log.gz
             </fileNamePattern>
             <maxFileSize>128MB</maxFileSize>
             <maxHistory>60</maxHistory>
@@ -156,9 +156,9 @@
 
     <!-- Mapper层日志，用于打印执行的sql  -->
     <appender name="MAPPER_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.path}/${spring.application.name}/mapper.log</file>
+        <file>${log.path}/mapper.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/${spring.application.name}/%d{yyyy-MM}/mapper-%d{yyyy-MM-dd}-%i.log.gz
+            <fileNamePattern>${log.path}/%d{yyyy-MM}/mapper-%d{yyyy-MM-dd}-%i.log.gz
             </fileNamePattern>
             <maxFileSize>128MB</maxFileSize>
             <maxHistory>60</maxHistory>
@@ -176,9 +176,9 @@
 
     <!-- 共用异常包的日志 -->
     <appender name="EXCEPTION_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.path}/${spring.application.name}/exception.log</file>
+        <file>${log.path}/exception.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/${spring.application.name}/%d{yyyy-MM}/exception-%d{yyyy-MM-dd}-%i.log.gz
+            <fileNamePattern>${log.path}/%d{yyyy-MM}/exception-%d{yyyy-MM-dd}-%i.log.gz
             </fileNamePattern>
             <maxFileSize>128MB</maxFileSize>
             <maxHistory>60</maxHistory>

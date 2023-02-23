@@ -31,7 +31,7 @@ public class Constant {
     /**
      *  根分类parentId
      */
-    public static final String ROOT_CATEGORY_PARENT_ID = "";
+    public static final String ROOT_CATEGORY_PARENT_ID = "-1";
 
     public static final String VISIT_COUNT_PREFIX = "huang_blog_visit_count";
 

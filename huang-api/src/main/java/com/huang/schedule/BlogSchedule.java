@@ -64,9 +64,11 @@ public class BlogSchedule implements SchedulingConfigurer {
         QueryWrapper<SysStatisticsEntity> statisticsWrapper = new QueryWrapper<>();
         statisticsWrapper.orderByDesc("create_time");
         SysStatisticsEntity sysStatisticsEntity = sysStatisticsMapper.selectList(statisticsWrapper).stream().findFirst().orElse(null);
-        assert sysStatisticsEntity != null;
-        Integer visit = sysStatisticsEntity.getVisit();
-        Integer ipVisit = sysStatisticsEntity.getIpVisit();
+        if(sysStatisticsEntity == null){
+            sysStatisticsEntity = new SysStatisticsEntity();
+        }
+        Integer visit = sysStatisticsEntity.getVisit() == null?0:sysStatisticsEntity.getVisit();
+        Integer ipVisit = sysStatisticsEntity.getIpVisit() == null?0:sysStatisticsEntity.getIpVisit();
         boolean visitEquals = !visit.equals(visitCount);
         if(visitEquals){
             sysStatisticsEntity.setVisit(visitCount);
@@ -96,7 +98,9 @@ public class BlogSchedule implements SchedulingConfigurer {
         QueryWrapper<SysStatisticsEntity> statisticsWrapper = new QueryWrapper<>();
         statisticsWrapper.orderByDesc("create_time");
         SysStatisticsEntity sysStatisticsEntity = sysStatisticsMapper.selectList(statisticsWrapper).stream().findFirst().orElse(null);
-        assert sysStatisticsEntity != null;
+        if(sysStatisticsEntity == null){
+            sysStatisticsEntity = new SysStatisticsEntity();
+        }
         SysStatisticsEntity entity = new SysStatisticsEntity();
         entity.setLikes(0);
         entity.setVisit(0);
