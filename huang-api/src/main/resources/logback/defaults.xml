@@ -25,10 +25,10 @@
     <springProperty scope="context" name="log.path" source="logging.file.path" defaultValue="/opt/huang-blog/web"/>
     <springProperty scope="context" name="spring.application.name" source="spring.application.name"/>
     <springProperty scope="context" name="spring.profiles.active" source="spring.profiles.active"/>
-    <springProperty scope="context" name="log.level.console" source="logging.level.console" defaultValue="INFO"/>
-    <springProperty scope="context" name="log.level.controller" source="logging.level.controller" defaultValue="INFO"/>
-    <springProperty scope="context" name="log.level.service" source="logging.level.service" defaultValue="INFO"/>
-    <springProperty scope="context" name="log.level.dao" source="logging.level.sql" defaultValue="DEBUG"/>
+    <springProperty scope="context" name="log.level.console" source="logging.level.console" defaultValue="WARN"/>
+    <springProperty scope="context" name="log.level.controller" source="logging.level.controller" defaultValue="WARN"/>
+    <springProperty scope="context" name="log.level.service" source="logging.level.service" defaultValue="WARN"/>
+    <springProperty scope="context" name="log.level.dao" source="logging.level.sql" defaultValue="WARN"/>
     <springProperty scope="context" name="server.port" source="server.port" defaultValue="0000"/>
     <!-- 彩色日志 -->
     <!-- 彩色日志依赖的渲染类 -->

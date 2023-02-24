@@ -4,39 +4,35 @@
 <mapper namespace="com.huang.mapper.PostMapper">
 
     <select id="queryByCondition" resultType="com.huang.entity.vo.FrontPostVo">
-        SELECT
-            t.id,
-            t.cover,
-            t.title,
-            t.summary,
-            t.top_priority,
-            t.status,
-            t.likes,
-            t.visit,
-            IFNULL((select count(1) from comment where post_id = t.id and status = 1),0) comments,
-            t.deleted,
-            t.create_by,
-            t.create_time,
-            t.update_by,
-            t.update_time,
-            t2.NAME AS category
-        FROM
-            post t
-                LEFT JOIN post_category t1 ON ( t1.post_id = t.id )
-                LEFT JOIN category t2 ON ( t2.id = t1.category_id )
-        WHERE
-            t.deleted = 0
+        SELECT t.id,
+        t.cover,
+        t.title,
+        t.summary,
+        t.top_priority,
+        t.status,
+        t.likes,
+        t.visit,
+        IFNULL((select count(1) from comment where post_id = t.id and status = 1), 0) comments,
+        t.deleted,
+        t.create_by,
+        t.create_time,
+        t.update_by,
+        t.update_time,
+        (select group_concat(c.NAME) from category c, post_category pc where c.id = pc.category_id and pc.post_id = t.id
+        group by pc.post_id) category
+        FROM post t
+        WHERE t.deleted = 0
         <if test="paramMap.keyword != null and paramMap.keyword != ''">
             and (t.title like CONCAT(CONCAT('%',#{paramMap.keyword}),'%')  or t.summary like CONCAT(CONCAT('%',#{paramMap.keyword}),'%'))
-        </if>
-        <if test="paramMap.category != null and paramMap.category != ''">
-            and t1.category_id = #{paramMap.category}
         </if>
         <if test="paramMap.startDate != null and paramMap.startDate != ''">
             and t.create_time &gt;= #{paramMap.startDate}
         </if>
         <if test="paramMap.endDate != null and paramMap.endDate != ''">
             and t.create_time &lt;= #{paramMap.endDate}
+        </if>
+        <if test="paramMap.category != null and paramMap.category != ''">
+            and t.id in (select post_id from post_category where category_id = #{paramMap.category})
         </if>
     </select>
 </mapper>

@@ -127,6 +127,10 @@ public class LogAspect {
                 if(argument instanceof SecurityContextHolderAwareRequestWrapper){
                     return "";
                 }
+                String paramContent = JSON.toJSONString(argument);
+                if (paramContent.length() > 500) {
+                    return paramContent.substring(0, 500);
+                }
                 return JSON.toJSONString(argument);
             }
         }

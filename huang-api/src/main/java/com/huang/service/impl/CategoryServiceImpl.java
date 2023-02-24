@@ -50,12 +50,20 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
     @Override
     public Map<String,Object> queryByIds(Map<String, Object> params) {
         Map<String,Object> result = new HashMap<>();
-        ArrayList<String> categoryIds = (ArrayList<String>) params.get("ids");
+        Object ids = params.get("ids");
+        String realCategoryIds;
+        if(ids instanceof ArrayList){
+            ArrayList<String> categoryIds = (ArrayList<String>) params.get("ids");
+            realCategoryIds = String.join(",", categoryIds);
+        }else {
+            realCategoryIds = (String) params.get("ids");
+        }
         Page<PostCategoryEntity> page = new Page<>();
         boolean compare = false;
-        if (categoryIds != null && categoryIds.size() > 0) {
+        if (StringUtils.hasText(realCategoryIds)) {
             //分类关联文章
             QueryWrapper<PostCategoryEntity> postCategoryWrapper = new QueryWrapper<>();
+            List<String> categoryIds = Arrays.stream(realCategoryIds.split(",")).collect(Collectors.toList());
             postCategoryWrapper.in("category_id",categoryIds);
             List<PostCategoryEntity> postCategoryEntities = postCategoryMapper.selectList(postCategoryWrapper);
             page.setRecords(postCategoryEntities);
