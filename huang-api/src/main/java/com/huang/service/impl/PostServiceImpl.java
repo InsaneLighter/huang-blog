@@ -75,6 +75,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, PostEntity> impleme
             postWrapper.eq("status", PostStatus.valueOf(status));
         }
         postWrapper.orderByDesc("top_priority");
+        postWrapper.orderByDesc("create_time");
         IPage<PostEntity> postEntityPage = this.page(
                 new Query().getPage(params),
                 postWrapper
